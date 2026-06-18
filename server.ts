@@ -11,48 +11,38 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// Lazy initialize Gemini API client to prevent crashing on boot if key is missing
 let aiClient: GoogleGenAI | null = null;
 function getAi(): GoogleGenAI {
   if (!aiClient) {
     const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error("GEMINI_API_KEY environment variable is required");
-    }
+    if (!apiKey) throw new Error("GEMINI_API_KEY environment variable is required");
     aiClient = new GoogleGenAI({
       apiKey,
-      httpOptions: {
-        headers: {
-          "User-Agent": "aistudio-build",
-        },
-      },
+      httpOptions: { headers: { "User-Agent": "aistudio-build" } },
     });
   }
   return aiClient;
 }
 
-// REST APIs
-// 1. Generate Perks API
+// 1. Generate Perks API Endpoint
 app.post("/api/generate-perks", async (req, res) => {
   try {
-    const { archetype, highestStat, lowestStat, customInput, stats } = req.body;
+    const { archetype, race, highestStat, lowestStat, customInput, stats } = req.body; // 🌟 Destructures race choice
     
     const ai = getAi();
-    const prompt = `You are a creative D&D-style game designer creating custom perks for a real-life comedy character sheet.
-We need exactly 2 "IRL Passive Perks" based on the following user characteristics:
-- Archetype: ${archetype || "Unknown"}
-- Highest Stat: ${highestStat || "Wisdom"}
-- Lowest Stat: ${lowestStat || "Strength"}
-- User details/hobbies: "${customInput || "Doting coder, loves snacks, hates waking up early"}"
-- Stats details: Strength (${stats?.strength || 10}), Dexterity (${stats?.dexterity || 10}), Constitution (${stats?.constitution || 10}), Intelligence (${stats?.intelligence || 10}), Wisdom (${stats?.wisdom || 10}), Charisma (${stats?.charisma || 10})
+    const prompt = `You are a creative D&D game designer creating comedy passive abilities for an IRL character sheet app.
+The user belongs to the following customized identity profile:
+- Queer Race Blueprint: ${race || "Twink"} (This uses lighthearted LGBTQ+ subculture slang descriptions)
+- Character Archetype: ${archetype || "The Wildcard"}
+- Highest Attribute: ${highestStat || "Wisdom"}
+- Lowest Attribute: ${lowestStat || "Strength"}
+- Hobbies / Context: "${customInput || "Enjoys coffee, table games, staying up late"}"
 
-Please generate exactly 2 hilarious, creative, and mechanically fun real-world perks that map to these traits.
-Each perk must have:
-- A catchy and witty title (e.g., "Pizza Conjurer", "Adrenaline Nap", "Stack Overflow Alchemist", "Rule Shark")
-- A real-world trigger condition and bonus modifier mapped to the 6 stats (Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma).
-- A funny mechanical description explaining how it plays out in everyday life (advantage, penalty, or social check).
-
-Return this response in valid JSON matching the schema of an array of perks.`;
+Please generate exactly 2 hilarious, creative, and mechanically sound real-world perks tailored directly around their Chosen Queer Race (${race}) and their Archetype. 
+Each perk must match this exact schema:
+- A catchy name.
+- A functional game trigger and modifier description matching real life.
+- A witty flavor description detailing how this trait operates during everyday hangouts or errands.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
@@ -64,107 +54,67 @@ Return this response in valid JSON matching the schema of an array of perks.`;
           items: {
             type: Type.OBJECT,
             properties: {
-              title: { type: Type.STRING, description: "Catcy, funny name of the perk" },
-              effect: { type: Type.STRING, description: "The funny game mechanics or modifier description (e.g., +2 to Charisma when offering food)" },
-              description: { type: Type.STRING, description: "A humorous and witty explanation of how it affects their daily real life" },
-              trigger: { type: Type.STRING, description: "Specific real-world trigger (e.g., Ordering takeout, reading documentation)" }
+              title: { type: Type.STRING },
+              effect: { type: Type.STRING, description: "Game modifier effect, e.g. +2 to Wisdom when selecting coffee" },
+              description: { type: Type.STRING },
+              trigger: { type: Type.STRING }
             },
             required: ["title", "effect", "description", "trigger"]
           }
         },
-        systemInstruction: "You are the ultimate witty D&D Game Master who translates mundane real-world quirks into legendary gamer traits. Keep your tone lighthearted, humorous, and full of tabletop RPG jokes."
+        systemInstruction: "You are an affectionate, brilliant Tabletop RPG game master. Combine D&D stat mechanics with funny, lighthearted nods to queer community terminology (Twink, Twunk, Twas, Otter, Bear) respectfully and hilariously."
       }
     });
 
-    const text = response.text || "[]";
-    res.json(JSON.parse(text.trim()));
-  } catch (error: any) {
-    console.error("Error generating perks:", error);
-    res.status(500).json({ 
-      error: error.message || "Failed to generate perks from the Dungeon Master",
-      fallback: [
-        {
-          title: "Caffeine Overdrive",
-          effect: "+2 to Dexterity when double-fisting hot beverages",
-          description: "Your fingers move with the speed of light, but you must pass a DC 12 Constitution check to avoid dropping your mug.",
-          trigger: "Consuming coffee or energy drinks"
-        },
-        {
-          title: "Slayer of Jars",
-          effect: "Advantage on Strength checks when opening tight lids",
-          description: "Through sheer willpower and rubber grip pads, you are the designated jar opener of the household.",
-          trigger: "Someone hands you a vacuum-sealed container"
-        }
-      ]
-    });
+    res.json(JSON.parse((response.text || "[]").trim()));
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-// 2. DM Advice Chat API
+// 2. DM Advice Chat Endpoint
 app.post("/api/dm-help", async (req, res) => {
   try {
-    const { character, message, history } = req.body;
-    
+    const { character, message } = req.body;
     const ai = getAi();
     
-    const prompt = `The player is asking for advice on how to handle a real-life situation using their custom IRL Character Sheet.
---- PLAYER SHEET ---
-Name: ${character.name || "Adventurer"}
-Archetype: ${character.role || "The Wildcard"}
-Level: ${character.level || 1}
-STATS:
-- Strength: ${character.stats.strength} (Mod: ${Math.floor((character.stats.strength - 10) / 2)})
-- Dexterity: ${character.stats.dexterity} (Mod: ${Math.floor((character.stats.dexterity - 10) / 2)})
-- Constitution: ${character.stats.constitution} (Mod: ${Math.floor((character.stats.constitution - 10) / 2)})
-- Intelligence: ${character.stats.intelligence} (Mod: ${Math.floor((character.stats.intelligence - 10) / 2)})
-- Wisdom: ${character.stats.wisdom} (Mod: ${Math.floor((character.stats.wisdom - 10) / 2)})
-- Charisma: ${character.stats.charisma} (Mod: ${Math.floor((character.stats.charisma - 10) / 2)})
+    const prompt = `The player is asking for situational real-world campaign advice.
+--- SHEET STATS ---
+Name: ${character.name}
+Race Blueprint: ${character.race || "Twink"}  <-- 🌟 Custom Queer context fed to chat pipeline
+Archetype: ${character.role}
+Level: ${character.level}
+Strength: ${character.stats.strength} | Dexterity: ${character.stats.dexterity} | Constitution: ${character.stats.constitution} | Intelligence: ${character.stats.intelligence} | Wisdom: ${character.stats.wisdom} | Charisma: ${character.stats.charisma}
 
-PERKS:
-${(character.perks || []).map((p: any) => `- ${p.title}: ${p.effect} (${p.description})`).join("\n")}
-
---- SCENARIO / USER QUERY ---
+--- SITUATION ---
 "${message}"
 
-Provide a highly entertaining, D&D-flavored response telling them EXACTLY how to resolve this.
-1. Suggest a specific Stat Check they should roll (e.g., "Pass a DC 14 Wisdom (Insight) check to see if your dad is actually mad about the lawn").
-2. Tell them how their Perks could help or hinder them.
-3. Keep the advice incredibly funny, framing normal life as a tabletop RPG encounter. Write in the voice of a classic, whimsical, and slightly sarcastic Dungeon Master.`;
+Provide a punchy, D&D-flavored response under 160 words. Sardonically suggest a custom Difficulty Class (DC) scale check (e.g., 'Pass a DC 14 Wisdom check to survive the meeting'). Weave their queer race identity and attribute blocks directly into your ruling!`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3.5-flash",
       contents: prompt,
       config: {
-        systemInstruction: "You are an affectionate, snarky, and brilliant Dungeon Master running an IRL Campaign. All of real life is an interactive board game to you. Frame your suggestions with DC (Difficulty Class) checks and stat math. Keep responses under 180 words, concise and punchy."
+        systemInstruction: "You are a witty, sarcastic, and supportive tabletop Dungeon Master. Treat all mundane real-world tasks as tactical grid encounters."
       }
     });
 
     res.json({ text: response.text });
-  } catch (error: any) {
-    console.error("Error in DM help:", error);
-    res.status(500).json({ error: error.message || "Failed to communicate with the Dungeon Master." });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-// Setup Vite Dev server or static files serving
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
+    const vite = await createViteServer({ server: { middlewareMode: true }, appType: "spa" });
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
+    app.get("*", (req, res) => res.sendFile(path.join(distPath, "index.html")));
   }
-
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+  app.listen(PORT, "0.0.0.0", () => console.log(`Server executing cleanly on port ${PORT}`));
 }
 
 startServer();

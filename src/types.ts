@@ -17,12 +17,13 @@ export interface Perk {
 export interface CharacterSheet {
   name: string;
   role: string; // IRL Archetype
+  race: string; // 🏳️‍🌈 Queer Community Race Blueprint
   level: number;
   xp: number;
   stats: StatBlock;
   perks: Perk[];
   customDetails: string;
-  avatar: string; // Avatar name or class-based illustration key
+  avatar: string; // Avatar emoji key
   faction: string; // e.g. "Rulebreakers", "Boardgame Night Crew"
 }
 
@@ -87,6 +88,45 @@ export const ARCHETYPES = [
     highest: "intelligence" as keyof StatBlock,
     lowest: "wisdom" as keyof StatBlock,
     icon: "Calculator"
+  }
+];
+
+// 🏳️‍🌈 Custom Queer Character Blueprint Dataset
+export const RACES = [
+  {
+    id: "twink",
+    name: "Twink",
+    tagline: "Agile, high-energy, and effortlessly aerodynamic.",
+    description: "Blessed with incredible social speed and natural grace. You weave through crowded grocery aisles effortlessly and possess a natural shield against unvetted fashion crises.",
+    icon: "✨"
+  },
+  {
+    id: "twunk",
+    name: "Twunk",
+    tagline: "The optimal hybrid of physical strength and fluid dexterity.",
+    description: "You hit the iron temple but keep your fast-acting initiative intact. You're the designated pack mule for moving heavy board game trunks without losing a step.",
+    icon: "💪"
+  },
+  {
+    id: "twas",
+    name: "Twas",
+    tagline: "The seasoned veteran; a twink that once was.",
+    description: "You have retired your high-energy clubbing boots for deep tactical wisdom and premium couch positioning. You bring unparalleled historical perspective and an explicit requirement for an afternoon nap.",
+    icon: "⏳"
+  },
+  {
+    id: "otter",
+    name: "Otter",
+    tagline: "Lean, scruffy, and infinitely resourceful.",
+    description: "The ultimate game night survivalist. You have an uncanny ability to discover missing keys, fix broken structural game pieces, and find loose change tucked under cushions.",
+    icon: "🦦"
+  },
+  {
+    id: "bear",
+    name: "Bear",
+    tagline: "Mighty, comforting, and wonderfully robust.",
+    description: "A fortress of pure stability and comforting auras. You excel at holding down the most reliable seating spots and project a passive protective field that keeps tilted party members calm.",
+    icon: "🐻"
   }
 ];
 
