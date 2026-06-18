@@ -19,47 +19,57 @@ const QUIZ_QUESTIONS = [
   {
     question: "You're ordering takeout with a group and nobody can decide. What's your play?",
     options: [
-      { text: "Double-check everyone's dietary constraints, budget limits, and create a shared spreadsheet.", archetype: "min-maxer" },
-      { text: "Suggest food roulette: Pick a place at random, and force the loser to pay.", archetype: "instigator" },
-      { text: "Quietly order from your trusted favorite spot that has never disappointed you.", archetype: "tactical-turtler" },
-      { text: "Do whatever is funniest: suggest ordering only appetizers or a custom 15-patty burger.", archetype: "wildcard" },
-      { text: "Whip out a rulebook-style argument about why pizza is the most mathematically democratic food.", archetype: "rules-lawyer" },
-      { text: "Look up active coupons, discount codes, and negotiate who gets the leftover boxes.", archetype: "loot-goblin" }
+      { text: "Take charge, make the decision yourself, and tell everyone what they're getting.", archetype: "top" },
+      { text: "Agree to whatever everyone else wants and offer to wait for the delivery at the door.", archetype: "bottom" },
+      { text: "Suggest a hybrid custom order that lets everyone mix and match perfectly.", archetype: "verse" },
+      { text: "Lead the discussion toward a highly versatile fusion spot with absolute confidence.", archetype: "versetop" },
+      { text: "Swiftly coordinate who pays, what address to use, and handle any delivery errors.", archetype: "versebottom" },
+      { text: "Diplomatically suggest ordering from separate nearby spots so everyone stays happy.", archetype: "side" },
+      { text: "Hypnotize the room with passionate descriptions until they order exactly what you wanted.", archetype: "powerbottom" }
     ]
   },
   {
     question: "A friendly casual board game starts arguing over a specific card rule. Your reaction is:",
     options: [
-      { text: "Pull up the 45-page official FAQ document PDF on your phone and read line 4 of clause B.", archetype: "rules-lawyer" },
-      { text: "Fuel the debate on purpose to see who gets the most defensive.", archetype: "instigator" },
-      { text: "Silently eat snacks, let them argue, and use the extra time to plan your next 3 moves.", archetype: "tactical-turtler" },
-      { text: "Suggest a sudden house rule that makes the game 3 times more chaotic.", archetype: "wildcard" },
-      { text: "Quickly summarize previous matches to prove who actually benefits from the card.", archetype: "min-maxer" },
-      { text: "Offer to let it slide only if the player trades you their extra resource token.", archetype: "loot-goblin" }
+      { text: "Firmly declare how we'll proceed so the game doesn't stall, keeping the pace physical.", archetype: "top" },
+      { text: "Quietly accept whichever ruling is chosen and find a clever way to play defensively.", archetype: "bottom" },
+      { text: "Synthesize both views into a balanced compromise that fits the current layout.", archetype: "verse" },
+      { text: "Assert the rule with executive confidence but leave room to pivot if needed.", archetype: "versetop" },
+      { text: "Adapt your engine on the fly to survive under either rule interpretation without stress.", archetype: "versebottom" },
+      { text: "Focus purely on social boundaries, helping players meet in the middle peacefully.", archetype: "side" },
+      { text: "Captivate the room with a charming argument that gets you the best benefit.", archetype: "powerbottom" }
     ]
   },
   {
     question: "You enter a store and spot a shelf of mystery boxes or blind bag items. What do you do?",
     options: [
-      { text: "Check community forums on your phone to find the exact batch weights to isolate the rare one.", archetype: "min-maxer" },
-      { text: "Shake all of them loudly to see which one sounds the most broken.", archetype: "wildcard" },
-      { text: "Ignore them entirely. You have a strict pre-budgeted itinerary item to buy.", archetype: "tactical-turtler" },
-      { text: "Convince the clerk to let you feel the packaging, claiming it's for 'research purposes'.", archetype: "loot-goblin" },
-      { text: "Briefly explain the exact scammy probabilities of loot pools to whoever is listening.", archetype: "rules-lawyer" },
-      { text: "Buy one, open it, and immediately mock your friend if they got a worse pull.", archetype: "instigator" }
+      { text: "Grab the most dominant looking box first, ready to claim the ultimate prize.", archetype: "top" },
+      { text: "Patiently examine all packets, completely unbothered by speed or hurry.", archetype: "bottom" },
+      { text: "Analyze the probabilities in your head to find the perfect multi-class option.", archetype: "verse" },
+      { text: "Lead a playful hunt, convincing those around you to buy matching boxes.", archetype: "versetop" },
+      { text: "Trust your quick reflexes and hand-eye coordination to pick the optimal choice.", archetype: "versebottom" },
+      { text: "Propose a fun boundary: buy different ones and trade based on mutual desires.", archetype: "side" },
+      { text: "Charm the store clerk into telling you which box has the heaviest, highest quality loot.", archetype: "powerbottom" }
     ]
   }
 ];
 
 const AVATAR_OPTIONS = [
+  { key: "king", emoji: "👑", bg: "bg-amber-950/40 border-amber-500", label: "Monarch" },
+  { key: "nails", emoji: "💅", bg: "bg-pink-950/40 border-pink-500", label: "Diva" },
+  { key: "shades", emoji: "🕶️", bg: "bg-zinc-800/40 border-zinc-500", label: "Cool" },
+  { key: "lips", emoji: "💋", bg: "bg-red-950/40 border-red-500", label: "Fatal" },
+  { key: "devil", emoji: "😈", bg: "bg-purple-950/40 border-purple-500", label: "Impish" },
+  { key: "unicorn", emoji: "🦄", bg: "bg-fuchsia-950/40 border-fuchsia-500", label: "Mythic" },
+  { key: "lightning", emoji: "⚡", bg: "bg-yellow-950/40 border-yellow-500", label: "Storm" },
+  { key: "gem", emoji: "💎", bg: "bg-cyan-950/40 border-cyan-500", label: "Diamond" },
+  { key: "peach", emoji: "🍑", bg: "bg-orange-950/40 border-orange-500", label: "Peach" },
+  { key: "fire", emoji: "🔥", bg: "bg-red-900/40 border-orange-500", label: "Fierce" },
+  { key: "rainbow", emoji: "🌈", bg: "bg-indigo-950/40 border-blue-500", label: "Pride" },
+  { key: "cowboy", emoji: "🤠", bg: "bg-yellow-900/40 border-yellow-700", label: "Outlaw" },
   { key: "wiz-boy", emoji: "🧙‍♂️", bg: "bg-purple-950/40 border-purple-500", label: "Mage" },
   { key: "knight", emoji: "🛡️", bg: "bg-slate-800/40 border-slate-400", label: "Defender" },
-  { key: "rogue", emoji: "🥷", bg: "bg-emerald-950/40 border-emerald-500", label: "Infiltrator" },
-  { key: "wild", emoji: "🦁", bg: "bg-amber-950/40 border-amber-500", label: "Beast" },
-  { key: "goblin", emoji: "👺", bg: "bg-red-950/40 border-red-500", label: "Goblin-mode" },
-  { key: "intellect", emoji: "🧠", bg: "bg-blue-950/40 border-blue-500", label: "AI Oracle" },
-  { key: "coder", emoji: "💻", bg: "bg-zinc-800/40 border-cyan-500", label: "Technomancer" },
-  { key: "coffee", emoji: "☕", bg: "bg-amber-900/40 border-yellow-600", label: "Caffeine Knight" }
+  { key: "rogue", emoji: "🥷", bg: "bg-emerald-950/40 border-emerald-500", label: "Infiltrator" }
 ];
 
 export default function Wizard({ onComplete, availableArchetypes, availableRaces, onCancel, showCancelButton }: WizardProps) {
@@ -69,10 +79,10 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
   const [quizIndex, setQuizIndex] = useState<number>(0);
   const [quizScores, setQuizScores] = useState<Record<string, number>>({});
   
-  const [selectedArchetype, setSelectedArchetype] = useState<string>(availableArchetypes[0]?.id || "rules-lawyer");
+  const [selectedArchetype, setSelectedArchetype] = useState<string>(availableArchetypes[0]?.id || "top");
   const [selectedRace, setSelectedRace] = useState<string>(availableRaces[0]?.id || "twink"); 
-  const [highestStat, setHighestStat] = useState<keyof StatBlock>("intelligence");
-  const [lowestStat, setLowestStat] = useState<keyof StatBlock>("charisma");
+  const [highestStat, setHighestStat] = useState<keyof StatBlock>("strength");
+  const [lowestStat, setLowestStat] = useState<keyof StatBlock>("wisdom");
   
   const getInitialStandardArray = (high: keyof StatBlock, low: keyof StatBlock): StatBlock => {
     const keys: (keyof StatBlock)[] = ["strength", "dexterity", "constitution", "intelligence", "wisdom", "charisma"];
@@ -302,7 +312,7 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
     onComplete({
       id: Math.random().toString(36).substring(2, 9), // Set tracking key
       name: charName,
-      role: archetypeDetails?.name || "The Wildcard",
+      role: archetypeDetails?.name || "Verse",
       race: raceDetails?.name || "Twink", 
       level: 1,
       xp: 0,
@@ -310,19 +320,20 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
       perks: generatedPerks,
       customDetails: quirkInput,
       avatar: avatar,
-      faction: faction || "Freelance Party"
+      faction: faction || "Freelance Party",
+      accentColor: archetypeDetails?.color || "#f43f5e"
     });
   };
 
-  const renderIcon = (iconName: string, className = "w-5 h-5 text-yellow-400") => {
+  const renderIcon = (iconName: string, className = "w-5 h-5 text-yellow-400", style?: React.CSSProperties) => {
     switch (iconName) {
-      case "BookOpen": return <BookOpen className={className} />;
-      case "Flame": return <Flame className={className} />;
-      case "Shield": return <Shield className={className} />;
-      case "Sparkles": return <Sparkles className={className} />;
-      case "Coins": return <Coins className={className} />;
-      case "Calculator": return <Calculator className={className} />;
-      default: return <Sparkles className={className} />;
+      case "BookOpen": return <BookOpen className={className} style={style} />;
+      case "Flame": return <Flame className={className} style={style} />;
+      case "Shield": return <Shield className={className} style={style} />;
+      case "Sparkles": return <Sparkles className={className} style={style} />;
+      case "Coins": return <Coins className={className} style={style} />;
+      case "Calculator": return <Calculator className={className} style={style} />;
+      default: return <Sparkles className={className} style={style} />;
     }
   };
 
@@ -383,14 +394,35 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
               <div className="grid md:grid-cols-2 gap-4">
                 {availableArchetypes.map((theme) => {
                   const isSelected = selectedArchetype === theme.id;
+                  const itemColor = theme.color || "#e4e4e7";
                   return (
-                    <div key={theme.id} onClick={() => handleArchetypeSelectDirect(theme.id)} className={`p-5 rounded-xl border transition-all cursor-pointer ${isSelected ? "bg-amber-500/10 border-amber-500" : "bg-zinc-900/60 border-zinc-800"}`}>
+                    <div 
+                      key={theme.id} 
+                      onClick={() => handleArchetypeSelectDirect(theme.id)} 
+                      className="p-5 rounded-xl border transition-all cursor-pointer"
+                      style={{ 
+                        borderColor: isSelected ? itemColor : "#27272a",
+                        backgroundColor: isSelected ? `${itemColor}15` : "rgba(24, 24, 27, 0.6)"
+                      }}
+                    >
                       <div className="flex justify-between items-start mb-2">
-                        {renderIcon(theme.icon, isSelected ? "text-amber-400" : "text-zinc-400")}
-                        {isSelected && <span className="bg-amber-500 text-black text-[10px] font-mono px-2 py-0.5 rounded-full uppercase font-bold">Class Active</span>}
+                        {renderIcon(theme.icon, "w-5 h-5", isSelected ? { color: itemColor } : { color: "#71717a" })}
+                        {isSelected && (
+                          <span 
+                            className="text-black text-[10px] font-mono px-2.5 py-0.5 rounded-full uppercase font-extrabold"
+                            style={{ backgroundColor: itemColor }}
+                          >
+                            Class Active
+                          </span>
+                        )}
                       </div>
-                      <h4 className="font-display font-bold text-white text-base mb-1">{theme.name}</h4>
-                      <p className="text-zinc-400 text-xs">{theme.tagline}</p>
+                      <h4 
+                        className="font-display font-extrabold text-white text-base mb-1"
+                        style={{ color: isSelected ? itemColor : "#ffffff" }}
+                      >
+                        {theme.name}
+                      </h4>
+                      <p className="text-zinc-400 text-xs leading-relaxed">{theme.tagline}</p>
                     </div>
                   );
                 })}

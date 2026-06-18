@@ -26,6 +26,7 @@ export interface CharacterSheet {
   customDetails: string;
   avatar: string; // Avatar emoji key
   faction: string; // e.g. "Rulebreakers", "Boardgame Night Crew"
+  accentColor: string; // Hex value for class tinting
 }
 
 export interface ChatMessage {
@@ -35,61 +36,77 @@ export interface ChatMessage {
   timestamp: string;
 }
 
-// ⚔️ Seed Database for classes/archetypes
+// ⚔️ Seed Database for classes/archetypes - Expanded 7-class roster
 export const DEFAULT_ARCHETYPES = [
   {
-    id: "rules-lawyer",
-    name: "The Rules Lawyer",
-    tagline: "Unbeatable at rulebook citations. Feared by Game Masters.",
-    description: "Your superpower is cross-referencing footnotes at 2 AM. You treat instructions like safety manuals and social covenants as legally binding.",
-    highest: "intelligence" as keyof StatBlock,
-    lowest: "charisma" as keyof StatBlock,
-    icon: "BookOpen"
-  },
-  {
-    id: "instigator",
-    name: "The Instigator",
-    tagline: "Enjoys chaos. Pushes shiny red buttons to see what happens.",
-    description: "You believe the best strategy is the one that forces everyone to pivot. You start alliances just to see how they break. A pure wild card of social boards.",
-    highest: "charisma" as keyof StatBlock,
+    id: "top",
+    name: "Top",
+    tagline: "Takes charge of the initiative. Commands the active encounter grid.",
+    description: "A natural vanguard who commands the encounter space, steps up for heavy lifting, and structures the party's direction with direct authority.",
+    highest: "strength" as keyof StatBlock,
     lowest: "wisdom" as keyof StatBlock,
-    icon: "Flame"
+    icon: "Flame",
+    color: "#f43f5e"
   },
   {
-    id: "tactical-turtler",
-    name: "The Tactical Turtler",
-    tagline: "Slow, methodical, and completely unbothered by speed runs.",
-    description: "You build giant walls, stack defensives, and wait out the storm. While others speedrun, you are organizing your inventories and fortifying your compound.",
+    id: "bottom",
+    name: "Bottom",
+    tagline: "Incredible endurance pool. Master of tactical survival and patience.",
+    description: "Thrives under pressure with remarkable endurance and nimble setup reflexes, outlasting long debates or exhausting sessions.",
     highest: "constitution" as keyof StatBlock,
-    lowest: "dexterity" as keyof StatBlock,
-    icon: "Shield"
+    lowest: "strength" as keyof StatBlock,
+    icon: "Shield",
+    color: "#06b6d4"
   },
   {
-    id: "wildcard",
-    name: "The Wildcard",
-    tagline: "Never let them know your next move (mostly because you don't know either).",
-    description: "You run on pure caffeine and instinct. You choose options because the card had pretty artwork or to achieve maximum immediate comedy.",
+    id: "verse",
+    name: "Verse",
+    tagline: "The ultimate multi-class flex. Adapts instantly to any team layout.",
+    description: "An incredibly versatile strategist capable of filling any group dynamic gap, balancing brainpower and tactical support beautifully.",
+    highest: "intelligence" as keyof StatBlock,
+    lowest: "strength" as keyof StatBlock,
+    icon: "Sparkles",
+    color: "#a855f7"
+  },
+  {
+    id: "versetop",
+    name: "VerseTop",
+    tagline: "Assertive executive leadership with an adaptable strategic pivot.",
+    description: "Executes bold decisions with charming persuasion, leading from the front but relying on others to sustain the long-haul grinds.",
+    highest: "charisma" as keyof StatBlock,
+    lowest: "constitution" as keyof StatBlock,
+    icon: "BookOpen",
+    color: "#f97316"
+  },
+  {
+    id: "versebottom",
+    name: "VerseBottom",
+    tagline: "High-agility coordination with a clutch defensive utility toolkit.",
+    description: "Quick to adapt, nimble with mechanics, and always ready to back up the team with resilient, fast-paced coordination.",
     highest: "dexterity" as keyof StatBlock,
     lowest: "intelligence" as keyof StatBlock,
-    icon: "Sparkles"
+    icon: "Activity",
+    color: "#10b981"
   },
   {
-    id: "loot-goblin",
-    name: "The Loot Goblin",
-    tagline: "If it's shiny and unpinned, it belongs in my inventory.",
-    description: "You track down lost coupons, hoard shiny dice, collect loyalty reward cards, and refuse to throw away boxes because they might have a function later.",
+    id: "side",
+    name: "Side",
+    tagline: "Deploys alternative solutions. Master of social boundary mechanics.",
+    description: "An exceptional room-reader and negotiator who avoids brute-force conflicts, opting instead for elegant diplomatic solutions.",
     highest: "wisdom" as keyof StatBlock,
-    lowest: "constitution" as keyof StatBlock,
-    icon: "Coins"
+    lowest: "strength" as keyof StatBlock,
+    icon: "Eye",
+    color: "#6366f1"
   },
   {
-    id: "min-maxer",
-    name: "The Min-Maxer",
-    tagline: "Calculates the mathematically optimal path to joy.",
-    description: "You analyze daily routes for fuel efficiency, optimize your work station, and possess an exact tier list for local takeaway joints.",
-    highest: "intelligence" as keyof StatBlock,
-    lowest: "wisdom" as keyof StatBlock,
-    icon: "Calculator"
+    id: "powerbottom",
+    name: "Power Bottom",
+    tagline: "Commands the entire field through raw charisma and unmatched stamina.",
+    description: "An absolute powerhouse of social presence and pure energy, captivating everyone while effortlessly outlasting any marathon schedule.",
+    highest: "constitution" as keyof StatBlock,
+    lowest: "intelligence" as keyof StatBlock,
+    icon: "Coins",
+    color: "#d946ef"
   }
 ];
 

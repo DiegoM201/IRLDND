@@ -59,6 +59,7 @@ export default function App() {
   const [forgeClassDesc, setForgeClassDesc] = useState("");
   const [forgeClassHigh, setForgeClassHigh] = useState<keyof StatBlock>("intelligence");
   const [forgeClassLow, setForgeClassLow] = useState<keyof StatBlock>("charisma");
+  const [forgeClassColor, setForgeClassColor] = useState("#fbbf24");
 
   const [forgeRaceName, setForgeRaceName] = useState("");
   const [forgeRaceTagline, setForgeRaceTagline] = useState("");
@@ -98,6 +99,17 @@ export default function App() {
 
   // Active sheet computed helper
   const character = characters[activeCharacterIndex] || null;
+  const classColor = character?.accentColor || archetypes.find(a => a.name === character?.role || a.id === character?.role)?.color || "#fbbf24";
+
+  const getAvatarEmoji = (k: string) => {
+    const mapping: Record<string, string> = {
+      king: "👑", nails: "💅", shades: "🕶️", lips: "💋", devil: "😈",
+      unicorn: "🦄", lightning: "⚡", gem: "💎", peach: "🍑", fire: "🔥",
+      rainbow: "🌈", cowboy: "🤠", "wiz-boy": "🧙‍♂️", knight: "🛡️", rogue: "🥷",
+      wild: "🦁", goblin: "👺", intellect: "🧠", coder: "💻", coffee: "☕"
+    };
+    return mapping[k] || "✨";
+  };
 
   const handleSaveCharacter = (sheet: CharacterSheet) => {
     let nextList = [...characters];
@@ -215,7 +227,8 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
             tagline: forgeClassTagline.trim() || "A completely unique role layout.",
             description: forgeClassDesc.trim() || "No dynamic overview provided.",
             highest: forgeClassHigh,
-            lowest: forgeClassLow
+            lowest: forgeClassLow,
+            color: forgeClassColor
           };
         }
         return a;
@@ -230,7 +243,8 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
         description: forgeClassDesc.trim() || "No dynamic overview provided.",
         highest: forgeClassHigh,
         lowest: forgeClassLow,
-        icon: "Sparkles"
+        icon: "Sparkles",
+        color: forgeClassColor
       };
       nextList = [...archetypes, newItem];
     }
@@ -244,6 +258,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
     setForgeClassDesc("");
     setForgeClassHigh("intelligence");
     setForgeClassLow("charisma");
+    setForgeClassColor("#fbbf24");
   };
 
   const handleDeleteArchetype = (id: string) => {
@@ -265,6 +280,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
     setForgeClassDesc(a.description || "");
     setForgeClassHigh(a.highest || "intelligence");
     setForgeClassLow(a.lowest || "charisma");
+    setForgeClassColor(a.color || "#fbbf24");
   };
 
   // 🌟 Unified Race CRUD Handlers
@@ -397,14 +413,9 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
     }
   };
 
-  const getAvatarEmoji = (k: string) => {
-    if (k === "coder") return "💻"; if (k === "coffee") return "☕"; if (k === "rogue") return "🥷"; if (k === "wiz-boy") return "🧙‍♂️";
-    if (k === "knight") return "🛡️"; if (k === "goblin") return "👺"; if (k === "intellect") return "🧠"; return "🦁";
-  };
-
   return (
     <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] antialiased">
-      <div className="h-1 w-full bg-gradient-to-r from-amber-600 to-yellow-500" />
+      <div className="h-1 w-full transition-all duration-300" style={{ backgroundColor: classColor }} />
       
       {(characters.length === 0 || isAddingNewCharacter) ? (
         <Wizard 
@@ -422,25 +433,31 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
             <span className="text-[10px] font-mono uppercase text-zinc-500 flex items-center gap-1">
               <Users className="w-3.5 h-3.5 text-zinc-400" /> Active Guild Members:
             </span>
-            {characters.map((c, index) => (
-              <button
-                key={c.id || index}
-                onClick={() => {
-                  setActiveCharacterIndex(index);
-                  localStorage.setItem("irl_active_char_idx", index.toString());
-                }}
-                className={`text-xs px-3 py-1 rounded-md font-medium border transition-all cursor-pointer ${
-                  activeCharacterIndex === index 
-                    ? "bg-amber-500 text-zinc-950 border-amber-400 font-bold" 
-                    : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white"
-                }`}
-              >
-                {getAvatarEmoji(c.avatar)} {c.name} (Lvl {c.level})
-              </button>
-            ))}
+            {characters.map((c, index) => {
+              const isActive = activeCharacterIndex === index;
+              const charClassColor = c.accentColor || archetypes.find(a => a.name === c.role || a.id === c.role)?.color || "#fbbf24";
+              return (
+                <button
+                  key={c.id || index}
+                  onClick={() => {
+                    setActiveCharacterIndex(index);
+                    localStorage.setItem("irl_active_char_idx", index.toString());
+                  }}
+                  className="text-xs px-3 py-1 rounded-md font-bold border transition-all cursor-pointer"
+                  style={{
+                    backgroundColor: isActive ? charClassColor : "rgba(24, 24, 27, 0.6)",
+                    borderColor: isActive ? charClassColor : "#27272a",
+                    color: isActive ? "#09090b" : "#a1a1aa"
+                  }}
+                >
+                  {getAvatarEmoji(c.avatar)} {c.name} (Lvl {c.level})
+                </button>
+              );
+            })}
             <button
               onClick={() => setIsAddingNewCharacter(true)}
-              className="text-xs bg-zinc-900 border border-dashed border-zinc-700 hover:border-amber-400 text-amber-400 px-3 py-1 rounded-md flex items-center gap-1 transition-all ml-auto cursor-pointer"
+              className="text-xs bg-zinc-900 border border-dashed border-zinc-700 hover:text-white px-3 py-1 rounded-md flex items-center gap-1 transition-all ml-auto cursor-pointer"
+              style={{ color: classColor, borderColor: `${classColor}40` }}
             >
               <Plus className="w-3.5 h-3.5" /> Join Party Profile
             </button>
@@ -449,27 +466,53 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
           {/* Header Dashboard Grid */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-zinc-900/60 p-5 rounded-2xl border border-zinc-850">
             <div className="flex items-center gap-4">
-              <div className="text-4xl p-3 bg-amber-500/10 rounded-xl relative">
+              <div 
+                className="text-4xl p-3 rounded-xl border relative"
+                style={{ backgroundColor: `${classColor}15`, borderColor: `${classColor}35` }}
+              >
                 {getAvatarEmoji(character.avatar)}
-                <span className="absolute -bottom-1.5 -right-1 bg-amber-500 text-black text-[10px] font-mono px-1.5 rounded-full font-bold">Lvl {character.level}</span>
+                <span 
+                  className="absolute -bottom-1.5 -right-1 text-black text-[10px] font-mono px-1.5 rounded-full font-bold"
+                  style={{ backgroundColor: classColor }}
+                >
+                  Lvl {character.level}
+                </span>
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-display font-bold text-white">{character.name}</h1>
-                  <span className="text-[11px] bg-amber-500/10 text-amber-400 font-mono px-2 py-0.5 rounded border border-amber-500/30 font-bold">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="text-2xl font-display font-extrabold text-white">{character.name}</h1>
+                  <span 
+                    className="text-[11.5px] font-mono px-2 py-0.5 rounded border font-extrabold"
+                    style={{ backgroundColor: `${classColor}15`, color: classColor, borderColor: `${classColor}40` }}
+                  >
                     {character.race} • {character.role}
                   </span>
                 </div>
-                <div className="text-xs text-zinc-400 font-mono mt-1">Guild: {character.faction} • XP: {character.xp}/100</div>
+                <div className="flex items-center gap-3 mt-2">
+                  <div className="text-xs text-zinc-400 font-mono">Guild: {character.faction}</div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-24 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                      <div className="h-full transition-all duration-500" style={{ width: `${character.xp}%`, backgroundColor: classColor }} />
+                    </div>
+                    <span className="text-[10px] text-zinc-500 font-mono font-bold">{character.xp}/100 XP</span>
+                  </div>
+                </div>
               </div>
             </div>
             
             <div className="flex items-center gap-2 self-end md:self-auto">
               <button 
                 onClick={() => setDevMode(!devMode)}
-                className={`flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg border transition-all cursor-pointer ${
-                  devMode ? "bg-amber-500/10 border-amber-500 text-amber-400 shadow-md font-extrabold" : "bg-zinc-950 border-zinc-850 text-zinc-400"
-                }`}
+                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg border transition-all cursor-pointer font-extrabold font-mono"
+                style={devMode ? {
+                  backgroundColor: `${classColor}15`,
+                  borderColor: classColor,
+                  color: classColor
+                } : {
+                  backgroundColor: "#09090b",
+                  borderColor: "#27272a",
+                  color: "#a1a1aa"
+                }}
               >
                 <Terminal className="w-3.5 h-3.5" /> DM System Workshop: {devMode ? "ON" : "OFF"}
               </button>
@@ -495,9 +538,27 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
 
           {/* Navigation Bar Header */}
           <div className="flex border-b border-zinc-850 gap-4 mb-6">
-            <button onClick={() => setActiveTab("sheet")} className={`pb-3 text-sm font-semibold cursor-pointer ${activeTab === "sheet" ? "text-amber-500 border-b-2 border-amber-500" : "text-zinc-400"}`}>Attributes Grid</button>
-            <button onClick={() => setActiveTab("dm")} className={`pb-3 text-sm font-semibold cursor-pointer ${activeTab === "dm" ? "text-amber-500 border-b-2 border-amber-500" : "text-zinc-400"}`}>AI DM Advice</button>
-            <button onClick={() => setActiveTab("markdown")} className={`pb-3 text-sm font-semibold cursor-pointer ${activeTab === "markdown" ? "text-amber-500 border-b-2 border-amber-500" : "text-zinc-400"}`}>Markdown Export</button>
+            <button 
+              onClick={() => setActiveTab("sheet")} 
+              className={`pb-3 text-sm font-semibold cursor-pointer transition-all ${activeTab === "sheet" ? "border-b-2" : "text-zinc-400 hover:text-zinc-200"}`}
+              style={{ color: activeTab === "sheet" ? classColor : undefined, borderBottomColor: activeTab === "sheet" ? classColor : "transparent" }}
+            >
+              Attributes Grid
+            </button>
+            <button 
+              onClick={() => setActiveTab("dm")} 
+              className={`pb-3 text-sm font-semibold cursor-pointer transition-all ${activeTab === "dm" ? "border-b-2" : "text-zinc-400 hover:text-zinc-200"}`}
+              style={{ color: activeTab === "dm" ? classColor : undefined, borderBottomColor: activeTab === "dm" ? classColor : "transparent" }}
+            >
+              AI DM Advice
+            </button>
+            <button 
+              onClick={() => setActiveTab("markdown")} 
+              className={`pb-3 text-sm font-semibold cursor-pointer transition-all ${activeTab === "markdown" ? "border-b-2" : "text-zinc-400 hover:text-zinc-200"}`}
+              style={{ color: activeTab === "markdown" ? classColor : undefined, borderBottomColor: activeTab === "markdown" ? classColor : "transparent" }}
+            >
+              Markdown Export
+            </button>
           </div>
 
           <div className="grid lg:grid-cols-12 gap-6">
@@ -530,16 +591,20 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                       {/* 🌟 Dynamic Class Management Module with full CRUD */}
                       {devTab === "class-forge" && (
                         <div className="flex flex-col gap-3">
-                          <h4 className="text-[10px] uppercase font-mono font-bold tracking-wider text-amber-500">
+                          <h4 
+                            className="text-[10px] uppercase font-mono font-bold tracking-wider"
+                            style={{ color: classColor }}
+                          >
                             {editingArchetypeId ? "🔧 EDITING EXISTING ROLE BLUEPRINT" : "✨ CREATE A NEW ROLE BLUEPRINT"}
                           </h4>
-                          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-2">
+                          <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-2">
                             <input 
                               type="text" 
                               placeholder="Class Name" 
                               value={forgeClassName} 
                               onChange={(e) => setForgeClassName(e.target.value)} 
                               className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded focus:outline-none focus:border-amber-500" 
+                              style={{ focusBorderColor: classColor }}
                             />
                             <input 
                               type="text" 
@@ -565,12 +630,28 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                               {Object.keys(STAT_DESCRIPTIONS).map(s => <option key={s} value={s}>Lowest/Flaw: {STAT_DESCRIPTIONS[s as keyof StatBlock].label}</option>)}
                             </select>
 
+                            <div className="flex items-center gap-1.5 bg-zinc-950 border border-zinc-850 p-2 rounded relative">
+                              <span className="text-[9px] font-mono text-zinc-500 uppercase font-black pl-1">Color:</span>
+                              <input 
+                                type="color" 
+                                value={forgeClassColor} 
+                                onChange={(e) => setForgeClassColor(e.target.value)} 
+                                className="w-8 h-6 bg-transparent border-0 cursor-pointer focus:outline-none shrink-0" 
+                                title="Pick archetype theme color"
+                              />
+                              <span className="text-[10px] font-mono text-zinc-400 overflow-hidden text-ellipsis whitespace-nowrap">{forgeClassColor}</span>
+                            </div>
+
                             <div className="flex gap-1">
-                              <button onClick={handleSaveArchetype} className="flex-1 bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs font-extrabold font-mono p-2 rounded cursor-pointer">
-                                {editingArchetypeId ? "Save Change" : "+ Forge"}
+                              <button 
+                                onClick={handleSaveArchetype} 
+                                className="flex-1 text-zinc-950 text-xs font-extrabold font-mono p-2 rounded cursor-pointer"
+                                style={{ backgroundColor: classColor }}
+                              >
+                                {editingArchetypeId ? "Save" : "+ Forge"}
                               </button>
                               {editingArchetypeId && (
-                                <button onClick={() => { setEditingArchetypeId(null); setForgeClassName(""); setForgeClassTagline(""); setForgeClassDesc(""); }} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold p-2 px-3 rounded cursor-pointer" title="Cancel Edit">✕</button>
+                                <button onClick={() => { setEditingArchetypeId(null); setForgeClassName(""); setForgeClassTagline(""); setForgeClassDesc(""); setForgeClassColor("#fbbf24"); }} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold p-2 px-3 rounded cursor-pointer" title="Cancel Edit">✕</button>
                               )}
                             </div>
                           </div>
@@ -585,10 +666,21 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
 
                           <div className="flex flex-wrap gap-1.5 mt-2">
                             {archetypes.map(a => (
-                              <div key={a.id} className="text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-300 px-2.5 py-1.5 rounded-lg flex items-center gap-2">
-                                <span className="font-semibold">{a.name}</span>
+                              <div 
+                                key={a.id} 
+                                className="text-[10px] bg-zinc-900 px-2.5 py-1.5 rounded-lg flex items-center gap-2 border"
+                                style={{ borderColor: `${a.color || "#3f3f46"}40` }}
+                              >
+                                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: a.color || "#3f3f46" }} />
+                                <span className="font-extrabold" style={{ color: a.color || "#ffffff" }}>{a.name}</span>
                                 <span className="text-zinc-500">({a.highest.substring(0,3).toUpperCase()} / {a.lowest.substring(0,3).toUpperCase()})</span>
-                                <button onClick={() => handleEditArchetype(a)} className="text-amber-400 hover:text-amber-300 text-[10px] font-bold cursor-pointer ml-1">Edit</button>
+                                <button 
+                                  onClick={() => handleEditArchetype(a)} 
+                                  className="text-amber-400 hover:text-amber-300 text-[10px] font-bold cursor-pointer ml-1"
+                                  style={{ color: a.color }}
+                                >
+                                  Edit
+                                </button>
                                 <button onClick={() => handleDeleteArchetype(a.id)} className="text-red-400 hover:text-red-300 cursor-pointer" title="Delete role class">✕</button>
                               </div>
                             ))}
@@ -694,12 +786,25 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                       const baseValue = value - raceBonus;
 
                       return (
-                        <div key={k} onClick={() => { if (!devMode) handleRollDice(k); }} className={`p-4 bg-zinc-900/40 rounded-xl border text-left select-none relative group ${devMode ? "border-amber-500/20" : "border-zinc-850 hover:border-amber-500 transition-all cursor-pointer"}`}>
+                        <div 
+                          key={k} 
+                          onClick={() => { if (!devMode) handleRollDice(k); }} 
+                          className={`p-4 bg-zinc-900/40 rounded-xl border text-left select-none relative group transition-all ${devMode ? "cursor-default" : "cursor-pointer"}`}
+                          style={{
+                            borderColor: devMode ? `${classColor}40` : "#27272a"
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!devMode) e.currentTarget.style.borderColor = classColor;
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!devMode) e.currentTarget.style.borderColor = "#27272a";
+                          }}
+                        >
                           
                           {/* 🔮 Dynamic Hover Tooltip Breakdown Card */}
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-zinc-950 border border-zinc-800 p-3 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none text-[10px] font-mono flex flex-col gap-1 text-zinc-300">
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-zinc-950 border border-zinc-805 p-3 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none text-[10px] font-mono flex flex-col gap-1 text-zinc-300">
                             <div className="flex justify-between border-b border-zinc-800 pb-1 mb-1 font-display">
-                              <span className="font-bold text-amber-400 text-xs">{desc.label}</span>
+                              <span className="font-bold text-xs" style={{ color: classColor }}>{desc.label}</span>
                               <span className="text-zinc-500 text-[9px]">CALCULATION</span>
                             </div>
                             <div className="flex justify-between">
@@ -707,16 +812,16 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                               <span className="text-white font-bold">{baseValue}</span>
                             </div>
                             {raceBonus > 0 && (
-                              <div className="flex justify-between text-green-400">
+                              <div className="flex justify-between text-zinc-300">
                                 <span className="text-zinc-500">Racial Bonus ({character.race}):</span>
-                                <span className="font-bold">+{raceBonus}</span>
+                                <span className="font-bold font-mono" style={{ color: classColor }}>+{raceBonus}</span>
                               </div>
                             )}
                             <div className="flex justify-between border-t border-zinc-900 pt-1 mt-1 font-bold">
                               <span className="text-zinc-400">Total Score:</span>
                               <span className="text-white">{value}</span>
                             </div>
-                            <div className="flex justify-between text-green-400 border-t border-zinc-900 pt-1 mt-1 font-bold">
+                            <div className="flex justify-between border-t border-zinc-900 pt-1 mt-1 font-bold" style={{ color: classColor }}>
                               <span>Modifier:</span>
                               <span>{mod >= 0 ? `+${mod}` : mod}</span>
                             </div>
@@ -724,18 +829,18 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
 
                           <div className="flex justify-between items-center mb-2">
                             <span className="text-[10px] font-mono text-zinc-400 uppercase font-bold">{k.substring(0,3)}</span>
-                            <span className="font-mono text-xs font-bold text-green-400">{mod >= 0 ? `+${mod}` : mod}</span>
+                            <span className="font-mono text-xs font-bold" style={{ color: classColor }}>{mod >= 0 ? `+${mod}` : mod}</span>
                           </div>
-                          <h4 className="font-display font-bold text-white text-base">{value}</h4>
+                          <h4 className="font-display font-extrabold text-white text-base">{value}</h4>
                           <span className="text-xs text-zinc-400 font-medium block mb-1">{desc.label}</span>
                           <p className="text-[10px] text-zinc-500 leading-normal line-clamp-2">{desc.utility}</p>
                           
                           {/* 🌟 Dynamic incremental modifiers in dev panels */}
                           {devMode && (
                             <div className="flex justify-between items-center mt-2.5 pt-2 border-t border-zinc-800" onClick={(e) => e.stopPropagation()}>
-                              <button onClick={() => { const nextStats = { ...character.stats, [k]: Math.max(1, value - 1) }; handleUpdateDirectSheet({ ...character, stats: nextStats }); }} className="px-2 py-0.5 bg-zinc-800 text-white rounded text-xs font-mono font-bold hover:bg-zinc-700 cursor-pointer">-</button>
-                              <span className="text-[8px] font-mono font-bold text-amber-500 tracking-wider">TWEAK</span>
-                              <button onClick={() => { const nextStats = { ...character.stats, [k]: Math.min(30, value + 1) }; handleUpdateDirectSheet({ ...character, stats: nextStats }); }} className="px-2 py-0.5 bg-zinc-800 text-white rounded text-xs font-mono font-bold hover:bg-zinc-700 cursor-pointer">+</button>
+                              <button onClick={() => { const nextStats = { ...character.stats, [k]: Math.max(1, value - 1) }; handleUpdateDirectSheet({ ...character, stats: nextStats }); }} className="px-2 py-0.5 bg-zinc-950 text-white rounded text-xs font-mono font-bold hover:bg-zinc-800 cursor-pointer border border-zinc-800">-</button>
+                              <span className="text-[8px] font-mono font-bold tracking-wider" style={{ color: classColor }}>TWEAK</span>
+                              <button onClick={() => { const nextStats = { ...character.stats, [k]: Math.min(30, value + 1) }; handleUpdateDirectSheet({ ...character, stats: nextStats }); }} className="px-2 py-0.5 bg-zinc-950 text-white rounded text-xs font-mono font-bold hover:bg-zinc-800 cursor-pointer border border-zinc-800">+</button>
                             </div>
                           )}
                         </div>
