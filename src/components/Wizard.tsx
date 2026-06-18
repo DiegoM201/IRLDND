@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { 
   BookOpen, Flame, Shield, Sparkles, Coins, Calculator, 
-  ChevronRight, ChevronLeft, User, Brain, 
+  ChevronRight, ChevronLeft, User, Brain, X,
   Heart, Eye, Activity, MessageSquare, Dumbbell, Wand2, 
   Dice5, Check, Loader2 
 } from "lucide-react";
-import { ARCHETYPES, STAT_DESCRIPTIONS, StatBlock, CharacterSheet, Perk, RACES } from "../types";
+import { STAT_DESCRIPTIONS, StatBlock, CharacterSheet, Perk } from "../types";
 
 interface WizardProps {
   onComplete: (sheet: CharacterSheet) => void;
+  availableArchetypes: any[]; // Dynamic values from Dev Panel
+  availableRaces: any[];
+  onCancel?: () => void;
+  showCancelButton?: boolean;
 }
 
 const QUIZ_QUESTIONS = [
@@ -58,15 +62,15 @@ const AVATAR_OPTIONS = [
   { key: "coffee", emoji: "☕", bg: "bg-amber-900/40 border-yellow-600", label: "Caffeine Knight" }
 ];
 
-export default function Wizard({ onComplete }: WizardProps) {
+export default function Wizard({ onComplete, availableArchetypes, availableRaces, onCancel, showCancelButton }: WizardProps) {
   const [step, setStep] = useState<number>(1);
   const [mode, setMode] = useState<" quiz" | "direct" | null>(null);
   
   const [quizIndex, setQuizIndex] = useState<number>(0);
   const [quizScores, setQuizScores] = useState<Record<string, number>>({});
   
-  const [selectedArchetype, setSelectedArchetype] = useState<string>("rules-lawyer");
-  const [selectedRace, setSelectedRace] = useState<string>("twink"); // 🌟 Race picker state
+  const [selectedArchetype, setSelectedArchetype] = useState<string>(availableArchetypes[0]?.id || "rules-lawyer");
+  const [selectedRace, setSelectedRace] = useState<string>(availableRaces[0]?.id || "twink"); 
   const [highestStat, setHighestStat] = useState<keyof StatBlock>("intelligence");
   const [lowestStat, setLowestStat] = useState<keyof StatBlock>("charisma");
   
@@ -113,7 +117,8 @@ export default function Wizard({ onComplete }: WizardProps) {
   const [faction, setFaction] = useState<string>("Modern Adventurers");
   const [avatar, setAvatar] = useState<string>("coder");
 
-  const archetypeDetails = ARCHETYPES.find(a => a.id === selectedArchetype) || ARCHETYPES[0];
+  const archetypeDetails = availableArchetypes.find(a => a.id === selectedArchetype) || availableArchetypes[0];
+  const raceDetails = availableRaces.find(r => r.id === selectedRace) || availableRaces[0];
 
   const handleSelectQuizOption = (archetype: string) => {
     setQuizScores(prev => ({ ...prev, [archetype]: (prev[archetype] || 0) + 1 }));
@@ -122,7 +127,7 @@ export default function Wizard({ onComplete }: WizardProps) {
       setQuizIndex(quizIndex + 1);
     } else {
       const finalScores = { ...quizScores, [archetype]: (quizScores[archetype] || 0) + 1 };
-      let winner = "rules-lawyer";
+      let winner = availableArchetypes[0]?.id || "rules-lawyer";
       let highestScore = 0;
       Object.entries(finalScores).forEach(([arch, score]) => {
         const scoreVal = score as number;
@@ -133,10 +138,10 @@ export default function Wizard({ onComplete }: WizardProps) {
       });
 
       setSelectedArchetype(winner);
-      const matched = ARCHETYPES.find(a => a.id === winner);
+      const matched = availableArchetypes.find(a => a.id === winner);
       if (matched) {
-        setHighestStat(matched.highest);
-        setLowestStat(matched.lowest);
+        setHighestStat(matched.highest || "intelligence");
+        setLowestStat(matched.lowest || "charisma");
       }
       setMode("direct");
       setStep(1);
@@ -145,10 +150,10 @@ export default function Wizard({ onComplete }: WizardProps) {
 
   const handleArchetypeSelectDirect = (id: string) => {
     setSelectedArchetype(id);
-    const matched = ARCHETYPES.find(a => a.id === id);
+    const matched = availableArchetypes.find(a => a.id === id);
     if (matched) {
-      setHighestStat(matched.highest);
-      setLowestStat(matched.lowest);
+      setHighestStat(matched.highest || "intelligence");
+      setLowestStat(matched.lowest || "charisma");
     }
   };
 
@@ -258,8 +263,8 @@ export default function Wizard({ onComplete }: WizardProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          archetype: archetypeDetails.name,
-          race: RACES.find(r => r.id === selectedRace)?.name || "Twink", // 🌟 Connects race to prompt
+          archetype: archetypeDetails?.name || "The Wildcard",
+          race: raceDetails?.name || "Twink",
           highestStat,
           lowestStat,
           customInput: quirkInput,
@@ -282,17 +287,30 @@ export default function Wizard({ onComplete }: WizardProps) {
       return;
     }
     setNameError("");
+
+    // 🌟 Calculate and Apply Ability Score Bonuses from Race dynamically!
+    const ultimateStats = { ...customStats };
+    if (raceDetails && raceDetails.bonuses) {
+      Object.entries(raceDetails.bonuses).forEach(([statName, bonusAmount]) => {
+        const key = statName as keyof StatBlock;
+        if (ultimateStats[key] !== undefined) {
+          ultimateStats[key] += (bonusAmount as number);
+        }
+      });
+    }
+
     onComplete({
+      id: Math.random().toString(36).substring(2, 9), // Set tracking key
       name: charName,
-      role: archetypeDetails.name,
-      race: RACES.find(r => r.id === selectedRace)?.name || "Twink", // 🌟 Package chosen race
+      role: archetypeDetails?.name || "The Wildcard",
+      race: raceDetails?.name || "Twink", 
       level: 1,
       xp: 0,
-      stats: customStats,
+      stats: ultimateStats,
       perks: generatedPerks,
       customDetails: quirkInput,
       avatar: avatar,
-      faction: faction || "Modern Adventurers"
+      faction: faction || "Freelance Party"
     });
   };
 
@@ -310,6 +328,12 @@ export default function Wizard({ onComplete }: WizardProps) {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8" id="wizard-container">
+      {showCancelButton && onCancel && (
+        <button onClick={onCancel} className="mb-4 flex items-center gap-1 text-xs text-zinc-500 hover:text-white bg-zinc-950 px-2.5 py-1.5 rounded border border-zinc-850 cursor-pointer">
+          <X className="w-3.5 h-3.5" /> Close Creation Roster
+        </button>
+      )}
+
       <div className="text-center mb-10">
         <h1 className="text-4xl font-display font-bold tracking-tight text-white mb-2">🔮 IRL CHARACTER GENERATOR</h1>
         <p className="text-zinc-400 text-sm max-w-lg mx-auto">Map your actual habits, triumphs, and flaws into a Tabletop RPG layout.</p>
@@ -357,7 +381,7 @@ export default function Wizard({ onComplete }: WizardProps) {
           {step === 1 && mode === "direct" && (
             <div className="flex flex-col gap-6">
               <div className="grid md:grid-cols-2 gap-4">
-                {ARCHETYPES.map((theme) => {
+                {availableArchetypes.map((theme) => {
                   const isSelected = selectedArchetype === theme.id;
                   return (
                     <div key={theme.id} onClick={() => handleArchetypeSelectDirect(theme.id)} className={`p-5 rounded-xl border transition-all cursor-pointer ${isSelected ? "bg-amber-500/10 border-amber-500" : "bg-zinc-900/60 border-zinc-800"}`}>
@@ -390,7 +414,7 @@ export default function Wizard({ onComplete }: WizardProps) {
               <div className="bg-zinc-900/40 border border-zinc-800 p-4 rounded-xl flex flex-col gap-3">
                 <h4 className="text-xs font-mono text-amber-400 font-bold uppercase">⚡ Keyboard Scriptorium</h4>
                 <div className="flex gap-2">
-                  <input type="text" value={textAllocation} onChange={(e) => setTextAllocation(e.target.value)} placeholder="e.g., Charisma 15, Intelligence 14, Strength 13..." className="flex-1 bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-xs text-white focus:outline-none" />
+                  <input type="text" value={textAllocation} onChange={(e) => setTextAllocation(e.target.value)} placeholder="e.g., Charisma 15, Intelligence 14, Strength 13..." className="flex-1 bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500" />
                   <button onClick={handleParseTextAllocation} className="px-4 py-2 bg-amber-500 text-zinc-950 font-bold text-xs rounded-lg uppercase font-mono">Scribe</button>
                 </div>
               </div>
@@ -449,33 +473,42 @@ export default function Wizard({ onComplete }: WizardProps) {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-mono text-zinc-400 uppercase tracking-widest mb-1.5">Adventurer Name</label>
-                    <input type="text" value={charName} onChange={(e) => setCharName(e.target.value)} placeholder="Diego the Coffee Sorcerer" className="w-full bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-xs text-zinc-200" />
+                    <input type="text" value={charName} onChange={(e) => setCharName(e.target.value)} placeholder="Diego the Coffee Sorcerer" className="w-full bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-xs text-zinc-200 focus:outline-none focus:border-amber-500" />
                     {nameError && <p className="text-red-400 text-xs mt-1">⚠️ {nameError}</p>}
                   </div>
                   <div>
                     <label className="block text-xs font-mono text-zinc-400 uppercase tracking-widest mb-1.5">Guild / Faction Name</label>
-                    <input type="text" value={faction} onChange={(e) => setFaction(e.target.value)} placeholder="Tech Room Syndicate" className="w-full bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-xs text-zinc-200" />
+                    <input type="text" value={faction} onChange={(e) => setFaction(e.target.value)} placeholder="Tech Room Syndicate" className="w-full bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-xs text-zinc-200 focus:outline-none focus:border-amber-500" />
                   </div>
                 </div>
 
-                {/* 🏳️‍🌈 Visual Selection Section for Queer Blueprint Races */}
+                {/* 🏳️‍🌈 Selection Section for Queer Blueprint Races */}
                 <div>
-                  <label className="block text-xs font-mono text-zinc-400 uppercase tracking-widest mb-1.5">Select Community Race Blueprint</label>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <label className="block text-xs font-mono text-zinc-400 uppercase tracking-widest">Select Community Race Blueprint</label>
+                    <span className="text-[10px] text-green-400 font-mono font-bold">Adds racial bonuses directly!</span>
+                  </div>
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 mt-1">
-                    {RACES.map((r) => {
+                    {availableRaces.map((r) => {
                       const isSelected = selectedRace === r.id;
                       return (
                         <div
                           key={r.id}
                           onClick={() => setSelectedRace(r.id)}
-                          className={`p-3 rounded-xl border text-center cursor-pointer transition-all ${
+                          className={`p-3 rounded-xl border text-center cursor-pointer transition-all flex flex-col justify-between ${
                             isSelected ? "bg-amber-500/10 border-amber-500" : "bg-zinc-950/80 border-zinc-850 hover:border-zinc-700"
                           }`}
                           title={r.description}
                         >
-                          <span className="text-xl block mb-1">{r.icon}</span>
-                          <span className="text-xs block font-bold text-white">{r.name}</span>
-                          <span className="text-[9px] block text-zinc-500 mt-0.5 line-clamp-1">{r.tagline}</span>
+                          <div>
+                            <span className="text-xl block mb-1">{r.icon || "✨"}</span>
+                            <span className="text-xs block font-bold text-white">{r.name}</span>
+                            <span className="text-[9px] block text-zinc-500 mt-0.5 line-clamp-1">{r.tagline}</span>
+                          </div>
+                          {/* 🌟 Ability modifier badge tracker */}
+                          <div className="text-[9px] text-green-400 font-mono mt-1.5 bg-green-950/20 py-0.5 rounded border border-green-900/10">
+                            {Object.entries(r.bonuses || {}).map(([sKey, bVal]) => `+${bVal}${sKey.substring(0,3).toUpperCase()}`).join(" ")}
+                          </div>
                         </div>
                       );
                     })}
