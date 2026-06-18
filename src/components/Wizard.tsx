@@ -287,25 +287,25 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-8 bg-white border border-slate-200 rounded-3xl shadow-sm text-slate-800 text-left mt-6" id="wizard-container">
+    <div className="max-w-3xl mx-auto px-6 py-8 bg-[#f5efe4] border-2 border-[#eaddca] rounded-3xl shadow-md text-stone-800 text-left mt-6" id="wizard-container">
       {showCancelButton && onCancel && (
-        <button onClick={onCancel} className="mb-4 flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors cursor-pointer font-bold font-mono">
+        <button onClick={onCancel} className="mb-4 flex items-center gap-1.5 text-xs text-stone-700 hover:text-stone-900 bg-brand-beige hover:bg-[#ebdcb9] px-3 py-1.5 rounded-lg border border-[#eaddca] transition-colors cursor-pointer font-black font-mono shadow-sm">
           <X className="w-3.5 h-3.5" /> Close Creation Roster
         </button>
       )}
 
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-display font-black tracking-tight text-slate-800 mb-1 flex items-center justify-center gap-2">
-          <Dice5 className="w-7 h-7 text-amber-500" />
+        <h1 className="text-3xl font-display font-black tracking-tight text-stone-900 mb-1 flex items-center justify-center gap-2">
+          <Dice5 className="w-7 h-7 text-amber-650" />
           IRL CHARACTER GENERATOR
         </h1>
-        <p className="text-slate-500 text-sm max-w-lg mx-auto font-medium">Map your actual habits, triumphs, and flaws into an interactive Tabletop RPG layout.</p>
+        <p className="text-stone-600 text-sm max-w-lg mx-auto font-semibold">Map your actual habits, triumphs, and flaws into an interactive Tabletop RPG layout.</p>
         
         <div className="flex justify-center items-center gap-1.5 mt-6 max-w-xs mx-auto">
           {Array.from({ length: 3 }).map((_, idx) => (
             <React.Fragment key={idx}>
-              <div className={`h-1.5 rounded-full transition-all ${step > idx ? "bg-amber-500 w-12" : "bg-slate-200 w-6"}`} />
-              {idx < 2 && <div className={`h-[1px] w-4 ${step > idx + 1 ? "bg-amber-600" : "bg-slate-200"}`} />}
+              <div className={`h-1.5 rounded-full transition-all ${step > idx ? "bg-amber-600 w-12" : "bg-[#eaddca] w-6"}`} />
+              {idx < 2 && <div className={`h-[1px] w-4 ${step > idx + 1 ? "bg-amber-700" : "bg-[#eaddca]"}`} />}
             </React.Fragment>
           ))}
         </div>
@@ -315,40 +315,40 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
         {/* Step 1: Assembly Phase */}
         {step === 1 && (
           <div className="flex flex-col gap-6">
-            <div className="border border-slate-200 rounded-2xl p-5 bg-slate-50/50 flex flex-col gap-5">
-              <h3 className="font-display font-black text-sm text-slate-700 uppercase tracking-widest border-b border-slate-200 pb-2">
+            <div className="border border-[#eaddca] rounded-2xl p-5 bg-brand-beige flex flex-col gap-5">
+              <h3 className="font-display font-black text-sm text-stone-800 uppercase tracking-widest border-b border-[#eaddca] pb-2">
                 Step 1: Identity Assembly
               </h3>
 
               {/* Character Details & Faction */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-1.5 font-bold">Adventurer Name</label>
+                  <label className="block text-xs font-mono text-stone-500 uppercase tracking-widest mb-1.5 font-bold">Adventurer Name</label>
                   <input 
                     type="text" 
                     value={charName} 
                     onChange={(e) => setCharName(e.target.value)} 
                     placeholder="Diego the Coffee Sorcerer" 
-                    className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400 focus:bg-white transition-all font-medium placeholder-slate-400" 
+                    className="w-full bg-brand-beige border border-[#eaddca] p-2.5 rounded-xl text-xs text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white transition-all font-medium placeholder-stone-400 font-sans font-bold" 
                   />
-                  {nameError && <p className="text-rose-500 text-xs mt-1 font-bold">⚠️ {nameError}</p>}
+                  {nameError && <p className="text-rose-600 text-xs mt-1 font-black">⚠️ {nameError}</p>}
                 </div>
                 <div>
-                  <label className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-1.5 font-bold">Guild / Faction Name</label>
+                  <label className="block text-xs font-mono text-stone-500 uppercase tracking-widest mb-1.5 font-bold">Guild / Faction Name</label>
                   <input 
                     type="text" 
                     value={faction} 
                     onChange={(e) => setFaction(e.target.value)} 
                     placeholder="Tech Room Syndicate" 
-                    className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400 focus:bg-white transition-all font-medium placeholder-slate-400" 
+                    className="w-full bg-brand-beige border border-[#eaddca] p-2.5 rounded-xl text-xs text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white transition-all font-medium placeholder-stone-400 font-sans font-bold" 
                   />
                 </div>
               </div>
 
               {/* Class Blueprint Selector */}
               <div>
-                <label className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-2 font-bold">Choose Class Blueprint</label>
-                <div className="grid md:grid-cols-2 gap-3 max-h-[195px] overflow-y-auto pr-1 border border-slate-200 rounded-xl p-2.5 bg-white shadow-inner">
+                <label className="block text-xs font-mono text-stone-500 uppercase tracking-widest mb-2 font-bold">Choose Class Blueprint</label>
+                <div className="grid md:grid-cols-2 gap-3 max-h-[195px] overflow-y-auto pr-1 border border-[#eaddca] rounded-xl p-2.5 bg-[#f5efe4] shadow-inner">
                   {availableArchetypes.map((theme) => {
                     const isSelected = selectedArchetype === theme.id;
                     const itemColor = theme.color || "#e4e4e7";
@@ -356,10 +356,10 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                       <div 
                         key={theme.id} 
                         onClick={() => handleArchetypeSelectDirect(theme.id)} 
-                        className="p-3 rounded-lg border transition-all cursor-pointer text-left"
+                        className="p-3 rounded-lg border transition-all cursor-pointer text-left shadow-sm hover:scale-[1.01]"
                         style={{ 
-                          borderColor: isSelected ? itemColor : "#e2e8f0",
-                          backgroundColor: isSelected ? `${itemColor}10` : "rgba(248, 250, 252, 0.8)"
+                          borderColor: isSelected ? itemColor : "#eaddca",
+                          backgroundColor: isSelected ? `${itemColor}15` : "rgba(252, 249, 242, 0.9)"
                         }}
                       >
                         <div className="flex justify-between items-start mb-1">
@@ -389,8 +389,8 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
               {/* Race Alignment Selector */}
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <label className="block text-xs font-mono text-slate-500 uppercase tracking-widest font-bold">Select Race Alignment</label>
-                  <span className="text-[10px] text-green-600 font-mono font-bold">Adds unique modifiers!</span>
+                  <label className="block text-xs font-mono text-stone-500 uppercase tracking-widest font-bold">Select Race Alignment</label>
+                  <span className="text-[10px] text-emerald-800 font-mono font-black">Adds unique modifiers!</span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-1">
                   {availableRaces.map((r) => {
@@ -399,8 +399,8 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                       <div
                         key={r.id}
                         onClick={() => setSelectedRace(r.id)}
-                        className={`p-2.5 rounded-xl border text-center cursor-pointer transition-all flex flex-col justify-between ${
-                          isSelected ? "bg-amber-500/10 border-amber-500 shadow-sm" : "bg-white border-slate-200 hover:border-slate-350"
+                        className={`p-2.5 rounded-xl border-2 text-center cursor-pointer transition-all flex flex-col justify-between ${
+                          isSelected ? "bg-[#eaddca]/40 border-amber-600 shadow-sm" : "bg-brand-beige border-[#eaddca] hover:border-amber-700"
                         }`}
                         title={r.description}
                       >
@@ -410,7 +410,7 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                           <span className="text-[8.5px] block text-slate-400 mt-0.5 line-clamp-1">{r.tagline}</span>
                         </div>
                         {/* Ability modifier badges */}
-                        <div className="text-[8px] text-green-600 font-mono font-bold mt-1.5 bg-green-50 py-0.5 rounded border border-green-200/50">
+                        <div className="text-[8px] text-emerald-800 font-mono font-bold mt-1.5 bg-emerald-50 border border-green-200/40 py-0.5 rounded">
                           {Object.entries(r.bonuses || {}).map(([sKey, bVal]) => `+${bVal}${sKey.substring(0,3).toUpperCase()}`).join(" ")}
                         </div>
                       </div>
@@ -421,11 +421,11 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
 
               {/* Avatar Selector Panel */}
               <div>
-                <div className="flex border-b border-slate-250 gap-4 mb-3.5">
+                <div className="flex border-b border-[#eaddca] gap-4 mb-3.5">
                   <button 
                     type="button"
                     onClick={() => setAvatarMode("emoji")} 
-                    className={`pb-2 text-xs font-mono font-bold cursor-pointer transition-all ${avatarMode === "emoji" ? "text-slate-800 border-b-2" : "text-slate-400 hover:text-slate-600"}`}
+                    className={`pb-2 text-xs font-mono font-black cursor-pointer transition-all ${avatarMode === "emoji" ? "text-stone-900 border-b-2" : "text-stone-405 hover:text-stone-600"}`}
                     style={{ borderBottomColor: avatarMode === "emoji" ? (archetypeDetails?.color || "#f43f5e") : "transparent" }}
                   >
                     🛡️ Emoji Node Roster
@@ -433,7 +433,7 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                   <button 
                     type="button"
                     onClick={() => setAvatarMode("scriptorium")} 
-                    className={`pb-2 text-xs font-mono font-bold cursor-pointer transition-all ${avatarMode === "scriptorium" ? "text-slate-800 border-b-2" : "text-slate-400 hover:text-slate-600"}`}
+                    className={`pb-2 text-xs font-mono font-black cursor-pointer transition-all ${avatarMode === "scriptorium" ? "text-stone-900 border-b-2" : "text-stone-405 hover:text-stone-600"}`}
                     style={{ borderBottomColor: avatarMode === "scriptorium" ? (archetypeDetails?.color || "#f43f5e") : "transparent" }}
                   >
                     🖼️ Image Scriptorium
@@ -442,16 +442,16 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
 
                 {avatarMode === "emoji" ? (
                   <div>
-                    <label className="block text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1.5">Choose Persona Emoji Node</label>
+                    <label className="block text-[10px] font-mono text-stone-500 uppercase tracking-widest mb-1.5 font-bold">Choose Persona Emoji Node</label>
                     <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-1">
                       {AVATAR_OPTIONS.map((opt) => (
                         <div 
                           key={opt.key} 
                           onClick={() => setAvatar(opt.key)} 
-                          className={`p-2.5 rounded-xl border text-center cursor-pointer transition-all ${avatar === opt.key ? "bg-white border-opacity-100 shadow-sm" : "bg-white border-slate-200 hover:scale-[1.02]"}`}
+                          className={`p-2.5 rounded-xl border-2 text-center cursor-pointer transition-all ${avatar === opt.key ? "bg-brand-card shadow-sm" : "bg-brand-card border-[#eaddca] hover:scale-[1.02]"}`}
                           style={{ 
                             borderColor: avatar === opt.key ? (archetypeDetails?.color || "#f43f5e") : undefined,
-                            backgroundColor: avatar === opt.key ? `${archetypeDetails?.color || "#f43f5e"}10` : undefined
+                            backgroundColor: avatar === opt.key ? `${archetypeDetails?.color || "#f43f5e"}15` : undefined
                           }}
                         >
                           <span className="text-xl block mb-0.5">{opt.emoji}</span>
@@ -461,11 +461,11 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                     </div>
                   </div>
                 ) : (
-                  <div className="grid sm:grid-cols-2 gap-6 bg-white border border-slate-200 p-4 rounded-xl text-left shadow-inner">
+                  <div className="grid sm:grid-cols-2 gap-6 bg-brand-beige border border-[#eaddca] p-4 rounded-xl text-left shadow-inner">
                     {/* Left: Upload and Sliders */}
                     <div className="flex flex-col gap-3">
                       <div>
-                        <label className="block text-[10px] font-mono text-slate-500 uppercase tracking-widest mb-1 font-bold">Local Image File</label>
+                        <label className="block text-[10px] font-mono text-stone-600 uppercase tracking-widest mb-1 font-bold">Local Image File</label>
                         <input 
                           type="file" 
                           accept="image/*" 
@@ -481,15 +481,15 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                               reader.readAsDataURL(file);
                             }
                           }}
-                          className="text-xs text-slate-500 block w-full file:mr-3 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-mono file:font-bold file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300 cursor-pointer" 
+                          className="text-xs text-stone-600 block w-full file:mr-3 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-mono file:font-bold file:bg-[#ebdcb9] file:text-stone-850 hover:file:bg-[#e6d0a3] cursor-pointer" 
                         />
                       </div>
 
-                      <div className="space-y-2 font-mono text-[9px] text-slate-500 mt-2">
+                      <div className="space-y-2 font-mono text-[9px] text-stone-600 mt-2">
                         <div>
                           <div className="flex justify-between mb-0.5">
                             <span className="font-bold">SCALE: {avatarScale.toFixed(1)}x</span>
-                            <span className="text-slate-400">0.5x - 3.0x</span>
+                            <span className="text-stone-500">0.5x - 3.0x</span>
                           </div>
                           <input 
                             type="range" 
@@ -498,14 +498,14 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                             step="0.1" 
                             value={avatarScale} 
                             onChange={(e) => setAvatarScale(parseFloat(e.target.value))} 
-                            className="w-full accent-amber-500 h-1 bg-slate-200 rounded cursor-pointer" 
+                            className="w-full accent-amber-600 h-1 bg-[#ebdcb9] rounded cursor-pointer" 
                           />
                         </div>
 
                         <div>
                           <div className="flex justify-between mb-0.5">
                             <span className="font-bold">ROTATION: {avatarRotate}°</span>
-                            <span className="text-slate-400">0° - 360°</span>
+                            <span className="text-stone-500">0° - 360°</span>
                           </div>
                           <input 
                             type="range" 
@@ -513,14 +513,14 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                             max="360" 
                             value={avatarRotate} 
                             onChange={(e) => setAvatarRotate(parseInt(e.target.value))} 
-                            className="w-full accent-amber-500 h-1 bg-slate-200 rounded cursor-pointer" 
+                            className="w-full accent-amber-600 h-1 bg-[#ebdcb9] rounded cursor-pointer" 
                           />
                         </div>
 
                         <div>
                           <div className="flex justify-between mb-0.5">
                             <span className="font-bold">X OFFSET: {avatarX}px</span>
-                            <span className="text-slate-400">-100px - 100px</span>
+                            <span className="text-stone-500">-100px - 100px</span>
                           </div>
                           <input 
                             type="range" 
@@ -528,14 +528,14 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                             max="100" 
                             value={avatarX} 
                             onChange={(e) => setAvatarX(parseInt(e.target.value))} 
-                            className="w-full accent-amber-500 h-1 bg-slate-200 rounded cursor-pointer" 
+                            className="w-full accent-amber-600 h-1 bg-[#ebdcb9] rounded cursor-pointer" 
                           />
                         </div>
 
                         <div>
                           <div className="flex justify-between mb-0.5">
                             <span className="font-bold">Y OFFSET: {avatarY}px</span>
-                            <span className="text-slate-400">-100px - 100px</span>
+                            <span className="text-stone-500">-100px - 100px</span>
                           </div>
                           <input 
                             type="range" 
@@ -543,15 +543,15 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                             max="100" 
                             value={avatarY} 
                             onChange={(e) => setAvatarY(parseInt(e.target.value))} 
-                            className="w-full accent-amber-500 h-1 bg-slate-200 rounded cursor-pointer" 
+                            className="w-full accent-amber-600 h-1 bg-[#ebdcb9] rounded cursor-pointer" 
                           />
                         </div>
                       </div>
                     </div>
 
                     {/* Right: Scriptorium Preview */}
-                    <div className="flex flex-col items-center justify-center p-3 border border-dashed border-slate-300 rounded-xl bg-slate-50">
-                      <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest mb-2 font-bold">Live Token Crop Target</span>
+                    <div className="flex flex-col items-center justify-center p-3 border border-dashed border-[#eaddca] rounded-xl bg-brand-card">
+                      <span className="text-[9px] font-mono text-stone-500 uppercase tracking-widest mb-2 font-bold">Live Token Crop Target</span>
                       <div 
                         className="relative w-28 h-28 rounded-full border-2 overflow-hidden flex items-center justify-center bg-white"
                         style={{ borderColor: archetypeDetails?.color || "#f43f5e" }}
@@ -567,7 +567,7 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                         ) : (
                           <div className="text-center p-2 flex flex-col items-center gap-1">
                             <span className="text-2xl">🥷</span>
-                            <span className="text-[8px] font-mono text-slate-500">Pending Upload...</span>
+                            <span className="text-[8px] font-mono text-stone-500">Pending Upload...</span>
                           </div>
                         )}
                       </div>
@@ -580,7 +580,7 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                             setAvatarX(0);
                             setAvatarY(0);
                           }}
-                          className="mt-2 text-[9px] font-mono text-slate-400 hover:text-slate-700 underline cursor-pointer"
+                          className="mt-2 text-[9px] font-mono text-stone-450 hover:text-stone-700 underline cursor-pointer font-bold"
                         >
                           Reset Transform Controls
                         </button>
@@ -603,28 +603,28 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
         {/* Step 2: Stats Allocation */}
         {step === 2 && (
           <div className="flex flex-col gap-6">
-            <div className="flex flex-wrap items-center gap-2 bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
-              <span className="text-[10px] font-mono uppercase text-slate-500 font-bold">Required Standard Array:</span>
+            <div className="flex flex-wrap items-center gap-2 bg-brand-card border border-[#eaddca] p-3.5 rounded-xl">
+              <span className="text-[10px] font-mono uppercase text-stone-500 font-bold">Required Standard Array:</span>
               {[15, 14, 13, 12, 10, 8].map(score => (
-                <span key={score} className={`text-xs font-mono font-black px-2.5 py-1 rounded-md border ${Object.values(customStats).includes(score) ? "bg-amber-500/10 border-amber-500/30 text-amber-600 font-bold" : "bg-zinc-100 text-zinc-400 line-through opacity-50"}`}>{score}</span>
+                <span key={score} className={`text-xs font-mono font-black px-2.5 py-1 rounded-md border ${Object.values(customStats).includes(score) ? "bg-amber-500/10 border-amber-500/30 text-amber-700 font-bold" : "bg-neutral-200 text-neutral-400 line-through opacity-50"}`}>{score}</span>
               ))}
             </div>
 
-            <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col gap-2.5">
-              <h4 className="text-xs font-mono text-amber-600 font-bold uppercase">⚡ Keyboard Scriptorium</h4>
-              <p className="text-[10px] text-slate-500 leading-normal font-medium">To save time, paste your stats allocation on a single line! Example: <i>"WIS 15, STR 14, CON 13"</i></p>
+            <div className="bg-brand-beige border border-[#eaddca] p-4 rounded-xl flex flex-col gap-2.5">
+              <h4 className="text-xs font-mono text-amber-800 font-black uppercase">⚡ Keyboard Scriptorium</h4>
+              <p className="text-[10px] text-stone-600 leading-normal font-medium">To save time, paste your stats allocation on a single line! Example: <i>"WIS 15, STR 14, CON 13"</i></p>
               <div className="flex gap-2">
                 <input 
                   type="text" 
                   value={textAllocation} 
                   onChange={(e) => setTextAllocation(e.target.value)} 
                   placeholder="e.g., Charisma 15, Intelligence 14, Strength 13..." 
-                  className="flex-1 bg-white border border-slate-200 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400" 
+                  className="flex-1 bg-brand-beige border border-[#eaddca] p-2.5 rounded-xl text-xs text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white" 
                 />
-                <button onClick={handleParseTextAllocation} className="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl uppercase font-mono">Scribe</button>
+                <button onClick={handleParseTextAllocation} className="px-5 py-2 bg-stone-800 hover:bg-stone-900 text-white font-black text-xs rounded-xl uppercase font-mono cursor-pointer transition-all active:scale-95 shadow-sm">Scribe</button>
               </div>
               {parseResult && (
-                <p className={`text-xs font-mono ${parseResult.success ? "text-green-600" : "text-rose-500"}`}>{parseResult.text}</p>
+                <p className={`text-xs font-mono ${parseResult.success ? "text-emerald-800 font-bold" : "text-rose-600 font-bold"}`}>{parseResult.text}</p>
               )}
             </div>
 
@@ -633,15 +633,15 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                 const statKey = key as keyof StatBlock;
                 const value = customStats[statKey];
                 return (
-                  <div key={statKey} className="p-4 bg-slate-50/50 border border-slate-200 rounded-xl shadow-sm text-left">
+                  <div key={statKey} className="p-4 bg-brand-beige border border-[#eaddca] rounded-xl shadow-sm text-left">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="font-display font-black text-slate-700 text-sm">{desc.label}</span>
-                      <span className="font-mono font-black text-xs px-2.5 py-0.5 rounded text-green-700 bg-green-50 border border-green-200/50">+{Math.floor((value - 10) / 2)} modifier</span>
+                      <span className="font-display font-black text-stone-800 text-sm">{desc.label}</span>
+                      <span className="font-mono font-black text-xs px-2.5 py-0.5 rounded text-emerald-800 bg-emerald-50 border border-emerald-250/50">+{Math.floor((value - 10) / 2)} modifier</span>
                     </div>
                     <select 
                       value={value} 
                       onChange={(e) => handleStandardArrayChange(statKey, parseInt(e.target.value))} 
-                      className="w-full bg-white border border-slate-200 text-slate-700 font-mono text-xs p-2.5 rounded-xl focus:outline-none focus:border-slate-400 cursor-pointer"
+                      className="w-full bg-brand-card border border-[#eaddca] text-stone-805 font-mono text-xs p-2.5 rounded-xl focus:outline-none focus:border-amber-600 cursor-pointer"
                     >
                       {[15, 14, 13, 12, 10, 8].map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
@@ -662,69 +662,69 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
           <div className="flex flex-col gap-6" id="wizard-step-3">
             <div className="grid md:grid-cols-2 gap-6">
               {/* AI DM Perk Synthesizer */}
-              <div className="bg-slate-50/40 border border-slate-200 p-5 rounded-2xl flex flex-col justify-between gap-4">
+              <div className="bg-brand-beige border border-[#eaddca] p-5 rounded-2xl flex flex-col justify-between gap-4">
                 <div>
                   <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold mb-2" style={{ color: archetypeDetails?.color || "#0284c7" }}>🔮 AI DM Perk Synthesizer</h4>
-                  <p className="text-slate-500 text-xs leading-relaxed mb-4">Input custom real-world hobbies, quirks, or hyper-fixations to let the Dungeon Master forge bespoke passive rules.</p>
+                  <p className="text-stone-605 text-xs leading-relaxed mb-4 font-semibold">Input custom real-world hobbies, quirks, or hyper-fixations to let the Dungeon Master forge bespoke passive rules.</p>
                   <textarea 
                     value={quirkInput} 
                     onChange={(e) => setQuirkInput(e.target.value)} 
                     placeholder="E.g., I am a web developer who lives on cold brew, stays up till 3 AM coding, and hoards mechanical keyboards..." 
-                    className="w-full h-24 bg-white border border-slate-200 p-3 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400" 
+                    className="w-full h-24 bg-brand-beige border border-[#eaddca] p-3 rounded-xl text-xs text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white font-sans font-medium" 
                   />
                 </div>
                 <button 
                   onClick={generatePerksFromDM} 
                   disabled={isGeneratingPerks} 
-                  className="w-full px-5 py-2.5 bg-white hover:bg-slate-50 border text-slate-700 font-display font-bold rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm"
+                  className="w-full px-5 py-2.5 bg-brand-card hover:bg-brand-beige border text-stone-700 font-display font-black rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm uppercase"
                   style={{ borderColor: `${archetypeDetails?.color || "#0284c7"}50` }}
                 >
-                  {isGeneratingPerks ? <Loader2 className="w-4 h-4 animate-spin text-slate-650" /> : <Wand2 className="w-4 h-4" style={{ color: archetypeDetails?.color || "#0284c7" }} />} Synthesize AI Perks
+                  {isGeneratingPerks ? <Loader2 className="w-4 h-4 animate-spin text-stone-850" /> : <Wand2 className="w-4 h-4" style={{ color: archetypeDetails?.color || "#0284c7" }} />} Synthesize AI Perks
                 </button>
               </div>
 
               {/* Manual Scriptorium */}
-              <div className="bg-slate-50/40 border border-slate-200 p-5 rounded-2xl flex flex-col gap-3">
+              <div className="bg-brand-beige border border-[#eaddca] p-5 rounded-2xl flex flex-col gap-3">
                 <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold" style={{ color: archetypeDetails?.color || "#a855f7" }}>📜 Scribe Custom Perk Matrix</h4>
                 <div className="grid grid-cols-2 gap-2.5 text-left text-xs">
                   <div>
-                    <label className="block text-[9px] uppercase font-mono text-slate-500 font-black mb-0.5">Perk Title</label>
+                    <label className="block text-[9px] uppercase font-mono text-stone-500 font-black mb-0.5">Perk Title</label>
                     <input 
                       type="text" 
                       value={perkTitle} 
                       onChange={(e) => setPerkTitle(e.target.value)} 
                       placeholder="e.g., Rule Shark" 
-                      className="w-full bg-white border border-slate-200 p-2 rounded-lg text-slate-800 focus:outline-none focus:border-slate-400" 
+                      className="w-full bg-brand-beige border border-[#eaddca] p-2 rounded-lg text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white font-medium" 
                     />
                   </div>
                   <div>
-                    <label className="block text-[9px] uppercase font-mono text-slate-500 font-black mb-0.5">Trigger Condition</label>
+                    <label className="block text-[9px] uppercase font-mono text-stone-500 font-black mb-0.5">Trigger Condition</label>
                     <input 
                       type="text" 
                       value={perkTrigger} 
                       onChange={(e) => setPerkTrigger(e.target.value)} 
                       placeholder="e.g., During debates" 
-                      className="w-full bg-white border border-slate-200 p-2 rounded-lg text-slate-800 focus:outline-none focus:border-slate-400" 
+                      className="w-full bg-brand-beige border border-[#eaddca] p-2 rounded-lg text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white font-medium" 
                     />
                   </div>
                   <div className="col-span-2">
-                    <label className="block text-[9px] uppercase font-mono text-slate-500 font-black mb-0.5">Modifier/Stat Effect</label>
+                    <label className="block text-[9px] uppercase font-mono text-stone-500 font-black mb-0.5">Modifier/Stat Effect</label>
                     <input 
                       type="text" 
                       value={perkEffect} 
                       onChange={(e) => setPerkEffect(e.target.value)} 
                       placeholder="e.g., +2 on Intelligence checks when arguing line 4" 
-                      className="w-full bg-white border border-slate-200 p-2 rounded-lg text-slate-800 focus:outline-none focus:border-slate-400" 
+                      className="w-full bg-brand-beige border border-[#eaddca] p-2 rounded-lg text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white font-medium" 
                     />
                   </div>
                   <div className="col-span-2">
-                    <label className="block text-[9px] uppercase font-mono text-slate-500 font-black mb-0.5">Humor Description</label>
+                    <label className="block text-[9px] uppercase font-mono text-stone-500 font-black mb-0.5">Humor Description</label>
                     <input 
                       type="text" 
                       value={perkDescription} 
                       onChange={(e) => setPerkDescription(e.target.value)} 
                       placeholder="e.g., You read details perfectly but annoy your fellows." 
-                      className="w-full bg-white border border-slate-200 p-2 rounded-lg text-slate-800 focus:outline-none focus:border-slate-400" 
+                      className="w-full bg-brand-beige border border-[#eaddca] p-2 rounded-lg text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white font-medium" 
                     />
                   </div>
                 </div>
@@ -754,29 +754,29 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
 
             {/* Quirk list */}
             <div>
-              <h3 className="text-sm font-mono uppercase text-slate-500 font-bold mb-3 flex items-center gap-1.5">
+              <h3 className="text-sm font-mono uppercase text-stone-500 font-bold mb-3 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: archetypeDetails?.color }} /> Active Perk Ledger ({generatedPerks.length})
               </h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {generatedPerks.map((p, idx) => (
-                  <div key={idx} className="p-4 bg-white border border-slate-200 rounded-xl relative group text-left shadow-sm" style={{ borderColor: `${archetypeDetails?.color || "#f43f5e"}30` }}>
+                  <div key={idx} className="p-4 bg-brand-card border-2 border-[#eaddca] rounded-xl relative group text-left shadow-sm" style={{ borderColor: `${archetypeDetails?.color || "#f43f5e"}50` }}>
                     <button 
                       onClick={() => setGeneratedPerks(generatedPerks.filter((_, i) => i !== idx))}
-                      className="absolute top-2.5 right-2.5 text-slate-400 hover:text-rose-500 cursor-pointer opacity-50 group-hover:opacity-100 transition-opacity text-xs"
+                      className="absolute top-2.5 right-2.5 text-stone-400 hover:text-rose-600 cursor-pointer opacity-50 group-hover:opacity-100 transition-opacity text-xs font-bold"
                       title="Discard Perk"
                     >
                       ✕
                     </button>
-                    <h4 className="font-display font-black text-slate-800 text-sm mb-1">{p.title}</h4>
+                    <h4 className="font-display font-black text-stone-905 text-sm mb-1">{p.title}</h4>
                     <p className="text-xs font-mono font-bold mb-1" style={{ color: archetypeDetails?.color || "#f43f5e" }}>{p.effect}</p>
-                    <p className="text-slate-650 text-[10.5px] font-mono leading-relaxed mb-0.5">
-                      <span className="text-slate-400 uppercase text-[9px] font-bold">Trigger:</span> {p.trigger}
+                    <p className="text-stone-700 text-[10.5px] font-mono leading-relaxed mb-0.5">
+                      <span className="text-[#847460] uppercase text-[9px] font-black">Trigger:</span> {p.trigger}
                     </p>
-                    <p className="text-slate-550 text-xs italic">"{p.description}"</p>
+                    <p className="text-stone-600 text-xs italic">"{p.description}"</p>
                   </div>
                 ))}
                 {generatedPerks.length === 0 && (
-                  <div className="md:col-span-2 py-8 border border-dashed border-slate-350 rounded-xl text-center text-slate-400 text-xs font-medium bg-slate-50/50">
+                  <div className="md:col-span-2 py-8 border border-dashed border-[#eaddca] rounded-xl text-center text-stone-500 text-xs font-bold bg-brand-beige">
                     No passive perks listed yet. Use AI or Scribe Custom Perk Matrix to add some!
                   </div>
                 )}
@@ -784,8 +784,8 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
             </div>
 
             <div className="flex justify-between mt-4">
-              <button onClick={handlePrevStep} className="text-slate-500 hover:text-slate-800 font-bold text-sm flex items-center gap-1 cursor-pointer"><ChevronLeft className="w-4 h-4" /> Go Back</button>
-              <button onClick={handleFinish} className="bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-md cursor-pointer flex gap-1.5 items-center">
+              <button onClick={handlePrevStep} className="text-stone-605 hover:text-stone-900 font-bold text-sm flex items-center gap-1 cursor-pointer"><ChevronLeft className="w-4 h-4" /> Go Back</button>
+              <button onClick={handleFinish} className="bg-gradient-to-r from-amber-650 to-amber-500 text-white px-8 py-3 rounded-xl font-black text-sm transition-all shadow-md cursor-pointer flex gap-1.5 items-center uppercase tracking-wide">
                 Create Character Sheet <ChevronRight className="w-4 h-4" />
               </button>
             </div>

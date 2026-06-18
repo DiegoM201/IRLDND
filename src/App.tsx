@@ -479,7 +479,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 antialiased">
+    <div className="min-h-screen bg-brand-beige text-stone-800 antialiased">
       <div className="h-1 w-full transition-all duration-300" style={{ backgroundColor: classColor }} />
       
       {(characters.length === 0 || isAddingNewCharacter) ? (
@@ -494,9 +494,9 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
         <div className="max-w-6xl mx-auto px-4 py-8 lg:py-12">
           
           {/* 🌟 Profile Manager Top Row */}
-          <div className="flex flex-wrap items-center gap-2 mb-4 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
-            <span className="text-[10px] font-mono uppercase text-slate-500 flex items-center gap-1">
-              <Users className="w-3.5 h-3.5 text-slate-400" /> Active Guild Members:
+          <div className="flex flex-wrap items-center gap-2 mb-4 bg-brand-card p-3 rounded-xl border border-[#eaddca] shadow-sm">
+            <span className="text-[10px] font-mono uppercase text-amber-900 flex items-center gap-1 font-bold">
+              <Users className="w-3.5 h-3.5 text-amber-800" /> Active Guild Members:
             </span>
             {characters.map((c, index) => {
               const isActive = activeCharacterIndex === index;
@@ -508,15 +508,15 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                     setActiveCharacterIndex(index);
                     localStorage.setItem("irl_active_char_idx", index.toString());
                   }}
-                  className="text-xs px-3 py-1.5 rounded-md font-bold border transition-all cursor-pointer flex items-center gap-1.5"
+                  className="text-xs px-3 py-1.5 rounded-md font-extrabold border transition-all cursor-pointer flex items-center gap-1.5 shadow-sm hover:scale-[1.02]"
                   style={{
-                    backgroundColor: isActive ? charClassColor : "rgba(241, 245, 249, 0.8)",
-                    borderColor: isActive ? charClassColor : "#e2e8f0",
-                    color: isActive ? "#ffffff" : "#475569"
+                    backgroundColor: isActive ? charClassColor : "rgba(250, 246, 238, 0.7)",
+                    borderColor: isActive ? charClassColor : "#eaddca",
+                    color: isActive ? "#ffffff" : "#4a3c2c"
                   }}
                 >
                   {c.avatar === "custom_uploaded" && c.avatarImage ? (
-                    <span className="w-5 h-5 rounded-full overflow-hidden inline-block border border-slate-200 bg-white">
+                    <span className="w-5 h-5 rounded-full overflow-hidden inline-block border border-[#eaddca] bg-brand-card">
                       <img 
                         src={c.avatarImage} 
                         alt="" 
@@ -533,22 +533,22 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
             })}
             <button
               onClick={() => setIsAddingNewCharacter(true)}
-              className="text-xs bg-white border border-dashed border-slate-300 hover:bg-slate-50 px-3 py-1 rounded-md flex items-center gap-1 transition-all ml-auto cursor-pointer"
-              style={{ color: classColor, borderColor: `${classColor}40` }}
+              className="text-xs bg-brand-card border border-dashed border-[#d2c2ad] hover:bg-[#f9f4e8] px-3 py-1 rounded-md flex items-center gap-1 transition-all ml-auto cursor-pointer font-bold"
+              style={{ color: classColor, borderColor: `${classColor}50` }}
             >
               <Plus className="w-3.5 h-3.5" /> Join Party Profile
             </button>
           </div>
 
           {/* Header Dashboard Grid */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-brand-card p-5 rounded-2xl border border-[#eaddca] shadow-sm">
             <div className="flex items-center gap-4 text-left">
               <div 
-                className="p-1 rounded-xl border relative w-16 h-16 flex items-center justify-center bg-slate-50 border-slate-200 shadow-inner shrink-0"
-                style={{ borderColor: `${classColor}35` }}
+                className="p-1 rounded-xl border relative w-16 h-16 flex items-center justify-center bg-brand-beige border-[#eaddca] shadow-inner shrink-0"
+                style={{ borderColor: `${classColor}55` }}
               >
                 {character.avatar === "custom_uploaded" && character.avatarImage ? (
-                  <div className="w-full h-full rounded-lg overflow-hidden flex items-center justify-center bg-slate-100">
+                  <div className="w-full h-full rounded-lg overflow-hidden flex items-center justify-center bg-brand-beige">
                     <img 
                       src={character.avatarImage} 
                       alt="" 
@@ -569,21 +569,21 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
               </div>
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="text-2xl font-display font-black text-slate-800">{character.name}</h1>
+                  <h1 className="text-2xl font-display font-black text-stone-900">{character.name}</h1>
                   <span 
                     className="text-[11.5px] font-mono px-2 py-0.5 rounded border font-extrabold"
-                    style={{ backgroundColor: `${classColor}10`, color: classColor, borderColor: `${classColor}30` }}
+                    style={{ backgroundColor: `${classColor}15`, color: classColor, borderColor: `${classColor}35` }}
                   >
                     {character.race} • {character.role}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 mt-2">
-                  <div className="text-xs text-slate-500 font-mono font-bold">Guild: {character.faction}</div>
+                  <div className="text-xs text-amber-900 font-mono font-bold">Guild: {character.faction}</div>
                   <div className="flex items-center gap-1.5">
-                    <div className="w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="w-24 h-1.5 bg-[#eaddca] rounded-full overflow-hidden">
                       <div className="h-full transition-all duration-500" style={{ width: `${character.xp}%`, backgroundColor: classColor }} />
                     </div>
-                    <span className="text-[10px] text-zinc-500 font-mono font-bold">{character.xp}/100 XP</span>
+                    <span className="text-[10px] text-amber-950 font-mono font-bold">{character.xp}/100 XP</span>
                   </div>
                 </div>
               </div>
@@ -592,15 +592,15 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
             <div className="flex items-center gap-2 self-end md:self-auto">
               <button 
                 onClick={() => setDevMode(!devMode)}
-                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg border transition-all cursor-pointer font-extrabold font-mono"
+                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg border transition-all cursor-pointer font-extrabold font-mono shadow-sm"
                 style={devMode ? {
-                  backgroundColor: `${classColor}15`,
+                  backgroundColor: `${classColor}20`,
                   borderColor: classColor,
                   color: classColor
                 } : {
-                  backgroundColor: "#ffffff",
-                  borderColor: "#cbd5e1",
-                  color: "#475569"
+                  backgroundColor: "#fcf8f0",
+                  borderColor: "#eaddca",
+                  color: "#5c4033"
                 }}
               >
                 <Terminal className="w-3.5 h-3.5" /> DM System Workshop: {devMode ? "ON" : "OFF"}
@@ -618,7 +618,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                     setActiveCharacterIndex(0);
                   }
                 }} 
-                className="text-xs text-amber-800 bg-amber-50 hover:bg-amber-100 px-3 py-2 rounded-lg border border-amber-200 font-bold transition-all cursor-pointer shadow-sm"
+                className="text-xs text-amber-900 bg-amber-100 hover:bg-amber-200 px-3 py-2 rounded-lg border border-amber-300 font-extrabold transition-all cursor-pointer shadow-sm"
               >
                 Banish Profile
               </button>
@@ -626,24 +626,24 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
           </div>
 
           {/* Navigation Bar Header */}
-          <div className="flex border-b border-slate-200 gap-4 mb-6">
+          <div className="flex border-b border-[#eaddca] gap-4 mb-6">
             <button 
                onClick={() => setActiveTab("sheet")} 
-               className={`pb-3 text-sm font-bold cursor-pointer transition-all ${activeTab === "sheet" ? "border-b-2" : "text-slate-400 hover:text-slate-600"}`}
+               className={`pb-3 text-sm font-extrabold cursor-pointer transition-all ${activeTab === "sheet" ? "border-b-2" : "text-amber-900/60 hover:text-amber-955"}`}
                style={{ color: activeTab === "sheet" ? classColor : undefined, borderBottomColor: activeTab === "sheet" ? classColor : "transparent" }}
             >
               Attributes Grid
             </button>
             <button 
                onClick={() => setActiveTab("dm")} 
-               className={`pb-3 text-sm font-bold cursor-pointer transition-all ${activeTab === "dm" ? "border-b-2" : "text-slate-400 hover:text-slate-600"}`}
+               className={`pb-3 text-sm font-extrabold cursor-pointer transition-all ${activeTab === "dm" ? "border-b-2" : "text-amber-900/60 hover:text-amber-955"}`}
                style={{ color: activeTab === "dm" ? classColor : undefined, borderBottomColor: activeTab === "dm" ? classColor : "transparent" }}
             >
               AI DM Advice
             </button>
             <button 
                onClick={() => setActiveTab("markdown")} 
-               className={`pb-3 text-sm font-bold cursor-pointer transition-all ${activeTab === "markdown" ? "border-b-2" : "text-slate-400 hover:text-slate-600"}`}
+               className={`pb-3 text-sm font-extrabold cursor-pointer transition-all ${activeTab === "markdown" ? "border-b-2" : "text-amber-900/60 hover:text-amber-955"}`}
                style={{ color: activeTab === "markdown" ? classColor : undefined, borderBottomColor: activeTab === "markdown" ? classColor : "transparent" }}
             >
               Markdown Export
@@ -657,37 +657,37 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                   
                   {/* 🛠️ Expanded Dev Mode Overrides Panel */}
                   {devMode && (
-                    <div className="bg-amber-50/60 border border-dashed border-amber-500/25 p-5 rounded-2xl flex flex-col gap-4 text-left">
-                      <div className="flex border-b border-slate-200 gap-3 pb-2">
-                        <button onClick={() => setDevTab("sheet-override")} className={`text-xs font-mono pb-1 cursor-pointer font-bold ${devTab === "sheet-override" ? "text-amber-800 border-b-2 border-amber-500" : "text-slate-400 hover:text-slate-600"}`}>Active Override</button>
-                        <button onClick={() => setDevTab("class-forge")} className={`text-xs font-mono pb-1 cursor-pointer font-bold ${devTab === "class-forge" ? "text-amber-800 border-b-2 border-amber-500" : "text-slate-400 hover:text-slate-600"}`}>Class Creator</button>
-                        <button onClick={() => setDevTab("race-forge")} className={`text-xs font-mono pb-1 cursor-pointer font-bold ${devTab === "race-forge" ? "text-amber-800 border-b-2 border-amber-500" : "text-slate-400 hover:text-slate-600"}`}>Race Creator</button>
+                    <div className="bg-[#f5eeda]/80 border border-dashed border-amber-800/30 p-5 rounded-2xl flex flex-col gap-4 text-left shadow-inner">
+                      <div className="flex border-b border-[#eaddca] gap-3 pb-2">
+                        <button onClick={() => setDevTab("sheet-override")} className={`text-xs font-mono pb-1 cursor-pointer font-bold ${devTab === "sheet-override" ? "text-amber-950 border-b-2 border-amber-700" : "text-stone-500 hover:text-stone-700"}`}>Active Override</button>
+                        <button onClick={() => setDevTab("class-forge")} className={`text-xs font-mono pb-1 cursor-pointer font-bold ${devTab === "class-forge" ? "text-amber-950 border-b-2 border-amber-700" : "text-stone-500 hover:text-stone-700"}`}>Class Creator</button>
+                        <button onClick={() => setDevTab("race-forge")} className={`text-xs font-mono pb-1 cursor-pointer font-bold ${devTab === "race-forge" ? "text-amber-950 border-b-2 border-amber-700" : "text-stone-500 hover:text-stone-700"}`}>Race Creator</button>
                       </div>
 
                       {devTab === "sheet-override" && (
                         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-left">
                           <div>
-                            <label className="block text-slate-500 mb-1 font-mono font-bold">Rename Sheet</label>
-                            <input type="text" value={character.name} onChange={(e) => handleUpdateDirectSheet({ ...character, name: e.target.value })} className="w-full bg-white border border-slate-205 p-2 rounded text-slate-800 text-xs focus:outline-none focus:border-slate-450 font-medium font-mono shadow-sm" />
+                            <label className="block text-amber-950/80 mb-1 font-mono font-bold">Rename Sheet</label>
+                            <input type="text" value={character.name} onChange={(e) => handleUpdateDirectSheet({ ...character, name: e.target.value })} className="w-full bg-brand-card border border-[#eaddca] p-2 rounded text-[#2a2015] text-xs focus:outline-none focus:border-amber-600 font-medium font-mono shadow-sm" />
                           </div>
                           <div>
-                            <label className="block text-slate-500 mb-1 font-mono font-bold">Modify Faction</label>
-                            <input type="text" value={character.faction} onChange={(e) => handleUpdateDirectSheet({ ...character, faction: e.target.value })} className="w-full bg-white border border-slate-205 p-2 rounded text-slate-800 text-xs focus:outline-none focus:border-slate-450 font-medium font-mono shadow-sm" />
+                            <label className="block text-amber-950/80 mb-1 font-mono font-bold">Modify Faction</label>
+                            <input type="text" value={character.faction} onChange={(e) => handleUpdateDirectSheet({ ...character, faction: e.target.value })} className="w-full bg-brand-card border border-[#eaddca] p-2 rounded text-[#2a2015] text-xs focus:outline-none focus:border-amber-600 font-medium font-mono shadow-sm" />
                           </div>
                           <div>
-                            <label className="block text-slate-500 mb-1 font-mono font-bold">Cosmetic Class Color Override</label>
+                            <label className="block text-amber-950/80 mb-1 font-mono font-bold">Cosmetic Class Color Override</label>
                             <div className="flex gap-2 items-center">
                               <input 
                                 type="color" 
                                 value={character.accentColor || classColor} 
                                 onChange={(e) => handleUpdateDirectSheet({ ...character, accentColor: e.target.value })} 
-                                className="w-10 h-8 bg-white border border-slate-205 rounded cursor-pointer shrink-0 shadow-sm" 
+                                className="w-10 h-8 bg-brand-card border border-[#eaddca] rounded cursor-pointer shrink-0 shadow-sm" 
                               />
                               <input 
                                 type="text" 
                                 value={character.accentColor || classColor} 
                                 onChange={(e) => handleUpdateDirectSheet({ ...character, accentColor: e.target.value })} 
-                                className="w-full bg-white border border-slate-205 p-2 rounded text-slate-800 text-xs font-mono focus:outline-none focus:border-slate-450 shadow-sm font-bold" 
+                                className="w-full bg-brand-card border border-[#eaddca] p-2 rounded text-[#2a2015] text-xs font-mono focus:outline-none focus:border-amber-600 shadow-sm font-bold" 
                               />
                             </div>
                           </div>
@@ -709,20 +709,20 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                               placeholder="Class Name" 
                               value={forgeClassName} 
                               onChange={(e) => setForgeClassName(e.target.value)} 
-                              className="bg-white text-xs text-slate-800 border border-slate-200 p-2 rounded focus:outline-none focus:border-slate-400 font-bold shadow-sm" 
+                              className="bg-brand-card text-xs text-[#2a2015] border border-[#eaddca] p-2 rounded focus:outline-none focus:border-amber-600 font-bold shadow-sm" 
                             />
                             <input 
                               type="text" 
                               placeholder="Catchy Tagline" 
                               value={forgeClassTagline} 
                               onChange={(e) => setForgeClassTagline(e.target.value)} 
-                              className="bg-white text-xs text-slate-800 border border-slate-200 p-2 rounded focus:outline-none focus:border-slate-400 shadow-sm" 
+                              className="bg-brand-card text-xs text-[#2a2015] border border-[#eaddca] p-2 rounded focus:outline-none focus:border-amber-600 shadow-sm" 
                             />
                             
                             <select 
                               value={forgeClassHigh} 
                               onChange={(e) => setForgeClassHigh(e.target.value as any)} 
-                              className="bg-white text-xs text-slate-700 border border-slate-200 p-2 rounded cursor-pointer shadow-sm font-semibold"
+                              className="bg-brand-card text-xs text-stone-700 border border-[#eaddca] p-2 rounded cursor-pointer shadow-sm font-semibold focus:outline-none focus:border-amber-600"
                             >
                               {Object.keys(STAT_DESCRIPTIONS).map(s => <option key={s} value={s}>Highest: {STAT_DESCRIPTIONS[s as keyof StatBlock].label}</option>)}
                             </select>
@@ -730,13 +730,13 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                             <select 
                               value={forgeClassLow} 
                               onChange={(e) => setForgeClassLow(e.target.value as any)} 
-                              className="bg-white text-xs text-slate-700 border border-slate-200 p-2 rounded cursor-pointer shadow-sm font-semibold"
+                              className="bg-brand-card text-xs text-stone-700 border border-[#eaddca] p-2 rounded cursor-pointer shadow-sm font-semibold focus:outline-none focus:border-amber-600"
                             >
                               {Object.keys(STAT_DESCRIPTIONS).map(s => <option key={s} value={s}>Lowest/Flaw: {STAT_DESCRIPTIONS[s as keyof StatBlock].label}</option>)}
                             </select>
-
-                            <div className="flex items-center gap-1.5 bg-white border border-slate-200 p-2 rounded relative shadow-sm">
-                              <span className="text-[9px] font-mono text-slate-500 uppercase font-black pl-1">Color:</span>
+Logic
+                            <div className="flex items-center gap-1.5 bg-brand-card border border-[#eaddca] p-2 rounded relative shadow-sm">
+                              <span className="text-[9px] font-mono text-stone-500 uppercase font-black pl-1">Color:</span>
                               <input 
                                 type="color" 
                                 value={forgeClassColor} 
@@ -744,7 +744,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                                 className="w-8 h-6 bg-transparent border-0 cursor-pointer focus:outline-none shrink-0" 
                                 title="Pick archetype theme color"
                               />
-                              <span className="text-[10px] font-mono text-slate-500 font-bold overflow-hidden text-ellipsis whitespace-nowrap">{forgeClassColor}</span>
+                              <span className="text-[10px] font-mono text-stone-600 font-bold overflow-hidden text-ellipsis whitespace-nowrap">{forgeClassColor}</span>
                             </div>
 
                             <div className="flex gap-1">
@@ -756,7 +756,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                                 {editingArchetypeId ? "Save" : "+ Forge"}
                               </button>
                               {editingArchetypeId && (
-                                <button onClick={() => { setEditingArchetypeId(null); setForgeClassName(""); setForgeClassTagline(""); setForgeClassDesc(""); setForgeClassColor("#fbbf24"); }} className="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-black p-2 px-3 rounded cursor-pointer" title="Cancel Edit">✕</button>
+                                <button onClick={() => { setEditingArchetypeId(null); setForgeClassName(""); setForgeClassTagline(""); setForgeClassDesc(""); setForgeClassColor("#fbbf24"); }} className="bg-amber-100/70 hover:bg-amber-200 text-stone-700 text-xs font-black p-2 px-3 rounded cursor-pointer border border-[#eaddca]" title="Cancel Edit">✕</button>
                               )}
                             </div>
                           </div>
@@ -766,27 +766,27 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                             placeholder="Brief Role Description / Overview" 
                             value={forgeClassDesc} 
                             onChange={(e) => setForgeClassDesc(e.target.value)} 
-                            className="w-full bg-white text-xs text-slate-800 border border-slate-200 p-2 rounded focus:outline-none focus:border-slate-400 shadow-sm" 
+                            className="w-full bg-brand-card text-xs text-[#2a2015] border border-[#eaddca] p-2 rounded focus:outline-none focus:border-amber-600 shadow-sm" 
                           />
 
                           <div className="flex flex-wrap gap-1.5 mt-2">
                             {archetypes.map(a => (
                               <div 
                                 key={a.id} 
-                                className="text-[10px] bg-white px-2.5 py-1.5 rounded-lg flex items-center gap-2 border border-slate-200 shadow-sm"
-                                style={{ borderColor: `${a.color || "#cbd5e1"}40` }}
+                                className="text-[10px] bg-brand-card px-2.5 py-1.5 rounded-lg flex items-center gap-2 border border-[#eaddca] shadow-sm"
+                                style={{ borderColor: `${a.color || "#eaddca"}80` }}
                               >
                                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: a.color || "#94a3b8" }} />
                                 <span className="font-extrabold" style={{ color: a.color || "#475569" }}>{a.name}</span>
-                                <span className="text-slate-400 font-bold">({a.highest.substring(0,3).toUpperCase()} / {a.lowest.substring(0,3).toUpperCase()})</span>
+                                <span className="text-stone-400 font-bold">({a.highest.substring(0,3).toUpperCase()} / {a.lowest.substring(0,3).toUpperCase()})</span>
                                 <button 
                                   onClick={() => handleEditArchetype(a)} 
-                                  className="text-amber-600 hover:text-amber-800 text-[10px] font-bold cursor-pointer ml-1"
+                                  className="text-amber-700 hover:text-amber-900 text-[10px] font-bold cursor-pointer ml-1"
                                   style={{ color: a.color }}
                                 >
                                   Edit
                                 </button>
-                                <button onClick={() => handleDeleteArchetype(a.id)} className="text-rose-500 hover:text-rose-700 font-bold cursor-pointer" title="Delete role class">✕</button>
+                                <button onClick={() => handleDeleteArchetype(a.id)} className="text-rose-600 hover:text-rose-800 font-bold cursor-pointer" title="Delete role class">✕</button>
                               </div>
                             ))}
                           </div>
@@ -796,7 +796,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                       {/* 🌟 Dynamic Race Management Module with full CRUD */}
                       {devTab === "race-forge" && (
                         <div className="flex flex-col gap-3">
-                          <h4 className="text-[10px] uppercase font-mono font-bold tracking-wider text-amber-600">
+                          <h4 className="text-[10px] uppercase font-mono font-bold tracking-wider text-amber-800">
                             {editingRaceId ? "🔧 EDITING EXISTING COMMUNITY BLUEPRINT" : "✨ CREATE A NEW COMMUNITY BLUEPRINT"}
                           </h4>
                           <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-2">
@@ -805,27 +805,27 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                               placeholder="Race Label" 
                               value={forgeRaceName} 
                               onChange={(e) => setForgeRaceName(e.target.value)} 
-                              className="bg-white text-xs text-slate-800 border border-slate-200 p-2 rounded focus:outline-none focus:border-slate-400 font-bold shadow-sm" 
+                              className="bg-brand-card text-xs text-[#2a2015] border border-[#eaddca] p-2 rounded focus:outline-none focus:border-amber-600 font-bold shadow-sm" 
                             />
                             <input 
                               type="text" 
                               placeholder="Catchy Tagline" 
                               value={forgeRaceTagline} 
                               onChange={(e) => setForgeRaceTagline(e.target.value)} 
-                              className="bg-white text-xs text-slate-800 border border-slate-200 p-2 rounded focus:outline-none focus:border-slate-400 shadow-sm" 
+                              className="bg-brand-card text-xs text-[#2a2015] border border-[#eaddca] p-2 rounded focus:outline-none focus:border-amber-600 shadow-sm" 
                             />
                             <input 
                               type="text" 
                               placeholder="Emoji Icon (e.g. 🦄)" 
                               value={forgeRaceIcon} 
                               onChange={(e) => setForgeRaceIcon(e.target.value)} 
-                              className="bg-white text-xs text-slate-800 border border-slate-200 p-2 rounded text-center focus:outline-none focus:border-slate-400 shadow-sm" 
+                              className="bg-brand-card text-xs text-[#2a2015] border border-[#eaddca] p-2 rounded text-center focus:outline-none focus:border-amber-600 shadow-sm" 
                             />
                             
                             <select 
                               value={forgeRaceBonusStat} 
                               onChange={(e) => setForgeRaceBonusStat(e.target.value as any)} 
-                              className="bg-white text-xs text-slate-700 border border-slate-200 p-2 rounded cursor-pointer shadow-sm font-semibold"
+                              className="bg-brand-card text-xs text-stone-700 border border-[#eaddca] p-2 rounded cursor-pointer shadow-sm font-semibold focus:outline-none focus:border-amber-600"
                             >
                               {Object.keys(STAT_DESCRIPTIONS).map(s => <option key={s} value={s}>Bonus: {STAT_DESCRIPTIONS[s as keyof StatBlock].label}</option>)}
                             </select>
@@ -836,16 +836,16 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                               max="5" 
                               value={forgeRaceBonusAmount} 
                               onChange={(e) => setForgeRaceBonusAmount(Number(e.target.value))} 
-                              className="bg-white text-xs text-slate-800 border border-slate-200 p-2 rounded text-center focus:outline-none focus:border-slate-400 shadow-sm font-bold" 
+                              className="bg-brand-card text-xs text-[#2a2015] border border-[#eaddca] p-2 rounded text-center focus:outline-none focus:border-amber-600 shadow-sm font-bold" 
                               title="Ability score bonus amount"
                             />
 
-                            <div className="flex gap-1 justify-between items-center bg-white shadow-sm">
-                              <button onClick={handleSaveRace} className="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs font-black font-mono p-2 rounded cursor-pointer transition-all active:scale-95 shadow-sm">
+                            <div className="flex gap-1 justify-between items-center bg-brand-card shadow-sm">
+                              <button onClick={handleSaveRace} className="flex-1 bg-amber-600 hover:bg-amber-500 text-white text-xs font-black font-mono p-2 rounded cursor-pointer transition-all active:scale-95 shadow-sm">
                                 {editingRaceId ? "Save" : "+ Forge"}
                               </button>
                               {editingRaceId && (
-                                <button onClick={() => { setEditingRaceId(null); setForgeRaceName(""); setForgeRaceTagline(""); setForgeRaceDesc(""); setForgeRaceIcon("✨"); }} className="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-black p-2 px-3 rounded cursor-pointer" title="Cancel Edit">✕</button>
+                                <button onClick={() => { setEditingRaceId(null); setForgeRaceName(""); setForgeRaceTagline(""); setForgeRaceDesc(""); setForgeRaceIcon("✨"); }} className="bg-amber-100/75 hover:bg-amber-200 text-stone-700 text-xs font-black p-2 px-3 rounded cursor-pointer border border-[#eaddca]" title="Cancel Edit">✕</button>
                               )}
                             </div>
                           </div>
@@ -855,7 +855,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                             placeholder="Racial Traits Overview" 
                             value={forgeRaceDesc} 
                             onChange={(e) => setForgeRaceDesc(e.target.value)} 
-                            className="w-full bg-white text-xs text-slate-800 border border-slate-202 p-2 rounded focus:outline-none focus:border-slate-400 shadow-sm" 
+                            className="w-full bg-brand-card text-xs text-[#2a2015] border border-[#eaddca] p-2 rounded focus:outline-none focus:border-amber-600 shadow-sm" 
                           />
 
                           <div className="flex flex-wrap gap-1.5 mt-2">
@@ -863,19 +863,18 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                               const bonusEntries = Object.entries(r.bonuses || {});
                               const bonusStr = bonusEntries.map(([s, v]) => `+${v} ${s.substring(0,3).toUpperCase()}`).join(", ");
                               return (
-                                <div key={r.id} className="text-[10px] bg-white border border-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg flex items-center gap-2 shadow-sm font-semibold">
+                                <div key={r.id} className="text-[10px] bg-brand-card border border-[#eaddca] text-stone-700 px-2.5 py-1.5 rounded-lg flex items-center gap-2 shadow-sm font-semibold">
                                   <span>{r.icon}</span>
                                   <span className="font-extrabold">{r.name}</span>
-                                  <span className="text-emerald-600 font-mono">({bonusStr})</span>
-                                  <button onClick={() => handleEditRace(r)} className="text-amber-700 hover:text-amber-900 text-[10px] font-extrabold cursor-pointer ml-1">Edit</button>
-                                  <button onClick={() => handleDeleteRace(r.id)} className="text-rose-500 hover:text-rose-700 font-bold cursor-pointer" title="Delete community blueprint">✕</button>
+                                  <span className="text-emerald-700 font-mono">({bonusStr})</span>
+                                  <button onClick={() => handleEditRace(r)} className="text-amber-800 hover:text-amber-950 text-[10px] font-extrabold cursor-pointer ml-1">Edit</button>
+                                  <button onClick={() => handleDeleteRace(r.id)} className="text-rose-600 hover:text-rose-800 font-bold cursor-pointer" title="Delete community blueprint">✕</button>
                                 </div>
                               );
                             })}
                           </div>
                         </div>
                       )}
-
                     </div>
                   )}
 
@@ -894,58 +893,60 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                         <div 
                           key={k} 
                           onClick={() => { if (!devMode) handleRollDice(k); }} 
-                          className={`p-4 bg-white rounded-xl border text-left select-none relative group transition-all shadow-sm ${devMode ? "cursor-default" : "cursor-pointer"}`}
+                          className={`p-4 bg-brand-card rounded-xl border-2 text-left select-none relative group transition-all shadow-sm h-full flex flex-col justify-between ${devMode ? "cursor-default" : "cursor-pointer hover:shadow-md"}`}
                           style={{
-                            borderColor: devMode ? `${classColor}40` : "#e2e8f0"
+                            borderColor: devMode ? `${classColor}60` : "#eaddca"
                           }}
                           onMouseEnter={(e) => {
                             if (!devMode) e.currentTarget.style.borderColor = classColor;
                           }}
                           onMouseLeave={(e) => {
-                            if (!devMode) e.currentTarget.style.borderColor = "#e2e8f0";
+                            if (!devMode) e.currentTarget.style.borderColor = "#eaddca";
                           }}
                         >
                           
                           {/* 🔮 Dynamic Hover Tooltip Breakdown Card */}
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-950 p-3 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none text-[10px] font-mono flex flex-col gap-1 text-slate-200">
-                            <div className="flex justify-between border-b border-slate-800 pb-1 mb-1 font-display">
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-[#2a2015] border border-[#1b120a] p-3 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none text-[10px] font-mono flex flex-col gap-1 text-amber-50">
+                            <div className="flex justify-between border-b border-[#4e3a24] pb-1 mb-1 font-display">
                               <span className="font-bold text-xs" style={{ color: classColor }}>{desc.label}</span>
-                              <span className="text-slate-500 text-[9px]">CALCULATION</span>
+                              <span className="text-amber-200/60 text-[9px]">CALCULATION</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-slate-400">Base Value:</span>
+                              <span className="text-amber-100/80">Base Value:</span>
                               <span className="text-white font-bold">{baseValue}</span>
                             </div>
                             {raceBonus > 0 && (
-                              <div className="flex justify-between text-slate-200">
-                                <span className="text-slate-400 font-bold">Racial Bonus ({character.race}):</span>
+                              <div className="flex justify-between text-amber-50">
+                                <span className="text-amber-100/80 font-bold">Racial Bonus:</span>
                                 <span className="font-bold font-mono" style={{ color: classColor }}>+{raceBonus}</span>
                               </div>
                             )}
-                            <div className="flex justify-between border-t border-slate-800 pt-1 mt-1 font-bold">
-                              <span className="text-slate-400 font-bold">Total Score:</span>
+                            <div className="flex justify-between border-t border-[#4e3a24] pt-1 mt-1 font-bold">
+                              <span className="text-amber-100/80 font-bold">Total Score:</span>
                               <span className="text-white">{value}</span>
                             </div>
-                            <div className="flex justify-between border-t border-slate-800 pt-1 mt-1 font-bold" style={{ color: classColor }}>
+                            <div className="flex justify-between border-t border-[#4e3a24] pt-1 mt-1 font-bold" style={{ color: classColor }}>
                               <span>Modifier:</span>
                               <span>{mod >= 0 ? `+${mod}` : mod}</span>
                             </div>
                           </div>
 
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="text-[10px] font-mono text-slate-400 uppercase font-bold">{k.substring(0,3)}</span>
-                            <span className="font-mono text-xs font-bold" style={{ color: classColor }}>{mod >= 0 ? `+${mod}` : mod}</span>
+                          <div>
+                            <div className="flex justify-between items-center mb-1.5">
+                              <span className="text-[10px] font-mono text-amber-900/60 uppercase font-bold">{k.substring(0,3)}</span>
+                              <span className="font-mono text-xs font-black" style={{ color: classColor }}>{mod >= 0 ? `+${mod}` : mod}</span>
+                            </div>
+                            <h4 className="font-display font-black text-stone-900 text-lg mb-0.5">{value}</h4>
+                            <span className="text-xs text-stone-700 font-extrabold block mb-1">{desc.label}</span>
+                            <p className="text-[10.5px] text-stone-500 leading-normal line-clamp-2 font-medium">{desc.utility}</p>
                           </div>
-                          <h4 className="font-display font-black text-slate-800 text-base">{value}</h4>
-                          <span className="text-xs text-slate-500 font-semibold block mb-1">{desc.label}</span>
-                          <p className="text-[10px] text-slate-400 leading-normal line-clamp-2">{desc.utility}</p>
                           
                           {/* 🌟 Dynamic incremental modifiers in dev panels */}
                           {devMode && (
-                            <div className="flex justify-between items-center mt-2.5 pt-2 border-t border-slate-200" onClick={(e) => e.stopPropagation()}>
-                              <button onClick={() => { const nextStats = { ...character.stats, [k]: Math.max(1, value - 1) }; handleUpdateDirectSheet({ ...character, stats: nextStats }); }} className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono font-bold hover:bg-slate-200 cursor-pointer border border-slate-250">-</button>
-                              <span className="text-[8px] font-mono font-bold tracking-wider" style={{ color: classColor }}>TWEAK</span>
-                              <button onClick={() => { const nextStats = { ...character.stats, [k]: Math.min(30, value + 1) }; handleUpdateDirectSheet({ ...character, stats: nextStats }); }} className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-mono font-bold hover:bg-slate-200 cursor-pointer border border-slate-250">+</button>
+                            <div className="flex justify-between items-center mt-3 pt-2.5 border-t border-[#eaddca]" onClick={(e) => e.stopPropagation()}>
+                              <button onClick={() => { const nextStats = { ...character.stats, [k]: Math.max(1, value - 1) }; handleUpdateDirectSheet({ ...character, stats: nextStats }); }} className="px-2 py-0.5 bg-brand-beige text-stone-750 rounded text-xs font-mono font-bold hover:bg-[#eaddca]/80 cursor-pointer border border-[#eaddca] shadow-sm">-</button>
+                              <span className="text-[8px] font-mono font-black tracking-wider" style={{ color: classColor }}>TWEAK</span>
+                              <button onClick={() => { const nextStats = { ...character.stats, [k]: Math.min(30, value + 1) }; handleUpdateDirectSheet({ ...character, stats: nextStats }); }} className="px-2 py-0.5 bg-brand-beige text-stone-750 rounded text-xs font-mono font-bold hover:bg-[#eaddca]/80 cursor-pointer border border-[#eaddca] shadow-sm">+</button>
                             </div>
                           )}
                         </div>
@@ -954,52 +955,52 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                   </div>
 
                   {/* 📜 Active Character Scribed Perks Management Section */}
-                  <div className="mt-8 text-left border-t border-slate-200 pt-6">
+                  <div className="mt-8 text-left border-t border-[#eaddca] pt-6">
                     <div className="flex flex-wrap items-center justify-between mb-4 gap-2">
-                      <h3 className="font-display font-bold text-lg text-slate-800 flex items-center gap-2">
-                        <Award className="w-5 h-5 text-amber-500" /> Scribed Character Perks
+                      <h3 className="font-display font-bold text-lg text-stone-900 flex items-center gap-2">
+                        <Award className="w-5 h-5 text-amber-600" /> Scribed Character Perks
                       </h3>
-                      <span className="text-[10px] font-mono text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded font-bold">
+                      <span className="text-[10px] font-mono text-amber-950 bg-[#eaddca]/40 border border-[#eaddca] px-2.5 py-0.5 rounded font-extrabold">
                         {character.perks.length} Passive Perks Active
                       </span>
                     </div>
 
                     {character.perks.length === 0 ? (
-                      <p className="text-xs text-slate-500 italic mb-5">No corporate or social perks scribed. Formulate a perk below or use the AI DM Advice builder!</p>
+                      <p className="text-xs text-stone-600 italic mb-5">No corporate or social perks scribed. Formulate a perk below or use the AI DM Advice builder!</p>
                     ) : (
                       <div className="grid sm:grid-cols-2 gap-4 mb-6">
                         {character.perks.map((p, idx) => (
                           <div 
                             key={idx} 
-                            className={`p-4 bg-white border rounded-xl flex justify-between items-start relative overflow-hidden transition-all group/perk shadow-sm ${
+                            className={`p-4 bg-brand-card border rounded-xl flex justify-between items-start relative overflow-hidden transition-all group/perk shadow-sm ${
                               activeEditingPerkIndex === idx 
-                                ? "border-amber-500 bg-amber-50/50" 
-                                : "border-slate-205 hover:border-slate-350"
+                                ? "border-amber-600 bg-amber-50/35" 
+                                : "border-[#eaddca] hover:border-[#ccd2cd]/70"
                             }`}
                           >
                             <div className="flex-1 pr-6 text-left">
                               <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                                <h4 className="font-display font-black text-amber-700 text-sm">{p.title}</h4>
-                                <span className="text-[9px] font-mono text-slate-500 bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">
+                                <h4 className="font-display font-black text-amber-800 text-sm">{p.title}</h4>
+                                <span className="text-[9px] font-mono text-stone-600 bg-brand-beige border border-[#eaddca] px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">
                                   Trigger: {p.trigger}
                                 </span>
                               </div>
-                              <p className="text-slate-850 text-xs font-mono font-semibold mb-1 flex items-center gap-1.5">
-                                <span className="text-amber-500 font-bold">★</span> {p.effect}
+                              <p className="text-stone-900 text-xs font-mono font-bold mb-1 flex items-center gap-1.5">
+                                <span className="text-amber-600 font-bold">★</span> {p.effect}
                               </p>
-                              <p className="text-slate-550 text-xs italic">"{p.description}"</p>
+                              <p className="text-stone-500 text-xs italic">"{p.description}"</p>
                             </div>
                             
                             <div className="flex items-center gap-1 shrink-0 ml-2">
                               <button 
                                 onClick={() => handleEditPerkClick(idx)}
-                                className="text-slate-650 hover:text-slate-850 p-1 bg-slate-50 border border-slate-200 rounded hover:scale-105 transition-all text-[10px] font-mono font-bold px-2 cursor-pointer"
+                                className="text-stone-700 hover:text-stone-900 p-1 px-2.5 bg-brand-beige border border-[#eaddca] rounded hover:scale-105 transition-all text-[10px] font-mono font-bold cursor-pointer shadow-sm"
                               >
                                 Edit
                               </button>
                               <button 
                                 onClick={() => handleDeletePerkClick(idx)}
-                                className="text-rose-600 hover:text-rose-800 p-1.5 bg-slate-50 border border-slate-200 rounded hover:scale-105 transition-all cursor-pointer"
+                                className="text-rose-600 hover:text-rose-800 p-1.5 bg-brand-beige border border-[#eaddca] rounded hover:scale-105 transition-all cursor-pointer shadow-sm"
                                 title="Banish perk"
                               >
                                 <Trash2 className="w-3 h-3" />
@@ -1011,13 +1012,13 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                     )}
 
                     {/* Perk Writer / Writer Dashboard Form */}
-                    <div className="bg-white border border-slate-200 rounded-2xl p-5 mt-4 shadow-sm animate-fade-in">
-                      <h4 className="text-xs font-mono text-amber-600 font-black uppercase mb-3 flex items-center justify-between">
+                    <div className="bg-brand-card border border-[#eaddca] rounded-2xl p-5 mt-4 shadow-sm animate-fade-in text-left">
+                      <h4 className="text-xs font-mono text-amber-700 font-black uppercase mb-3 flex items-center justify-between">
                         <span>{activeEditingPerkIndex !== null ? "📝 Edit Scribed Perk" : "✨ Scribe Custom Perk"}</span>
                         {activeEditingPerkIndex !== null && (
                           <button 
                             onClick={() => { setActiveEditingPerkIndex(null); setPerkTitle(""); setPerkTrigger("Passive"); setPerkEffect(""); setPerkDescription(""); }} 
-                            className="text-slate-400 hover:text-slate-705 font-bold text-xs uppercase cursor-pointer"
+                            className="text-stone-400 hover:text-stone-700 font-bold text-xs uppercase cursor-pointer"
                           >
                             ✕ Cancel Edit
                           </button>
@@ -1026,46 +1027,46 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
 
                       <div className="grid sm:grid-cols-2 gap-3 mb-3">
                         <div>
-                          <label className="block text-[10px] font-mono text-slate-500 uppercase mb-1 font-bold">Perk Title</label>
+                          <label className="block text-[10px] font-mono text-stone-500 uppercase mb-1 font-bold">Perk Title</label>
                           <input 
                             type="text" 
                             placeholder="e.g., Tactical Procrastinator" 
                             value={perkTitle}
                             onChange={(e) => setPerkTitle(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400 focus:bg-white transition-all font-medium placeholder-slate-400"
+                            className="w-full bg-brand-beige border border-[#eaddca] p-2.5 rounded-xl text-xs text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white transition-all font-medium placeholder-stone-400"
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-mono text-slate-500 uppercase mb-1 font-bold">Trigger Condition</label>
+                          <label className="block text-[10px] font-mono text-stone-500 uppercase mb-1 font-bold">Trigger Condition</label>
                           <input 
                             type="text" 
                             placeholder="e.g., Passive, or Ordering takeout" 
                             value={perkTrigger}
                             onChange={(e) => setPerkTrigger(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400 focus:bg-white transition-all font-medium placeholder-slate-400"
+                            className="w-full bg-brand-beige border border-[#eaddca] p-2.5 rounded-xl text-xs text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white transition-all font-medium placeholder-stone-400"
                           />
                         </div>
                       </div>
 
                       <div className="grid sm:grid-cols-2 gap-3 mb-3 font-mono">
                         <div>
-                          <label className="block text-[10px] font-mono text-slate-500 uppercase mb-1 font-bold">Modifier Effect</label>
+                          <label className="block text-[10px] font-mono text-stone-500 uppercase mb-1 font-bold">Modifier Effect</label>
                           <input 
                             type="text" 
                             placeholder="e.g., Advantage on Wisdom checks under pressure" 
                             value={perkEffect}
                             onChange={(e) => setPerkEffect(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-205 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-450 focus:bg-white font-medium"
+                            className="w-full bg-brand-beige border border-[#eaddca] p-2.5 rounded-xl text-xs text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white font-medium placeholder-stone-400"
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-mono text-slate-500 uppercase mb-1 font-bold">Flavor Description / Joke</label>
+                          <label className="block text-[10px] font-mono text-stone-500 uppercase mb-1 font-bold">Flavor Description / Joke</label>
                           <input 
                             type="text" 
                             placeholder="e.g., Under maximum panic, your reflexes and room reading are unmatched." 
                             value={perkDescription}
                             onChange={(e) => setPerkDescription(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-205 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-450 focus:bg-white font-medium"
+                            className="w-full bg-brand-beige border border-[#eaddca] p-2.5 rounded-xl text-xs text-[#2a2015] focus:outline-none focus:border-amber-600 focus:bg-white font-medium placeholder-stone-400"
                           />
                         </div>
                       </div>
@@ -1084,29 +1085,29 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
               )}
 
               {activeTab === "dm" && (
-                <div className="bg-white border border-slate-200 rounded-2xl flex flex-col h-[400px] overflow-hidden shadow-sm">
-                  <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/55 text-zinc-800">
+                <div className="bg-brand-card border border-[#eaddca] rounded-2xl flex flex-col h-[400px] overflow-hidden shadow-sm">
+                  <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-brand-beige/70 text-stone-800 text-left">
                     {chatMessages.map(m => (
                       <div key={m.id} className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
-                        <div className={`max-w-md p-3 rounded-2xl text-xs shadow-sm ${m.sender === "user" ? "bg-amber-500 text-slate-950 font-bold rounded-tr-none" : "bg-white text-slate-700 border border-slate-200 rounded-tl-none font-medium"}`}><p className="whitespace-pre-wrap">{m.text}</p></div>
+                        <div className={`max-w-md p-3 rounded-2xl text-xs shadow-sm ${m.sender === "user" ? "bg-amber-600 text-white font-extrabold rounded-tr-none" : "bg-brand-card text-stone-800 border border-[#eaddca] rounded-tl-none font-medium"}`}><p className="whitespace-pre-wrap">{m.text}</p></div>
                       </div>
                     ))}
-                    {isDmThinking && <div className="text-xs text-slate-400 animate-pulse font-bold tracking-tight">The DM is flipping through manual logs...</div>}
+                    {isDmThinking && <div className="text-xs text-amber-800 animate-pulse font-bold tracking-tight">The DM is flipping through manual logs...</div>}
                     <div ref={chatEndRef} />
                   </div>
-                  <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-slate-200 flex gap-2">
-                    <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="My roommate is tilted about dishes, help!" className="flex-1 bg-slate-50 border border-slate-202 p-2 rounded text-xs text-slate-800 focus:outline-none focus:border-slate-400 transition-all focus:bg-white" />
+                  <form onSubmit={handleSendMessage} className="p-3 bg-brand-card border-t border-[#eaddca] flex gap-2">
+                    <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="My roommate is tilted about dishes, help!" className="flex-1 bg-brand-beige border border-[#eaddca] p-2 rounded text-xs text-stone-850 focus:outline-none focus:border-amber-600 transition-all focus:bg-white" />
                     <button type="submit" className="px-4 text-white font-extrabold text-xs rounded-lg cursor-pointer shadow-sm active:scale-95 transition-all" style={{ backgroundColor: classColor }}>Send</button>
                   </form>
                 </div>
               )}
 
               {activeTab === "markdown" && (
-                <div className="bg-white border border-slate-200 rounded-xl p-4 font-mono text-xs text-slate-705 max-h-[350px] overflow-y-auto shadow-sm">
-                  <div className="flex justify-end mb-2">
-                    <button onClick={() => { navigator.clipboard.writeText(generateMarkdownString()); setCopyStatus(true); setTimeout(() => setCopyStatus(false), 2000); }} className="text-[10px] bg-amber-50 text-amber-700 px-3 py-1.5 rounded-lg border border-amber-200 font-bold hover:bg-amber-100 cursor-pointer">{copyStatus ? "✓ Copied!" : "Copy Clipboard"}</button>
+                <div className="bg-brand-card border border-[#eaddca] rounded-2xl p-5 font-mono text-xs text-stone-800 max-h-[350px] overflow-y-auto shadow-sm text-left">
+                  <div className="flex justify-end mb-3">
+                    <button onClick={() => { navigator.clipboard.writeText(generateMarkdownString()); setCopyStatus(true); setTimeout(() => setCopyStatus(false), 2000); }} className="text-[10px] bg-brand-beige hover:bg-[#ebdcb9] text-amber-800 px-3 py-1.5 rounded-lg border border-[#eaddca] font-black uppercase transition-all shadow-sm active:scale-95 cursor-pointer">{copyStatus ? "✓ Copied!" : "Copy to Scrolls"}</button>
                   </div>
-                  <pre className="whitespace-pre-wrap text-left bg-slate-50 p-4 rounded-xl border border-slate-150">{generateMarkdownString()}</pre>
+                  <pre className="whitespace-pre-wrap text-left bg-brand-beige/40 p-4 rounded-xl border border-[#eaddca] text-stone-700 shadow-inner font-mono text-[10.5px] leading-relaxed select-all">{generateMarkdownString()}</pre>
                 </div>
               )}
             </div>
@@ -1115,18 +1116,18 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
             <div className="lg:col-span-4 flex flex-col gap-5 text-left">
               
               {/* Dice Scriptorium Bag */}
-              <div className="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
+              <div className="bg-brand-card border border-[#eaddca] p-5 rounded-2xl shadow-sm">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-display font-black text-sm text-slate-800 flex items-center gap-1.5 uppercase tracking-wide">
+                  <h4 className="font-display font-black text-sm text-stone-900 flex items-center gap-1.5 uppercase tracking-wide">
                     <Dice5 className="w-4 h-4" style={{ color: classColor }} />
                     Polyhedral Dice Bag
                   </h4>
-                  <span className="text-[10px] font-mono bg-slate-50 border border-slate-200 text-slate-500 px-2 py-0.5 rounded uppercase font-bold">
+                  <span className="text-[10px] font-mono bg-[#eaddca]/40 border border-[#eaddca] text-amber-950 px-2 py-0.5 rounded uppercase font-bold">
                     BAG OPEN
                   </span>
                 </div>
 
-                <p className="text-[11px] text-slate-500 mb-3 leading-normal font-medium">
+                <p className="text-[11px] text-stone-600 mb-3 leading-normal font-medium">
                   Select a polyhedral shape below, scribe your check details, then tap the die or any stat card to challenge fate:
                 </p>
 
@@ -1141,10 +1142,10 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                           setActiveDieType(d);
                           setRollResult(null);
                         }}
-                        className="py-1.5 rounded-lg border text-center cursor-pointer transition-all uppercase font-bold"
+                        className="py-1.5 rounded-lg border text-center cursor-pointer transition-all uppercase font-black shadow-sm"
                         style={{
-                          backgroundColor: isSelected ? classColor : "#f8fafc",
-                          borderColor: isSelected ? classColor : "#e2e8f0",
+                          backgroundColor: isSelected ? classColor : "#ebdcb9",
+                          borderColor: isSelected ? classColor : "#eaddca",
                           color: isSelected ? "#ffffff" : "#475569"
                         }}
                       >
@@ -1156,7 +1157,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
 
                 {/* Roll Objective Note Input */}
                 <div className="mb-4">
-                  <label className="block text-[10px] font-mono text-slate-500 uppercase font-black mb-1">
+                  <label className="block text-[10px] font-mono text-stone-500 uppercase font-black mb-1">
                     ROLL OBJECTIVE NOTE
                   </label>
                   <input
@@ -1164,13 +1165,13 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                     placeholder="e.g. Bluffing bar bouncer for free VIP access..."
                     value={rollNote}
                     onChange={(e) => setRollNote(e.target.value)}
-                    className="w-full bg-slate-50 font-medium text-xs text-slate-800 border border-slate-200 p-2.5 rounded-xl focus:outline-none focus:border-slate-400 focus:bg-white transition-all placeholder-slate-450"
+                    className="w-full bg-brand-beige font-medium text-xs text-[#2a2015] border border-[#eaddca] p-2.5 rounded-xl focus:outline-none focus:border-amber-600 focus:bg-white transition-all placeholder-stone-400"
                   />
                 </div>
 
                 {/* Big Interactive Rolling Die */}
-                <div className="flex flex-col items-center justify-center py-6 bg-slate-50 rounded-xl border border-slate-200 relative overflow-hidden group">
-                  <div className="absolute top-1.5 left-2 font-mono text-[8px] text-slate-400 font-bold uppercase">
+                <div className="flex flex-col items-center justify-center py-6 bg-brand-beige rounded-xl border border-[#eaddca] relative overflow-hidden group">
+                  <div className="absolute top-1.5 left-2 font-mono text-[8px] text-amber-900/60 font-bold uppercase">
                     Shape: {activeDieType}
                   </div>
                   
@@ -1194,7 +1195,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                     )}
                   </button>
 
-                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest mt-3 select-none font-extrabold text-center px-4">
+                  <span className="text-[10px] font-mono text-stone-500 uppercase tracking-widest mt-3 select-none font-black text-center px-4">
                     {isRolling ? "TUNING PROBABILITIES..." : "TAP DIE TO ROLL PURE CHECK"}
                   </span>
                 </div>
@@ -1205,7 +1206,7 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                     className="mt-4 p-4 rounded-xl border text-center transition-all shadow-sm"
                     style={{
                       backgroundColor: `${rollResult.bracket === "crit-success" ? "#06b6d4" : rollResult.bracket === "crit-fail" ? "#ef4444" : rollResult.bracket === "success" ? classColor : "#cbd5e1"}09`,
-                      borderColor: `${rollResult.bracket === "crit-success" ? "#06b6d4" : rollResult.bracket === "crit-fail" ? "#ef4444" : rollResult.bracket === "success" ? classColor : "#cbd5e1"}35`
+                      borderColor: `${rollResult.bracket === "crit-success" ? "#06b6d4" : rollResult.bracket === "crit-fail" ? "#ef4444" : rollResult.bracket === "success" ? classColor : "#ebdcb9"}bf`
                     }}
                   >
                     <span className="text-[10px] uppercase font-mono tracking-wider font-extrabold" style={{ color: classColor }}>
@@ -1217,10 +1218,10 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                     >
                       {rollResult.total}
                     </div>
-                    <div className="text-[10px] text-slate-500 font-mono mb-2">
+                    <div className="text-[10px] text-stone-500 font-mono mb-2">
                       ({rollResult.natural} on {activeDieType}) {rollResult.modifier >= 0 ? `+ ${rollResult.modifier} Mod` : `- ${Math.abs(rollResult.modifier)} Mod`}
                     </div>
-                    <p className="text-xs text-slate-650 italic leading-relaxed font-mono font-medium">
+                    <p className="text-xs text-stone-600 italic leading-relaxed font-mono font-medium">
                       "{rollResult.message}"
                     </p>
                   </div>
@@ -1228,20 +1229,20 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
               </div>
 
               {/* Campaign Roll History Ledger */}
-              <div className="bg-white border border-slate-200 p-5 rounded-2xl flex flex-col shadow-sm">
-                <div className="flex items-center justify-between mb-3 border-b border-slate-200 pb-2.5">
-                  <h4 className="font-display font-black text-xs text-slate-850 uppercase tracking-wider">
+              <div className="bg-brand-card border border-[#eaddca] p-5 rounded-2xl flex flex-col shadow-sm">
+                <div className="flex items-center justify-between mb-3 border-b border-[#eaddca] pb-2.5">
+                  <h4 className="font-display font-black text-xs text-stone-900 uppercase tracking-wider">
                     📜 Real-World Roll History Ledger
                   </h4>
-                  <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-50 border border-slate-200 px-2.5 py-0.5 rounded">
+                  <span className="text-[10px] font-mono font-bold text-amber-950 bg-[#eaddca]/40 border border-[#eaddca] px-2.5 py-0.5 rounded">
                     {rollHistory.length} logs
                   </span>
                 </div>
 
                 {rollHistory.length === 0 ? (
                   <div className="text-center py-8">
-                    <p className="text-xs text-slate-400 italic">Roll history ledger is currently empty.</p>
-                    <p className="text-[10.5px] text-slate-500 font-mono mt-1 font-bold">Make characters or checks to record deeds.</p>
+                    <p className="text-xs text-stone-600 italic">Roll history ledger is currently empty.</p>
+                    <p className="text-[10.5px] text-stone-500 font-mono mt-1 font-bold">Make characters or checks to record deeds.</p>
                   </div>
                 ) : (
                   <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
@@ -1251,12 +1252,12 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                       return (
                         <div 
                           key={h.id || i}
-                          className="p-3 bg-slate-50 border border-slate-202 rounded-xl flex items-center justify-between gap-3 text-xs"
+                          className="p-3 bg-brand-beige/50 border border-[#eaddca] rounded-xl flex items-center justify-between gap-3 text-xs text-left"
                         >
                           <div className="flex-1 min-w-0">
                             <div className="flex flex-wrap items-center gap-1.5 mb-1 text-[10px] font-mono">
                               <span 
-                                className="font-extrabold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wide bg-white shadow-sm"
+                                className="font-extrabold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wide bg-brand-card shadow-sm"
                                 style={{
                                   color: isCrit ? "#06b6d4" : isFail ? "#ef4444" : classColor,
                                   border: `1px solid ${isCrit ? "rgba(6,182,212,0.3)" : isFail ? "rgba(239,68,68,0.3)" : `${classColor}25`}`
@@ -1264,24 +1265,24 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                               >
                                 {h.diceType.toUpperCase()}
                               </span>
-                              <span className="text-slate-700 font-extrabold">
+                              <span className="text-stone-850 font-extrabold">
                                 {h.associatedStat ? h.associatedStat : "RAW"}
                               </span>
-                              <span className="text-slate-400 font-semibold">{h.timestamp}</span>
+                              <span className="text-stone-500 font-semibold">{h.timestamp}</span>
                             </div>
-                            <p className="text-[10.5px] text-slate-600 font-mono truncate italic leading-relaxed font-bold">
+                            <p className="text-[10.5px] text-stone-600 font-mono truncate italic leading-relaxed font-bold">
                               "{h.note}"
                             </p>
                           </div>
                           
                           <div className="text-right shrink-0">
                             <div 
-                              className="text-base font-mono font-black"
-                              style={{ color: isCrit ? "#06b6d4" : isFail ? "#ef4444" : "#1e293b" }}
+                               className="text-base font-mono font-black"
+                               style={{ color: isCrit ? "#06b6d4" : isFail ? "#ef4444" : "#2a2015" }}
                             >
                               {h.total}
                             </div>
-                            <div className="text-[9px] text-slate-400 font-mono font-medium">
+                            <div className="text-[9px] text-stone-500 font-mono font-medium">
                               ({h.natural} nat)
                             </div>
                           </div>
