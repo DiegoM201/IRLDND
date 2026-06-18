@@ -15,69 +15,26 @@ interface WizardProps {
   showCancelButton?: boolean;
 }
 
-const QUIZ_QUESTIONS = [
-  {
-    question: "You're ordering takeout with a group and nobody can decide. What's your play?",
-    options: [
-      { text: "Take charge, make the decision yourself, and tell everyone what they're getting.", archetype: "top" },
-      { text: "Agree to whatever everyone else wants and offer to wait for the delivery at the door.", archetype: "bottom" },
-      { text: "Suggest a hybrid custom order that lets everyone mix and match perfectly.", archetype: "verse" },
-      { text: "Lead the discussion toward a highly versatile fusion spot with absolute confidence.", archetype: "versetop" },
-      { text: "Swiftly coordinate who pays, what address to use, and handle any delivery errors.", archetype: "versebottom" },
-      { text: "Diplomatically suggest ordering from separate nearby spots so everyone stays happy.", archetype: "side" },
-      { text: "Hypnotize the room with passionate descriptions until they order exactly what you wanted.", archetype: "powerbottom" }
-    ]
-  },
-  {
-    question: "A friendly casual board game starts arguing over a specific card rule. Your reaction is:",
-    options: [
-      { text: "Firmly declare how we'll proceed so the game doesn't stall, keeping the pace physical.", archetype: "top" },
-      { text: "Quietly accept whichever ruling is chosen and find a clever way to play defensively.", archetype: "bottom" },
-      { text: "Synthesize both views into a balanced compromise that fits the current layout.", archetype: "verse" },
-      { text: "Assert the rule with executive confidence but leave room to pivot if needed.", archetype: "versetop" },
-      { text: "Adapt your engine on the fly to survive under either rule interpretation without stress.", archetype: "versebottom" },
-      { text: "Focus purely on social boundaries, helping players meet in the middle peacefully.", archetype: "side" },
-      { text: "Captivate the room with a charming argument that gets you the best benefit.", archetype: "powerbottom" }
-    ]
-  },
-  {
-    question: "You enter a store and spot a shelf of mystery boxes or blind bag items. What do you do?",
-    options: [
-      { text: "Grab the most dominant looking box first, ready to claim the ultimate prize.", archetype: "top" },
-      { text: "Patiently examine all packets, completely unbothered by speed or hurry.", archetype: "bottom" },
-      { text: "Analyze the probabilities in your head to find the perfect multi-class option.", archetype: "verse" },
-      { text: "Lead a playful hunt, convincing those around you to buy matching boxes.", archetype: "versetop" },
-      { text: "Trust your quick reflexes and hand-eye coordination to pick the optimal choice.", archetype: "versebottom" },
-      { text: "Propose a fun boundary: buy different ones and trade based on mutual desires.", archetype: "side" },
-      { text: "Charm the store clerk into telling you which box has the heaviest, highest quality loot.", archetype: "powerbottom" }
-    ]
-  }
-];
-
 const AVATAR_OPTIONS = [
-  { key: "king", emoji: "👑", bg: "bg-amber-950/40 border-amber-500", label: "Monarch" },
-  { key: "nails", emoji: "💅", bg: "bg-pink-950/40 border-pink-500", label: "Diva" },
-  { key: "shades", emoji: "🕶️", bg: "bg-zinc-800/40 border-zinc-500", label: "Cool" },
-  { key: "lips", emoji: "💋", bg: "bg-red-950/40 border-red-500", label: "Fatal" },
-  { key: "devil", emoji: "😈", bg: "bg-purple-950/40 border-purple-500", label: "Impish" },
-  { key: "unicorn", emoji: "🦄", bg: "bg-fuchsia-950/40 border-fuchsia-500", label: "Mythic" },
-  { key: "lightning", emoji: "⚡", bg: "bg-yellow-950/40 border-yellow-500", label: "Storm" },
-  { key: "gem", emoji: "💎", bg: "bg-cyan-950/40 border-cyan-500", label: "Diamond" },
-  { key: "peach", emoji: "🍑", bg: "bg-orange-950/40 border-orange-500", label: "Peach" },
-  { key: "fire", emoji: "🔥", bg: "bg-red-900/40 border-orange-500", label: "Fierce" },
-  { key: "rainbow", emoji: "🌈", bg: "bg-indigo-950/40 border-blue-500", label: "Pride" },
-  { key: "cowboy", emoji: "🤠", bg: "bg-yellow-900/40 border-yellow-700", label: "Outlaw" },
-  { key: "wiz-boy", emoji: "🧙‍♂️", bg: "bg-purple-950/40 border-purple-500", label: "Mage" },
-  { key: "knight", emoji: "🛡️", bg: "bg-slate-800/40 border-slate-400", label: "Defender" },
-  { key: "rogue", emoji: "🥷", bg: "bg-emerald-950/40 border-emerald-500", label: "Infiltrator" }
+  { key: "king", emoji: "👑", bg: "bg-amber-100 border-amber-300", label: "Monarch" },
+  { key: "nails", emoji: "💅", bg: "bg-pink-100 border-pink-300", label: "Diva" },
+  { key: "shades", emoji: "🕶️", bg: "bg-slate-100 border-slate-300", label: "Cool" },
+  { key: "lips", emoji: "💋", bg: "bg-red-100 border-red-300", label: "Fatal" },
+  { key: "devil", emoji: "😈", bg: "bg-purple-100 border-purple-300", label: "Impish" },
+  { key: "unicorn", emoji: "🦄", bg: "bg-fuchsia-100 border-fuchsia-300", label: "Mythic" },
+  { key: "lightning", emoji: "⚡", bg: "bg-yellow-100 border-yellow-300", label: "Storm" },
+  { key: "gem", emoji: "💎", bg: "bg-cyan-100 border-cyan-300", label: "Diamond" },
+  { key: "peach", emoji: "🍑", bg: "bg-orange-100 border-orange-350", label: "Peach" },
+  { key: "fire", emoji: "🔥", bg: "bg-red-100 border-orange-300", label: "Fierce" },
+  { key: "rainbow", emoji: "🌈", bg: "bg-indigo-100 border-indigo-300", label: "Pride" },
+  { key: "cowboy", emoji: "🤠", bg: "bg-amber-140/50 border-amber-300", label: "Outlaw" },
+  { key: "wiz-boy", emoji: "🧙‍♂️", bg: "bg-purple-100 border-purple-300", label: "Mage" },
+  { key: "knight", emoji: "🛡️", bg: "bg-slate-100 border-slate-300", label: "Defender" },
+  { key: "rogue", emoji: "🥷", bg: "bg-emerald-100 border-emerald-300", label: "Infiltrator" }
 ];
 
 export default function Wizard({ onComplete, availableArchetypes, availableRaces, onCancel, showCancelButton }: WizardProps) {
   const [step, setStep] = useState<number>(1);
-  const [mode, setMode] = useState<" quiz" | "direct" | null>(null);
-  
-  const [quizIndex, setQuizIndex] = useState<number>(0);
-  const [quizScores, setQuizScores] = useState<Record<string, number>>({});
   
   const [selectedArchetype, setSelectedArchetype] = useState<string>(availableArchetypes[0]?.id || "top");
   const [selectedRace, setSelectedRace] = useState<string>(availableRaces[0]?.id || "twink"); 
@@ -144,34 +101,6 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
   const archetypeDetails = availableArchetypes.find(a => a.id === selectedArchetype) || availableArchetypes[0];
   const raceDetails = availableRaces.find(r => r.id === selectedRace) || availableRaces[0];
 
-  const handleSelectQuizOption = (archetype: string) => {
-    setQuizScores(prev => ({ ...prev, [archetype]: (prev[archetype] || 0) + 1 }));
-
-    if (quizIndex < QUIZ_QUESTIONS.length - 1) {
-      setQuizIndex(quizIndex + 1);
-    } else {
-      const finalScores = { ...quizScores, [archetype]: (quizScores[archetype] || 0) + 1 };
-      let winner = availableArchetypes[0]?.id || "rules-lawyer";
-      let highestScore = 0;
-      Object.entries(finalScores).forEach(([arch, score]) => {
-        const scoreVal = score as number;
-        if (scoreVal > highestScore) {
-          highestScore = scoreVal;
-          winner = arch;
-        }
-      });
-
-      setSelectedArchetype(winner);
-      const matched = availableArchetypes.find(a => a.id === winner);
-      if (matched) {
-        setHighestStat(matched.highest || "intelligence");
-        setLowestStat(matched.lowest || "charisma");
-      }
-      setMode("direct");
-      setStep(1);
-    }
-  };
-
   const handleArchetypeSelectDirect = (id: string) => {
     setSelectedArchetype(id);
     const matched = availableArchetypes.find(a => a.id === id);
@@ -183,23 +112,22 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
 
   const handleNextStep = () => {
     if (step === 1) {
+      if (!charName.trim()) {
+        setNameError("Hold your horses, adventurer! Your Character Sheet needs a name.");
+        return;
+      }
+      setNameError("");
       const baseStats = getInitialStandardArray(highestStat, lowestStat);
       setCustomStats(baseStats);
       setStep(2);
     } else if (step === 2) {
       setStep(3);
-    } else if (step === 3) {
-      setStep(4);
     }
   };
 
   const handlePrevStep = () => {
     if (step > 1) {
       setStep(step - 1);
-    } else {
-      setMode(null);
-      setQuizIndex(0);
-      setQuizScores({});
     }
   };
 
@@ -346,7 +274,7 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
     });
   };
 
-  const renderIcon = (iconName: string, className = "w-5 h-5 text-yellow-400", style?: React.CSSProperties) => {
+  const renderIcon = (iconName: string, className = "w-5 h-5 text-yellow-500", style?: React.CSSProperties) => {
     switch (iconName) {
       case "BookOpen": return <BookOpen className={className} style={style} />;
       case "Flame": return <Flame className={className} style={style} />;
@@ -359,502 +287,511 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8" id="wizard-container">
+    <div className="max-w-3xl mx-auto px-6 py-8 bg-white border border-slate-200 rounded-3xl shadow-sm text-slate-800 text-left mt-6" id="wizard-container">
       {showCancelButton && onCancel && (
-        <button onClick={onCancel} className="mb-4 flex items-center gap-1 text-xs text-zinc-500 hover:text-white bg-zinc-950 px-2.5 py-1.5 rounded border border-zinc-850 cursor-pointer">
+        <button onClick={onCancel} className="mb-4 flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg border border-slate-200 transition-colors cursor-pointer font-bold font-mono">
           <X className="w-3.5 h-3.5" /> Close Creation Roster
         </button>
       )}
 
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-display font-bold tracking-tight text-white mb-2">🔮 IRL CHARACTER GENERATOR</h1>
-        <p className="text-zinc-400 text-sm max-w-lg mx-auto">Map your actual habits, triumphs, and flaws into a Tabletop RPG layout.</p>
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-display font-black tracking-tight text-slate-800 mb-1 flex items-center justify-center gap-2">
+          <Dice5 className="w-7 h-7 text-amber-500" />
+          IRL CHARACTER GENERATOR
+        </h1>
+        <p className="text-slate-500 text-sm max-w-lg mx-auto font-medium">Map your actual habits, triumphs, and flaws into an interactive Tabletop RPG layout.</p>
         
-        {mode && (
-          <div className="flex justify-center items-center gap-1.5 mt-8 max-w-md mx-auto">
-            {Array.from({ length: 4 }).map((_, idx) => (
-              <React.Fragment key={idx}>
-                <div className={`h-1.5 rounded-full transition-all ${step > idx ? "bg-amber-500 w-12" : "bg-zinc-800 w-6"}`} />
-                {idx < 3 && <div className={`h-[1px] w-4 ${step > idx + 1 ? "bg-amber-600" : "bg-zinc-800"}`} />}
-              </React.Fragment>
-            ))}
-          </div>
-        )}
+        <div className="flex justify-center items-center gap-1.5 mt-6 max-w-xs mx-auto">
+          {Array.from({ length: 3 }).map((_, idx) => (
+            <React.Fragment key={idx}>
+              <div className={`h-1.5 rounded-full transition-all ${step > idx ? "bg-amber-500 w-12" : "bg-slate-200 w-6"}`} />
+              {idx < 2 && <div className={`h-[1px] w-4 ${step > idx + 1 ? "bg-amber-600" : "bg-slate-200"}`} />}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
 
-      {!mode ? (
-        <div className="grid md:grid-cols-2 gap-6 mt-6">
-          <button onClick={() => setMode(" quiz")} className="flex flex-col items-center justify-center p-8 bg-zinc-900/60 border border-zinc-800 rounded-xl hover:border-amber-500 transition-all text-center cursor-pointer group">
-            <Dice5 className="w-7 h-7 text-amber-400 mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="text-xl font-display font-semibold text-white mb-2">Take the IRL Quiz</h3>
-            <p className="text-zinc-400 text-sm max-w-xs">Answer 3 scenarios to auto-sort yourself into your archetypal party framework.</p>
-          </button>
-          <button onClick={() => { setMode("direct"); setStep(1); }} className="flex flex-col items-center justify-center p-8 bg-zinc-900/60 border border-zinc-800 rounded-xl hover:border-amber-500 transition-all text-center cursor-pointer group">
-            <User className="w-7 h-7 text-cyan-400 mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="text-xl font-display font-semibold text-white mb-2">Manual Character Design</h3>
-            <p className="text-zinc-400 text-sm max-w-xs">Skip the trial and assemble your raw modifiers immediately.</p>
-          </button>
-        </div>
-      ) : (
-        <div>
-          {step === 1 && mode === " quiz" && (
-            <div className="bg-zinc-900/60 border border-zinc-850 p-6 rounded-2xl">
-              <h2 className="text-2xl font-display font-bold text-white mb-6">{QUIZ_QUESTIONS[quizIndex].question}</h2>
-              <div className="space-y-3">
-                {QUIZ_QUESTIONS[quizIndex].options.map((option, keyId) => (
-                  <button key={keyId} onClick={() => handleSelectQuizOption(option.archetype)} className="w-full text-left p-4 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-xl transition-all cursor-pointer block text-sm text-zinc-100">
-                    {option.text}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+      <div>
+        {/* Step 1: Assembly Phase */}
+        {step === 1 && (
+          <div className="flex flex-col gap-6">
+            <div className="border border-slate-200 rounded-2xl p-5 bg-slate-50/50 flex flex-col gap-5">
+              <h3 className="font-display font-black text-sm text-slate-700 uppercase tracking-widest border-b border-slate-200 pb-2">
+                Step 1: Identity Assembly
+              </h3>
 
-          {step === 1 && mode === "direct" && (
-            <div className="flex flex-col gap-6">
+              {/* Character Details & Faction */}
               <div className="grid md:grid-cols-2 gap-4">
-                {availableArchetypes.map((theme) => {
-                  const isSelected = selectedArchetype === theme.id;
-                  const itemColor = theme.color || "#e4e4e7";
-                  return (
-                    <div 
-                      key={theme.id} 
-                      onClick={() => handleArchetypeSelectDirect(theme.id)} 
-                      className="p-5 rounded-xl border transition-all cursor-pointer"
-                      style={{ 
-                        borderColor: isSelected ? itemColor : "#27272a",
-                        backgroundColor: isSelected ? `${itemColor}15` : "rgba(24, 24, 27, 0.6)"
-                      }}
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        {renderIcon(theme.icon, "w-5 h-5", isSelected ? { color: itemColor } : { color: "#71717a" })}
-                        {isSelected && (
-                          <span 
-                            className="text-black text-[10px] font-mono px-2.5 py-0.5 rounded-full uppercase font-extrabold"
-                            style={{ backgroundColor: itemColor }}
-                          >
-                            Class Active
-                          </span>
-                        )}
-                      </div>
-                      <h4 
-                        className="font-display font-extrabold text-white text-base mb-1"
-                        style={{ color: isSelected ? itemColor : "#ffffff" }}
-                      >
-                        {theme.name}
-                      </h4>
-                      <p className="text-zinc-400 text-xs leading-relaxed">{theme.tagline}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex justify-between mt-4">
-                <button onClick={handlePrevStep} className="text-zinc-400 hover:text-white font-semibold text-sm flex items-center gap-1"><ChevronLeft className="w-4 h-4" /> Reset Mode</button>
-                <button onClick={handleNextStep} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-zinc-950 px-6 py-2 rounded-lg font-semibold text-sm transition-all shadow-md cursor-pointer">Distribute Stats <ChevronRight className="w-4 h-4" /></button>
-              </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-wrap items-center gap-2 bg-zinc-950/40 border border-zinc-850 p-3 rounded-xl">
-                <span className="text-[10px] font-mono uppercase text-zinc-500">Required Array:</span>
-                {[15, 14, 13, 12, 10, 8].map(score => (
-                  <span key={score} className={`text-xs font-mono font-black px-2.5 py-1 rounded-md border ${Object.values(customStats).includes(score) ? "bg-amber-500/10 border-amber-500/30 text-amber-400" : "bg-red-950/20 text-red-400 line-through opacity-60"}`}>{score}</span>
-                ))}
-              </div>
-
-              <div className="bg-zinc-900/40 border border-zinc-800 p-4 rounded-xl flex flex-col gap-3">
-                <h4 className="text-xs font-mono text-amber-400 font-bold uppercase">⚡ Keyboard Scriptorium</h4>
-                <div className="flex gap-2">
-                  <input type="text" value={textAllocation} onChange={(e) => setTextAllocation(e.target.value)} placeholder="e.g., Charisma 15, Intelligence 14, Strength 13..." className="flex-1 bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-xs text-white focus:outline-none focus:border-amber-500" />
-                  <button onClick={handleParseTextAllocation} className="px-4 py-2 bg-amber-500 text-zinc-950 font-bold text-xs rounded-lg uppercase font-mono">Scribe</button>
+                <div>
+                  <label className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-1.5 font-bold">Adventurer Name</label>
+                  <input 
+                    type="text" 
+                    value={charName} 
+                    onChange={(e) => setCharName(e.target.value)} 
+                    placeholder="Diego the Coffee Sorcerer" 
+                    className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400 focus:bg-white transition-all font-medium placeholder-slate-400" 
+                  />
+                  {nameError && <p className="text-rose-500 text-xs mt-1 font-bold">⚠️ {nameError}</p>}
+                </div>
+                <div>
+                  <label className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-1.5 font-bold">Guild / Faction Name</label>
+                  <input 
+                    type="text" 
+                    value={faction} 
+                    onChange={(e) => setFaction(e.target.value)} 
+                    placeholder="Tech Room Syndicate" 
+                    className="w-full bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400 focus:bg-white transition-all font-medium placeholder-slate-400" 
+                  />
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                {Object.entries(STAT_DESCRIPTIONS).map(([key, desc]) => {
-                  const statKey = key as keyof StatBlock;
-                  const value = customStats[statKey];
-                  return (
-                    <div key={statKey} className="p-4 bg-zinc-900/60 rounded-xl border border-zinc-850">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-display font-bold text-white text-sm">{desc.label}</span>
-                        <span className="font-mono font-bold text-xs px-2 py-0.5 rounded text-green-400 bg-green-950/20">+{Math.floor((value - 10) / 2)}</span>
-                      </div>
-                      <select value={value} onChange={(e) => handleStandardArrayChange(statKey, parseInt(e.target.value))} className="w-full bg-zinc-950 border border-zinc-800 text-zinc-100 font-mono text-xs p-2.5 rounded-lg focus:outline-none focus:border-amber-500 cursor-pointer">
-                        {[15, 14, 13, 12, 10, 8].map(s => <option key={s} value={s}>{s}</option>)}
-                      </select>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="flex justify-between mt-4">
-                <button onClick={handlePrevStep} className="text-zinc-400 font-semibold text-sm flex items-center gap-1"><ChevronLeft className="w-4 h-4" /> Go Back</button>
-                <button onClick={handleNextStep} className="flex items-center gap-2 bg-amber-500 text-zinc-950 px-6 py-2 rounded-lg font-semibold text-sm transition-all shadow-md cursor-pointer">Custom Perks <ChevronRight className="w-4 h-4" /></button>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="flex flex-col gap-6" id="wizard-step-3">
-              <div className="grid md:grid-cols-2 gap-6">
-                {/* AI DM Perk Synthesizer */}
-                <div className="bg-zinc-900/60 border border-zinc-850 p-5 rounded-2xl flex flex-col justify-between gap-4">
-                  <div>
-                    <h4 className="text-xs font-mono uppercase tracking-wider font-bold mb-2" style={{ color: archetypeDetails?.color || "#38bdf8" }}>🔮 AI DM Perk Synthesizer</h4>
-                    <p className="text-zinc-400 text-xs leading-relaxed mb-4">Input custom real-world hobbies, hyper-fixations, or quirks to let the Dungeon Master forge bespoke passive rules for you.</p>
-                    <textarea 
-                      value={quirkInput} 
-                      onChange={(e) => setQuirkInput(e.target.value)} 
-                      placeholder="E.g., I am a web developer who lives on cold brew, stays up till 3 AM coding side projects, and hoards mechanical keyboards..." 
-                      className="w-full h-24 bg-zinc-950 border border-zinc-800 p-3 rounded-lg text-xs text-zinc-200 focus:outline-none focus:border-zinc-700" 
-                    />
-                  </div>
-                  <button 
-                    onClick={generatePerksFromDM} 
-                    disabled={isGeneratingPerks} 
-                    className="w-full px-5 py-2.5 bg-zinc-950 hover:bg-zinc-900 border text-white font-display font-semibold rounded-lg text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
-                    style={{ borderColor: `${archetypeDetails?.color || "#38bdf8"}50` }}
-                  >
-                    {isGeneratingPerks ? <Loader2 className="w-4 h-4 animate-spin text-white" /> : <Wand2 className="w-4 h-4" style={{ color: archetypeDetails?.color || "#38bdf8" }} />} Synthesize AI Perks
-                  </button>
-                </div>
-
-                {/* Manual Perk Builder Matrix */}
-                <div className="bg-zinc-900/60 border border-zinc-850 p-5 rounded-2xl flex flex-col gap-3">
-                  <h4 className="text-xs font-mono uppercase tracking-wider font-bold" style={{ color: archetypeDetails?.color || "#a855f7" }}>📜 Scribe Custom Perk Matrix</h4>
-                  <div className="grid grid-cols-2 gap-2.5 text-left">
-                    <div>
-                      <label className="block text-[9px] uppercase font-mono text-zinc-500 font-bold mb-0.5">Perk Title</label>
-                      <input 
-                        type="text" 
-                        value={perkTitle} 
-                        onChange={(e) => setPerkTitle(e.target.value)} 
-                        placeholder="e.g., Rule Shark" 
-                        className="w-full bg-zinc-950 border border-zinc-800 p-2 rounded text-xs text-white focus:outline-none focus:border-zinc-700" 
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[9px] uppercase font-mono text-zinc-500 font-bold mb-0.5">Trigger Condition</label>
-                      <input 
-                        type="text" 
-                        value={perkTrigger} 
-                        onChange={(e) => setPerkTrigger(e.target.value)} 
-                        placeholder="e.g., During line debates" 
-                        className="w-full bg-zinc-950 border border-zinc-800 p-2 rounded text-xs text-white focus:outline-none focus:border-zinc-700" 
-                      />
-                    </div>
-                    <div className="col-span-2">
-                      <label className="block text-[9px] uppercase font-mono text-zinc-500 font-bold mb-0.5">Modifier/Stat Effect</label>
-                      <input 
-                        type="text" 
-                        value={perkEffect} 
-                        onChange={(e) => setPerkEffect(e.target.value)} 
-                        placeholder="e.g., +2 on Intelligence checks when referencing rulebook line 4" 
-                        className="w-full bg-zinc-950 border border-zinc-800 p-2 rounded text-xs text-white focus:outline-none focus:border-zinc-700" 
-                      />
-                    </div>
-                    <div className="col-span-2">
-                      <label className="block text-[9px] uppercase font-mono text-zinc-500 font-bold mb-0.5">Humor Description</label>
-                      <input 
-                        type="text" 
-                        value={perkDescription} 
-                        onChange={(e) => setPerkDescription(e.target.value)} 
-                        placeholder="e.g., You read rules like holy scriptures. Friends sigh, but yield." 
-                        className="w-full bg-zinc-950 border border-zinc-800 p-2 rounded text-xs text-white focus:outline-none focus:border-zinc-700" 
-                      />
-                    </div>
-                  </div>
-                  <button 
-                    onClick={() => {
-                      if (!perkTitle.trim() || !perkEffect.trim()) return;
-                      const newPerk = {
-                        title: perkTitle.trim(),
-                        trigger: perkTrigger.trim() || "Always Active",
-                        effect: perkEffect.trim(),
-                        description: perkDescription.trim() || "A customized rule written into your destiny."
-                      };
-                      setGeneratedPerks([...generatedPerks, newPerk]);
-                      setPerkTitle("");
-                      setPerkTrigger("");
-                      setPerkEffect("");
-                      setPerkDescription("");
-                    }}
-                    disabled={!perkTitle.trim() || !perkEffect.trim()}
-                    className="w-full mt-1.5 py-2 text-black font-mono text-xs font-extrabold rounded-lg uppercase cursor-pointer disabled:opacity-40 disabled:pointer-events-none transition-all active:scale-95"
-                    style={{ backgroundColor: archetypeDetails?.color || "#a855f7" }}
-                  >
-                    + Scribe Perk
-                  </button>
-                </div>
-              </div>
-
-              {/* Roster list */}
+              {/* Class Blueprint Selector */}
               <div>
-                <h3 className="text-sm font-mono uppercase text-zinc-400 font-bold mb-3 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: archetypeDetails?.color }} /> Active Perk Ledger ({generatedPerks.length})
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {generatedPerks.map((p, idx) => (
-                    <div key={idx} className="p-4 bg-zinc-900/40 border rounded-xl relative group text-left" style={{ borderColor: `${archetypeDetails?.color || "#f43f5e"}30` }}>
-                      <button 
-                        onClick={() => setGeneratedPerks(generatedPerks.filter((_, i) => i !== idx))}
-                        className="absolute top-2.5 right-2.5 text-zinc-500 hover:text-red-400 cursor-pointer opacity-40 group-hover:opacity-100 transition-opacity text-xs"
-                        title="Discard Perk"
+                <label className="block text-xs font-mono text-slate-500 uppercase tracking-widest mb-2 font-bold">Choose Class Blueprint</label>
+                <div className="grid md:grid-cols-2 gap-3 max-h-[195px] overflow-y-auto pr-1 border border-slate-200 rounded-xl p-2.5 bg-white shadow-inner">
+                  {availableArchetypes.map((theme) => {
+                    const isSelected = selectedArchetype === theme.id;
+                    const itemColor = theme.color || "#e4e4e7";
+                    return (
+                      <div 
+                        key={theme.id} 
+                        onClick={() => handleArchetypeSelectDirect(theme.id)} 
+                        className="p-3 rounded-lg border transition-all cursor-pointer text-left"
+                        style={{ 
+                          borderColor: isSelected ? itemColor : "#e2e8f0",
+                          backgroundColor: isSelected ? `${itemColor}10` : "rgba(248, 250, 252, 0.8)"
+                        }}
                       >
-                        ✕
-                      </button>
-                      <h4 className="font-display font-bold text-white text-sm mb-1">{p.title}</h4>
-                      <p className="text-xs font-mono font-bold mb-1" style={{ color: archetypeDetails?.color || "#f43f5e" }}>{p.effect}</p>
-                      <p className="text-zinc-300 text-[10.5px] font-mono leading-relaxed mb-0.5">
-                        <span className="text-zinc-500 uppercase text-[9px] font-bold">Trigger:</span> {p.trigger}
-                      </p>
-                      <p className="text-zinc-400 text-xs italic">"{p.description}"</p>
-                    </div>
-                  ))}
-                  {generatedPerks.length === 0 && (
-                    <div className="md:col-span-2 py-8 border border-dashed border-zinc-800 rounded-xl text-center text-zinc-500 text-xs">
-                      No passive perks listed yet. Use AI or Scribe Custom Perk Matrix to add some!
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex justify-between mt-4">
-                <button onClick={handlePrevStep} className="text-zinc-400 font-semibold text-sm flex items-center gap-1"><ChevronLeft className="w-4 h-4" /> Go Back</button>
-                <button onClick={handleNextStep} className="flex items-center gap-2 text-zinc-950 px-6 py-2 rounded-lg font-semibold text-sm transition-all shadow-md cursor-pointer" style={{ backgroundColor: archetypeDetails?.color || "#f43f5e" }}>Refine Identity <ChevronRight className="w-4 h-4" /></button>
-              </div>
-            </div>
-          )}
-
-          {step === 4 && (
-            <div className="flex flex-col gap-6" id="wizard-step-4">
-              <div className="bg-zinc-900/60 border border-zinc-850 p-6 rounded-2xl flex flex-col gap-5">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-mono text-zinc-400 uppercase tracking-widest mb-1.5">Adventurer Name</label>
-                    <input type="text" value={charName} onChange={(e) => setCharName(e.target.value)} placeholder="Diego the Coffee Sorcerer" className="w-full bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-xs text-zinc-200 focus:outline-none focus:border-amber-500" />
-                    {nameError && <p className="text-red-400 text-xs mt-1">⚠️ {nameError}</p>}
-                  </div>
-                  <div>
-                    <label className="block text-xs font-mono text-zinc-400 uppercase tracking-widest mb-1.5">Guild / Faction Name</label>
-                    <input type="text" value={faction} onChange={(e) => setFaction(e.target.value)} placeholder="Tech Room Syndicate" className="w-full bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-xs text-zinc-200 focus:outline-none focus:border-amber-500" />
-                  </div>
-                </div>
-
-                {/* 🏳️‍🌈 Selection Section for Queer Blueprint Races */}
-                <div>
-                  <div className="flex justify-between items-center mb-1.5">
-                    <label className="block text-xs font-mono text-zinc-400 uppercase tracking-widest">Select Community Race Blueprint</label>
-                    <span className="text-[10px] text-green-400 font-mono font-bold">Adds racial bonuses directly!</span>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 mt-1">
-                    {availableRaces.map((r) => {
-                      const isSelected = selectedRace === r.id;
-                      return (
-                        <div
-                          key={r.id}
-                          onClick={() => setSelectedRace(r.id)}
-                          className={`p-3 rounded-xl border text-center cursor-pointer transition-all flex flex-col justify-between ${
-                            isSelected ? "bg-amber-500/10 border-amber-500" : "bg-zinc-950/80 border-zinc-850 hover:border-zinc-700"
-                          }`}
-                          title={r.description}
-                        >
-                          <div>
-                            <span className="text-xl block mb-1">{r.icon || "✨"}</span>
-                            <span className="text-xs block font-bold text-white">{r.name}</span>
-                            <span className="text-[9px] block text-zinc-500 mt-0.5 line-clamp-1">{r.tagline}</span>
-                          </div>
-                          {/* 🌟 Ability modifier badge tracker */}
-                          <div className="text-[9px] text-green-400 font-mono mt-1.5 bg-green-950/20 py-0.5 rounded border border-green-900/10">
-                            {Object.entries(r.bonuses || {}).map(([sKey, bVal]) => `+${bVal}${sKey.substring(0,3).toUpperCase()}`).join(" ")}
-                          </div>
+                        <div className="flex justify-between items-start mb-1">
+                          {renderIcon(theme.icon, "w-4 h-4", isSelected ? { color: itemColor } : { color: "#64748b" })}
+                          {isSelected && (
+                            <span 
+                              className="text-white text-[9px] font-mono px-2 py-0.5 rounded-full uppercase font-black"
+                              style={{ backgroundColor: itemColor }}
+                            >
+                              Selected
+                            </span>
+                          )}
                         </div>
-                      );
-                    })}
-                  </div>
+                        <h4 
+                          className="font-display font-black text-sm mb-0.5"
+                          style={{ color: isSelected ? itemColor : "#334155" }}
+                        >
+                          {theme.name}
+                        </h4>
+                        <p className="text-slate-500 text-[11px] leading-relaxed line-clamp-1">{theme.tagline}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Race Alignment Selector */}
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-xs font-mono text-slate-500 uppercase tracking-widest font-bold">Select Race Alignment</label>
+                  <span className="text-[10px] text-green-600 font-mono font-bold">Adds unique modifiers!</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-1">
+                  {availableRaces.map((r) => {
+                    const isSelected = selectedRace === r.id;
+                    return (
+                      <div
+                        key={r.id}
+                        onClick={() => setSelectedRace(r.id)}
+                        className={`p-2.5 rounded-xl border text-center cursor-pointer transition-all flex flex-col justify-between ${
+                          isSelected ? "bg-amber-500/10 border-amber-500 shadow-sm" : "bg-white border-slate-200 hover:border-slate-350"
+                        }`}
+                        title={r.description}
+                      >
+                        <div>
+                          <span className="text-lg block mb-0.5">{r.icon || "✨"}</span>
+                          <span className="text-xs block font-bold text-slate-800 truncate">{r.name}</span>
+                          <span className="text-[8.5px] block text-slate-400 mt-0.5 line-clamp-1">{r.tagline}</span>
+                        </div>
+                        {/* Ability modifier badges */}
+                        <div className="text-[8px] text-green-600 font-mono font-bold mt-1.5 bg-green-50 py-0.5 rounded border border-green-200/50">
+                          {Object.entries(r.bonuses || {}).map(([sKey, bVal]) => `+${bVal}${sKey.substring(0,3).toUpperCase()}`).join(" ")}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Avatar Selector Panel */}
+              <div>
+                <div className="flex border-b border-slate-250 gap-4 mb-3.5">
+                  <button 
+                    type="button"
+                    onClick={() => setAvatarMode("emoji")} 
+                    className={`pb-2 text-xs font-mono font-bold cursor-pointer transition-all ${avatarMode === "emoji" ? "text-slate-800 border-b-2" : "text-slate-400 hover:text-slate-600"}`}
+                    style={{ borderBottomColor: avatarMode === "emoji" ? (archetypeDetails?.color || "#f43f5e") : "transparent" }}
+                  >
+                    🛡️ Emoji Node Roster
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setAvatarMode("scriptorium")} 
+                    className={`pb-2 text-xs font-mono font-bold cursor-pointer transition-all ${avatarMode === "scriptorium" ? "text-slate-800 border-b-2" : "text-slate-400 hover:text-slate-600"}`}
+                    style={{ borderBottomColor: avatarMode === "scriptorium" ? (archetypeDetails?.color || "#f43f5e") : "transparent" }}
+                  >
+                    🖼️ Image Scriptorium
+                  </button>
                 </div>
 
-                <div>
-                  <div className="flex border-b border-zinc-800 gap-4 mb-4">
-                    <button 
-                      type="button"
-                      onClick={() => setAvatarMode("emoji")} 
-                      className={`pb-2 text-xs font-mono font-bold cursor-pointer transition-all ${avatarMode === "emoji" ? "text-white border-b-2" : "text-zinc-500 hover:text-zinc-300"}`}
-                      style={{ borderBottomColor: avatarMode === "emoji" ? (archetypeDetails?.color || "#f43f5e") : "transparent" }}
-                    >
-                      🛡️ Emoji Node Roster
-                    </button>
-                    <button 
-                      type="button"
-                      onClick={() => setAvatarMode("scriptorium")} 
-                      className={`pb-2 text-xs font-mono font-bold cursor-pointer transition-all ${avatarMode === "scriptorium" ? "text-white border-b-2" : "text-zinc-500 hover:text-zinc-300"}`}
-                      style={{ borderBottomColor: avatarMode === "scriptorium" ? (archetypeDetails?.color || "#f43f5e") : "transparent" }}
-                    >
-                      🖼️ Image Scriptorium
-                    </button>
-                  </div>
-
-                  {avatarMode === "emoji" ? (
-                    <div>
-                      <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">Choose Persona Emoji Node</label>
-                      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-1">
-                        {AVATAR_OPTIONS.map((opt) => (
-                          <div 
-                            key={opt.key} 
-                            onClick={() => setAvatar(opt.key)} 
-                            className={`p-2.5 rounded-xl border text-center cursor-pointer transition-all ${avatar === opt.key ? "bg-opacity-10 border-opacity-100" : "bg-zinc-950 border-zinc-850"}`}
-                            style={{ 
-                              borderColor: avatar === opt.key ? (archetypeDetails?.color || "#f43f5e") : undefined,
-                              backgroundColor: avatar === opt.key ? `${archetypeDetails?.color || "#f43f5e"}15` : undefined
-                            }}
-                          >
-                            <span className="text-xl block mb-0.5">{opt.emoji}</span>
-                            <span className="text-[9px] block text-zinc-400 font-semibold">{opt.label}</span>
-                          </div>
-                        ))}
-                      </div>
+                {avatarMode === "emoji" ? (
+                  <div>
+                    <label className="block text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1.5">Choose Persona Emoji Node</label>
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-1">
+                      {AVATAR_OPTIONS.map((opt) => (
+                        <div 
+                          key={opt.key} 
+                          onClick={() => setAvatar(opt.key)} 
+                          className={`p-2.5 rounded-xl border text-center cursor-pointer transition-all ${avatar === opt.key ? "bg-white border-opacity-100 shadow-sm" : "bg-white border-slate-200 hover:scale-[1.02]"}`}
+                          style={{ 
+                            borderColor: avatar === opt.key ? (archetypeDetails?.color || "#f43f5e") : undefined,
+                            backgroundColor: avatar === opt.key ? `${archetypeDetails?.color || "#f43f5e"}10` : undefined
+                          }}
+                        >
+                          <span className="text-xl block mb-0.5">{opt.emoji}</span>
+                          <span className="text-[9px] block text-slate-500 font-bold">{opt.label}</span>
+                        </div>
+                      ))}
                     </div>
-                  ) : (
-                    <div className="grid sm:grid-cols-2 gap-6 bg-zinc-950/50 border border-zinc-850 p-4 rounded-xl text-left">
-                      {/* Left: Upload and Sliders */}
-                      <div className="flex flex-col gap-3">
+                  </div>
+                ) : (
+                  <div className="grid sm:grid-cols-2 gap-6 bg-white border border-slate-200 p-4 rounded-xl text-left shadow-inner">
+                    {/* Left: Upload and Sliders */}
+                    <div className="flex flex-col gap-3">
+                      <div>
+                        <label className="block text-[10px] font-mono text-slate-500 uppercase tracking-widest mb-1 font-bold">Local Image File</label>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = () => {
+                                if (typeof reader.result === "string") {
+                                  setUploadedBase64(reader.result);
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                          className="text-xs text-slate-500 block w-full file:mr-3 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-[10px] file:font-mono file:font-bold file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300 cursor-pointer" 
+                        />
+                      </div>
+
+                      <div className="space-y-2 font-mono text-[9px] text-slate-500 mt-2">
                         <div>
-                          <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">Local Image File</label>
+                          <div className="flex justify-between mb-0.5">
+                            <span className="font-bold">SCALE: {avatarScale.toFixed(1)}x</span>
+                            <span className="text-slate-400">0.5x - 3.0x</span>
+                          </div>
                           <input 
-                            type="file" 
-                            accept="image/*" 
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                const reader = new FileReader();
-                                reader.onload = () => {
-                                  if (typeof reader.result === "string") {
-                                    setUploadedBase64(reader.result);
-                                  }
-                                };
-                                reader.readAsDataURL(file);
-                              }
-                            }}
-                            className="text-xs text-zinc-400 block w-full file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-mono file:font-black file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer" 
+                            type="range" 
+                            min="0.5" 
+                            max="3.0" 
+                            step="0.1" 
+                            value={avatarScale} 
+                            onChange={(e) => setAvatarScale(parseFloat(e.target.value))} 
+                            className="w-full accent-amber-500 h-1 bg-slate-200 rounded cursor-pointer" 
                           />
                         </div>
 
-                        <div className="space-y-2 font-mono text-[10px] text-zinc-400 mt-2">
-                          <div>
-                            <div className="flex justify-between mb-0.5">
-                              <span>SCALE: {avatarScale.toFixed(1)}x</span>
-                              <span className="text-zinc-600">0.5x - 3.0x</span>
-                            </div>
-                            <input 
-                              type="range" 
-                              min="0.5" 
-                              max="3.0" 
-                              step="0.1" 
-                              value={avatarScale} 
-                              onChange={(e) => setAvatarScale(parseFloat(e.target.value))} 
-                              className="w-full accent-emerald-500 bg-zinc-800 h-1 rounded" 
-                            />
+                        <div>
+                          <div className="flex justify-between mb-0.5">
+                            <span className="font-bold">ROTATION: {avatarRotate}°</span>
+                            <span className="text-slate-400">0° - 360°</span>
                           </div>
-
-                          <div>
-                            <div className="flex justify-between mb-0.5">
-                              <span>ROTATION: {avatarRotate}°</span>
-                              <span className="text-zinc-600">0° - 360°</span>
-                            </div>
-                            <input 
-                              type="range" 
-                              min="0" 
-                              max="360" 
-                              value={avatarRotate} 
-                              onChange={(e) => setAvatarRotate(parseInt(e.target.value))} 
-                              className="w-full accent-emerald-500 bg-zinc-800 h-1 rounded" 
-                            />
-                          </div>
-
-                          <div>
-                            <div className="flex justify-between mb-0.5">
-                              <span>X OFFSET: {avatarX}px</span>
-                              <span className="text-zinc-600">-100px - 100px</span>
-                            </div>
-                            <input 
-                              type="range" 
-                              min="-100" 
-                              max="100" 
-                              value={avatarX} 
-                              onChange={(e) => setAvatarX(parseInt(e.target.value))} 
-                              className="w-full accent-emerald-500 bg-zinc-800 h-1 rounded" 
-                            />
-                          </div>
-
-                          <div>
-                            <div className="flex justify-between mb-0.5">
-                              <span>Y OFFSET: {avatarY}px</span>
-                              <span className="text-zinc-600">-100px - 100px</span>
-                            </div>
-                            <input 
-                              type="range" 
-                              min="-100" 
-                              max="100" 
-                              value={avatarY} 
-                              onChange={(e) => setAvatarY(parseInt(e.target.value))} 
-                              className="w-full bg-zinc-800 h-1" 
-                            />
-                          </div>
+                          <input 
+                            type="range" 
+                            min="0" 
+                            max="360" 
+                            value={avatarRotate} 
+                            onChange={(e) => setAvatarRotate(parseInt(e.target.value))} 
+                            className="w-full accent-amber-500 h-1 bg-slate-200 rounded cursor-pointer" 
+                          />
                         </div>
-                      </div>
 
-                      {/* Right: Scriptorium Preview */}
-                      <div className="flex flex-col items-center justify-center p-3 border border-dashed border-zinc-800 rounded-xl bg-zinc-950/80">
-                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-2 font-bold">Live Token Crop Target</span>
-                        <div 
-                          className="relative w-32 h-32 rounded-full border-2 overflow-hidden flex items-center justify-center bg-zinc-900"
-                          style={{ borderColor: archetypeDetails?.color || "#f43f5e" }}
-                        >
-                          {uploadedBase64 ? (
-                            <img 
-                              src={uploadedBase64} 
-                              alt="Scriptorium Source Avatar" 
-                              referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover pointer-events-none select-none max-w-full max-h-full"
-                              style={{ transform: `scale(${avatarScale}) translate(${avatarX}px, ${avatarY}px) rotate(${avatarRotate}deg)` }}
-                            />
-                          ) : (
-                            <div className="text-center p-2 flex flex-col items-center gap-1">
-                              <span className="text-3xl">🥷</span>
-                              <span className="text-[8px] font-mono text-zinc-600">Pending Upload...</span>
-                            </div>
-                          )}
+                        <div>
+                          <div className="flex justify-between mb-0.5">
+                            <span className="font-bold">X OFFSET: {avatarX}px</span>
+                            <span className="text-slate-400">-100px - 100px</span>
+                          </div>
+                          <input 
+                            type="range" 
+                            min="-100" 
+                            max="100" 
+                            value={avatarX} 
+                            onChange={(e) => setAvatarX(parseInt(e.target.value))} 
+                            className="w-full accent-amber-500 h-1 bg-slate-200 rounded cursor-pointer" 
+                          />
                         </div>
-                        {uploadedBase64 && (
-                          <button 
-                            type="button" 
-                            onClick={() => {
-                              setAvatarScale(1.0);
-                              setAvatarRotate(0);
-                              setAvatarX(0);
-                              setAvatarY(0);
-                            }}
-                            className="mt-2 text-[9px] font-mono text-zinc-500 hover:text-white underline cursor-pointer"
-                          >
-                            Reset Transform Controls
-                          </button>
-                        )}
+
+                        <div>
+                          <div className="flex justify-between mb-0.5">
+                            <span className="font-bold">Y OFFSET: {avatarY}px</span>
+                            <span className="text-slate-400">-100px - 100px</span>
+                          </div>
+                          <input 
+                            type="range" 
+                            min="-100" 
+                            max="100" 
+                            value={avatarY} 
+                            onChange={(e) => setAvatarY(parseInt(e.target.value))} 
+                            className="w-full accent-amber-500 h-1 bg-slate-200 rounded cursor-pointer" 
+                          />
+                        </div>
                       </div>
                     </div>
-                  )}
-                </div>
+
+                    {/* Right: Scriptorium Preview */}
+                    <div className="flex flex-col items-center justify-center p-3 border border-dashed border-slate-300 rounded-xl bg-slate-50">
+                      <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest mb-2 font-bold">Live Token Crop Target</span>
+                      <div 
+                        className="relative w-28 h-28 rounded-full border-2 overflow-hidden flex items-center justify-center bg-white"
+                        style={{ borderColor: archetypeDetails?.color || "#f43f5e" }}
+                      >
+                        {uploadedBase64 ? (
+                          <img 
+                            src={uploadedBase64} 
+                            alt="Scriptorium Source Avatar" 
+                            referrerPolicy="no-referrer"
+                            className="w-full h-full object-cover pointer-events-none select-none max-w-full max-h-full"
+                            style={{ transform: `translate(${avatarX}px, ${avatarY}px) scale(${avatarScale}) rotate(${avatarRotate}deg)` }}
+                          />
+                        ) : (
+                          <div className="text-center p-2 flex flex-col items-center gap-1">
+                            <span className="text-2xl">🥷</span>
+                            <span className="text-[8px] font-mono text-slate-500">Pending Upload...</span>
+                          </div>
+                        )}
+                      </div>
+                      {uploadedBase64 && (
+                        <button 
+                          type="button" 
+                          onClick={() => {
+                            setAvatarScale(1.0);
+                            setAvatarRotate(0);
+                            setAvatarX(0);
+                            setAvatarY(0);
+                          }}
+                          className="mt-2 text-[9px] font-mono text-slate-400 hover:text-slate-700 underline cursor-pointer"
+                        >
+                          Reset Transform Controls
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div className="flex justify-between mt-4">
-                <button onClick={handlePrevStep} className="text-zinc-400 font-semibold text-sm flex items-center gap-1"><ChevronLeft className="w-4 h-4" /> Go Back</button>
-                <button onClick={handleFinish} className="bg-gradient-to-r from-amber-500 to-yellow-500 text-zinc-950 px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-lg cursor-pointer">Generate Character Sheet 📜</button>
+            </div>
+            
+            <div className="flex justify-end mt-2">
+              <button onClick={handleNextStep} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md cursor-pointer">
+                Distribute Stats <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Stats Allocation */}
+        {step === 2 && (
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap items-center gap-2 bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
+              <span className="text-[10px] font-mono uppercase text-slate-500 font-bold">Required Standard Array:</span>
+              {[15, 14, 13, 12, 10, 8].map(score => (
+                <span key={score} className={`text-xs font-mono font-black px-2.5 py-1 rounded-md border ${Object.values(customStats).includes(score) ? "bg-amber-500/10 border-amber-500/30 text-amber-600 font-bold" : "bg-zinc-100 text-zinc-400 line-through opacity-50"}`}>{score}</span>
+              ))}
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col gap-2.5">
+              <h4 className="text-xs font-mono text-amber-600 font-bold uppercase">⚡ Keyboard Scriptorium</h4>
+              <p className="text-[10px] text-slate-500 leading-normal font-medium">To save time, paste your stats allocation on a single line! Example: <i>"WIS 15, STR 14, CON 13"</i></p>
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={textAllocation} 
+                  onChange={(e) => setTextAllocation(e.target.value)} 
+                  placeholder="e.g., Charisma 15, Intelligence 14, Strength 13..." 
+                  className="flex-1 bg-white border border-slate-200 p-2.5 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400" 
+                />
+                <button onClick={handleParseTextAllocation} className="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-xl uppercase font-mono">Scribe</button>
+              </div>
+              {parseResult && (
+                <p className={`text-xs font-mono ${parseResult.success ? "text-green-600" : "text-rose-500"}`}>{parseResult.text}</p>
+              )}
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {Object.entries(STAT_DESCRIPTIONS).map(([key, desc]) => {
+                const statKey = key as keyof StatBlock;
+                const value = customStats[statKey];
+                return (
+                  <div key={statKey} className="p-4 bg-slate-50/50 border border-slate-200 rounded-xl shadow-sm text-left">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-display font-black text-slate-700 text-sm">{desc.label}</span>
+                      <span className="font-mono font-black text-xs px-2.5 py-0.5 rounded text-green-700 bg-green-50 border border-green-200/50">+{Math.floor((value - 10) / 2)} modifier</span>
+                    </div>
+                    <select 
+                      value={value} 
+                      onChange={(e) => handleStandardArrayChange(statKey, parseInt(e.target.value))} 
+                      className="w-full bg-white border border-slate-200 text-slate-700 font-mono text-xs p-2.5 rounded-xl focus:outline-none focus:border-slate-400 cursor-pointer"
+                    >
+                      {[15, 14, 13, 12, 10, 8].map(s => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex justify-between mt-4">
+              <button onClick={handlePrevStep} className="text-slate-500 hover:text-slate-800 font-bold text-sm flex items-center gap-1 cursor-pointer"><ChevronLeft className="w-4 h-4" /> Go Back</button>
+              <button onClick={handleNextStep} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md cursor-pointer">Custom Perks <ChevronRight className="w-4 h-4" /></button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Perks Customizer */}
+        {step === 3 && (
+          <div className="flex flex-col gap-6" id="wizard-step-3">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* AI DM Perk Synthesizer */}
+              <div className="bg-slate-50/40 border border-slate-200 p-5 rounded-2xl flex flex-col justify-between gap-4">
+                <div>
+                  <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold mb-2" style={{ color: archetypeDetails?.color || "#0284c7" }}>🔮 AI DM Perk Synthesizer</h4>
+                  <p className="text-slate-500 text-xs leading-relaxed mb-4">Input custom real-world hobbies, quirks, or hyper-fixations to let the Dungeon Master forge bespoke passive rules.</p>
+                  <textarea 
+                    value={quirkInput} 
+                    onChange={(e) => setQuirkInput(e.target.value)} 
+                    placeholder="E.g., I am a web developer who lives on cold brew, stays up till 3 AM coding, and hoards mechanical keyboards..." 
+                    className="w-full h-24 bg-white border border-slate-200 p-3 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-slate-400" 
+                  />
+                </div>
+                <button 
+                  onClick={generatePerksFromDM} 
+                  disabled={isGeneratingPerks} 
+                  className="w-full px-5 py-2.5 bg-white hover:bg-slate-50 border text-slate-700 font-display font-bold rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-sm"
+                  style={{ borderColor: `${archetypeDetails?.color || "#0284c7"}50` }}
+                >
+                  {isGeneratingPerks ? <Loader2 className="w-4 h-4 animate-spin text-slate-650" /> : <Wand2 className="w-4 h-4" style={{ color: archetypeDetails?.color || "#0284c7" }} />} Synthesize AI Perks
+                </button>
+              </div>
+
+              {/* Manual Scriptorium */}
+              <div className="bg-slate-50/40 border border-slate-200 p-5 rounded-2xl flex flex-col gap-3">
+                <h4 className="text-xs font-mono uppercase tracking-wider font-extrabold" style={{ color: archetypeDetails?.color || "#a855f7" }}>📜 Scribe Custom Perk Matrix</h4>
+                <div className="grid grid-cols-2 gap-2.5 text-left text-xs">
+                  <div>
+                    <label className="block text-[9px] uppercase font-mono text-slate-500 font-black mb-0.5">Perk Title</label>
+                    <input 
+                      type="text" 
+                      value={perkTitle} 
+                      onChange={(e) => setPerkTitle(e.target.value)} 
+                      placeholder="e.g., Rule Shark" 
+                      className="w-full bg-white border border-slate-200 p-2 rounded-lg text-slate-800 focus:outline-none focus:border-slate-400" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] uppercase font-mono text-slate-500 font-black mb-0.5">Trigger Condition</label>
+                    <input 
+                      type="text" 
+                      value={perkTrigger} 
+                      onChange={(e) => setPerkTrigger(e.target.value)} 
+                      placeholder="e.g., During debates" 
+                      className="w-full bg-white border border-slate-200 p-2 rounded-lg text-slate-800 focus:outline-none focus:border-slate-400" 
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-[9px] uppercase font-mono text-slate-500 font-black mb-0.5">Modifier/Stat Effect</label>
+                    <input 
+                      type="text" 
+                      value={perkEffect} 
+                      onChange={(e) => setPerkEffect(e.target.value)} 
+                      placeholder="e.g., +2 on Intelligence checks when arguing line 4" 
+                      className="w-full bg-white border border-slate-200 p-2 rounded-lg text-slate-800 focus:outline-none focus:border-slate-400" 
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-[9px] uppercase font-mono text-slate-500 font-black mb-0.5">Humor Description</label>
+                    <input 
+                      type="text" 
+                      value={perkDescription} 
+                      onChange={(e) => setPerkDescription(e.target.value)} 
+                      placeholder="e.g., You read details perfectly but annoy your fellows." 
+                      className="w-full bg-white border border-slate-200 p-2 rounded-lg text-slate-800 focus:outline-none focus:border-slate-400" 
+                    />
+                  </div>
+                </div>
+                <button 
+                  onClick={() => {
+                    if (!perkTitle.trim() || !perkEffect.trim()) return;
+                    const newPerk = {
+                      title: perkTitle.trim(),
+                      trigger: perkTrigger.trim() || "Always Active",
+                      effect: perkEffect.trim(),
+                      description: perkDescription.trim() || "A customized rule written into your destiny."
+                    };
+                    setGeneratedPerks([...generatedPerks, newPerk]);
+                    setPerkTitle("");
+                    setPerkTrigger("");
+                    setPerkEffect("");
+                    setPerkDescription("");
+                  }}
+                  disabled={!perkTitle.trim() || !perkEffect.trim()}
+                  className="w-full mt-1.5 py-2 text-white font-mono text-xs font-black rounded-lg uppercase cursor-pointer disabled:opacity-40 disabled:pointer-events-none transition-all active:scale-95 shadow-sm"
+                  style={{ backgroundColor: archetypeDetails?.color || "#a855f7" }}
+                >
+                  + Scribe Perk
+                </button>
               </div>
             </div>
-          )}
-        </div>
-      )}
+
+            {/* Quirk list */}
+            <div>
+              <h3 className="text-sm font-mono uppercase text-slate-500 font-bold mb-3 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: archetypeDetails?.color }} /> Active Perk Ledger ({generatedPerks.length})
+              </h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                {generatedPerks.map((p, idx) => (
+                  <div key={idx} className="p-4 bg-white border border-slate-200 rounded-xl relative group text-left shadow-sm" style={{ borderColor: `${archetypeDetails?.color || "#f43f5e"}30` }}>
+                    <button 
+                      onClick={() => setGeneratedPerks(generatedPerks.filter((_, i) => i !== idx))}
+                      className="absolute top-2.5 right-2.5 text-slate-400 hover:text-rose-500 cursor-pointer opacity-50 group-hover:opacity-100 transition-opacity text-xs"
+                      title="Discard Perk"
+                    >
+                      ✕
+                    </button>
+                    <h4 className="font-display font-black text-slate-800 text-sm mb-1">{p.title}</h4>
+                    <p className="text-xs font-mono font-bold mb-1" style={{ color: archetypeDetails?.color || "#f43f5e" }}>{p.effect}</p>
+                    <p className="text-slate-650 text-[10.5px] font-mono leading-relaxed mb-0.5">
+                      <span className="text-slate-400 uppercase text-[9px] font-bold">Trigger:</span> {p.trigger}
+                    </p>
+                    <p className="text-slate-550 text-xs italic">"{p.description}"</p>
+                  </div>
+                ))}
+                {generatedPerks.length === 0 && (
+                  <div className="md:col-span-2 py-8 border border-dashed border-slate-350 rounded-xl text-center text-slate-400 text-xs font-medium bg-slate-50/50">
+                    No passive perks listed yet. Use AI or Scribe Custom Perk Matrix to add some!
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex justify-between mt-4">
+              <button onClick={handlePrevStep} className="text-slate-500 hover:text-slate-800 font-bold text-sm flex items-center gap-1 cursor-pointer"><ChevronLeft className="w-4 h-4" /> Go Back</button>
+              <button onClick={handleFinish} className="bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-md cursor-pointer flex gap-1.5 items-center">
+                Create Character Sheet <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
