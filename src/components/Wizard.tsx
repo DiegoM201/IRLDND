@@ -127,6 +127,20 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
   const [faction, setFaction] = useState<string>("Modern Adventurers");
   const [avatar, setAvatar] = useState<string>("coder");
 
+  // 📜 Scribe custom perk states
+  const [perkTitle, setPerkTitle] = useState("");
+  const [perkTrigger, setPerkTrigger] = useState("");
+  const [perkEffect, setPerkEffect] = useState("");
+  const [perkDescription, setPerkDescription] = useState("");
+
+  // 🖼️ Image Scriptorium States
+  const [avatarMode, setAvatarMode] = useState<"emoji" | "scriptorium">("emoji");
+  const [uploadedBase64, setUploadedBase64] = useState<string>("");
+  const [avatarScale, setAvatarScale] = useState<number>(1.2);
+  const [avatarRotate, setAvatarRotate] = useState<number>(0);
+  const [avatarX, setAvatarX] = useState<number>(0);
+  const [avatarY, setAvatarY] = useState<number>(0);
+
   const archetypeDetails = availableArchetypes.find(a => a.id === selectedArchetype) || availableArchetypes[0];
   const raceDetails = availableRaces.find(r => r.id === selectedRace) || availableRaces[0];
 
@@ -319,7 +333,14 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
       stats: ultimateStats,
       perks: generatedPerks,
       customDetails: quirkInput,
-      avatar: avatar,
+      avatar: avatarMode === "scriptorium" && uploadedBase64 ? "custom_uploaded" : avatar,
+      avatarImage: avatarMode === "scriptorium" ? uploadedBase64 : undefined,
+      avatarConfig: avatarMode === "scriptorium" ? {
+        scale: avatarScale,
+        x: avatarX,
+        y: avatarY,
+        rotate: avatarRotate
+      } : undefined,
       faction: faction || "Freelance Party",
       accentColor: archetypeDetails?.color || "#f43f5e"
     });
@@ -476,25 +497,133 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
           )}
 
           {step === 3 && (
-            <div className="flex flex-col gap-6">
-              <div className="bg-zinc-900/60 border border-zinc-850 p-5 rounded-2xl flex flex-col gap-4">
-                <textarea value={quirkInput} onChange={(e) => setQuirkInput(e.target.value)} placeholder="E.g., I am a web developer who lives on iced espresso and sleeps through alarms..." className="w-full h-20 bg-zinc-950 border border-zinc-800 p-3 rounded-lg text-sm text-zinc-200 focus:outline-none focus:border-amber-500" />
-                <button onClick={generatePerksFromDM} disabled={isGeneratingPerks} className="w-full px-5 py-2.5 bg-amber-500/10 border border-amber-500/40 text-amber-300 font-display font-semibold rounded-lg text-sm flex items-center justify-center gap-2 cursor-pointer">
-                  {isGeneratingPerks ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />} Synthesize Perks with AI
-                </button>
-              </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                {generatedPerks.map((p, idx) => (
-                  <div key={idx} className="p-4 bg-zinc-900/40 border border-zinc-800 rounded-xl">
-                    <h4 className="font-display font-bold text-white text-sm mb-1">{p.title}</h4>
-                    <p className="text-green-400 text-xs font-mono mb-1">{p.effect}</p>
-                    <p className="text-zinc-400 text-xs italic">"{p.description}"</p>
+            <div className="flex flex-col gap-6" id="wizard-step-3">
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* AI DM Perk Synthesizer */}
+                <div className="bg-zinc-900/60 border border-zinc-850 p-5 rounded-2xl flex flex-col justify-between gap-4">
+                  <div>
+                    <h4 className="text-xs font-mono uppercase tracking-wider font-bold mb-2" style={{ color: archetypeDetails?.color || "#38bdf8" }}>🔮 AI DM Perk Synthesizer</h4>
+                    <p className="text-zinc-400 text-xs leading-relaxed mb-4">Input custom real-world hobbies, hyper-fixations, or quirks to let the Dungeon Master forge bespoke passive rules for you.</p>
+                    <textarea 
+                      value={quirkInput} 
+                      onChange={(e) => setQuirkInput(e.target.value)} 
+                      placeholder="E.g., I am a web developer who lives on cold brew, stays up till 3 AM coding side projects, and hoards mechanical keyboards..." 
+                      className="w-full h-24 bg-zinc-950 border border-zinc-800 p-3 rounded-lg text-xs text-zinc-200 focus:outline-none focus:border-zinc-700" 
+                    />
                   </div>
-                ))}
+                  <button 
+                    onClick={generatePerksFromDM} 
+                    disabled={isGeneratingPerks} 
+                    className="w-full px-5 py-2.5 bg-zinc-950 hover:bg-zinc-900 border text-white font-display font-semibold rounded-lg text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                    style={{ borderColor: `${archetypeDetails?.color || "#38bdf8"}50` }}
+                  >
+                    {isGeneratingPerks ? <Loader2 className="w-4 h-4 animate-spin text-white" /> : <Wand2 className="w-4 h-4" style={{ color: archetypeDetails?.color || "#38bdf8" }} />} Synthesize AI Perks
+                  </button>
+                </div>
+
+                {/* Manual Perk Builder Matrix */}
+                <div className="bg-zinc-900/60 border border-zinc-850 p-5 rounded-2xl flex flex-col gap-3">
+                  <h4 className="text-xs font-mono uppercase tracking-wider font-bold" style={{ color: archetypeDetails?.color || "#a855f7" }}>📜 Scribe Custom Perk Matrix</h4>
+                  <div className="grid grid-cols-2 gap-2.5 text-left">
+                    <div>
+                      <label className="block text-[9px] uppercase font-mono text-zinc-500 font-bold mb-0.5">Perk Title</label>
+                      <input 
+                        type="text" 
+                        value={perkTitle} 
+                        onChange={(e) => setPerkTitle(e.target.value)} 
+                        placeholder="e.g., Rule Shark" 
+                        className="w-full bg-zinc-950 border border-zinc-800 p-2 rounded text-xs text-white focus:outline-none focus:border-zinc-700" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[9px] uppercase font-mono text-zinc-500 font-bold mb-0.5">Trigger Condition</label>
+                      <input 
+                        type="text" 
+                        value={perkTrigger} 
+                        onChange={(e) => setPerkTrigger(e.target.value)} 
+                        placeholder="e.g., During line debates" 
+                        className="w-full bg-zinc-950 border border-zinc-800 p-2 rounded text-xs text-white focus:outline-none focus:border-zinc-700" 
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-[9px] uppercase font-mono text-zinc-500 font-bold mb-0.5">Modifier/Stat Effect</label>
+                      <input 
+                        type="text" 
+                        value={perkEffect} 
+                        onChange={(e) => setPerkEffect(e.target.value)} 
+                        placeholder="e.g., +2 on Intelligence checks when referencing rulebook line 4" 
+                        className="w-full bg-zinc-950 border border-zinc-800 p-2 rounded text-xs text-white focus:outline-none focus:border-zinc-700" 
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <label className="block text-[9px] uppercase font-mono text-zinc-500 font-bold mb-0.5">Humor Description</label>
+                      <input 
+                        type="text" 
+                        value={perkDescription} 
+                        onChange={(e) => setPerkDescription(e.target.value)} 
+                        placeholder="e.g., You read rules like holy scriptures. Friends sigh, but yield." 
+                        className="w-full bg-zinc-950 border border-zinc-800 p-2 rounded text-xs text-white focus:outline-none focus:border-zinc-700" 
+                      />
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      if (!perkTitle.trim() || !perkEffect.trim()) return;
+                      const newPerk = {
+                        title: perkTitle.trim(),
+                        trigger: perkTrigger.trim() || "Always Active",
+                        effect: perkEffect.trim(),
+                        description: perkDescription.trim() || "A customized rule written into your destiny."
+                      };
+                      setGeneratedPerks([...generatedPerks, newPerk]);
+                      setPerkTitle("");
+                      setPerkTrigger("");
+                      setPerkEffect("");
+                      setPerkDescription("");
+                    }}
+                    disabled={!perkTitle.trim() || !perkEffect.trim()}
+                    className="w-full mt-1.5 py-2 text-black font-mono text-xs font-extrabold rounded-lg uppercase cursor-pointer disabled:opacity-40 disabled:pointer-events-none transition-all active:scale-95"
+                    style={{ backgroundColor: archetypeDetails?.color || "#a855f7" }}
+                  >
+                    + Scribe Perk
+                  </button>
+                </div>
               </div>
+
+              {/* Roster list */}
+              <div>
+                <h3 className="text-sm font-mono uppercase text-zinc-400 font-bold mb-3 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: archetypeDetails?.color }} /> Active Perk Ledger ({generatedPerks.length})
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {generatedPerks.map((p, idx) => (
+                    <div key={idx} className="p-4 bg-zinc-900/40 border rounded-xl relative group text-left" style={{ borderColor: `${archetypeDetails?.color || "#f43f5e"}30` }}>
+                      <button 
+                        onClick={() => setGeneratedPerks(generatedPerks.filter((_, i) => i !== idx))}
+                        className="absolute top-2.5 right-2.5 text-zinc-500 hover:text-red-400 cursor-pointer opacity-40 group-hover:opacity-100 transition-opacity text-xs"
+                        title="Discard Perk"
+                      >
+                        ✕
+                      </button>
+                      <h4 className="font-display font-bold text-white text-sm mb-1">{p.title}</h4>
+                      <p className="text-xs font-mono font-bold mb-1" style={{ color: archetypeDetails?.color || "#f43f5e" }}>{p.effect}</p>
+                      <p className="text-zinc-300 text-[10.5px] font-mono leading-relaxed mb-0.5">
+                        <span className="text-zinc-500 uppercase text-[9px] font-bold">Trigger:</span> {p.trigger}
+                      </p>
+                      <p className="text-zinc-400 text-xs italic">"{p.description}"</p>
+                    </div>
+                  ))}
+                  {generatedPerks.length === 0 && (
+                    <div className="md:col-span-2 py-8 border border-dashed border-zinc-800 rounded-xl text-center text-zinc-500 text-xs">
+                      No passive perks listed yet. Use AI or Scribe Custom Perk Matrix to add some!
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div className="flex justify-between mt-4">
                 <button onClick={handlePrevStep} className="text-zinc-400 font-semibold text-sm flex items-center gap-1"><ChevronLeft className="w-4 h-4" /> Go Back</button>
-                <button onClick={handleNextStep} className="flex items-center gap-2 bg-amber-500 text-zinc-950 px-6 py-2 rounded-lg font-semibold text-sm transition-all shadow-md cursor-pointer">Refine Identity <ChevronRight className="w-4 h-4" /></button>
+                <button onClick={handleNextStep} className="flex items-center gap-2 text-zinc-950 px-6 py-2 rounded-lg font-semibold text-sm transition-all shadow-md cursor-pointer" style={{ backgroundColor: archetypeDetails?.color || "#f43f5e" }}>Refine Identity <ChevronRight className="w-4 h-4" /></button>
               </div>
             </div>
           )}
@@ -548,15 +677,173 @@ export default function Wizard({ onComplete, availableArchetypes, availableRaces
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-zinc-400 uppercase tracking-widest mb-1.5">Choose Avatar Class</label>
-                  <div className="grid grid-cols-4 gap-2 mt-1">
-                    {AVATAR_OPTIONS.map((opt) => (
-                      <div key={opt.key} onClick={() => setAvatar(opt.key)} className={`p-3 rounded-xl border text-center cursor-pointer transition-all ${avatar === opt.key ? "bg-amber-500/10 border-amber-500" : "bg-zinc-950/80 border-zinc-850"}`}>
-                        <span className="text-2xl block mb-1">{opt.emoji}</span>
-                        <span className="text-[10px] block text-zinc-400">{opt.label}</span>
-                      </div>
-                    ))}
+                  <div className="flex border-b border-zinc-800 gap-4 mb-4">
+                    <button 
+                      type="button"
+                      onClick={() => setAvatarMode("emoji")} 
+                      className={`pb-2 text-xs font-mono font-bold cursor-pointer transition-all ${avatarMode === "emoji" ? "text-white border-b-2" : "text-zinc-500 hover:text-zinc-300"}`}
+                      style={{ borderBottomColor: avatarMode === "emoji" ? (archetypeDetails?.color || "#f43f5e") : "transparent" }}
+                    >
+                      🛡️ Emoji Node Roster
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => setAvatarMode("scriptorium")} 
+                      className={`pb-2 text-xs font-mono font-bold cursor-pointer transition-all ${avatarMode === "scriptorium" ? "text-white border-b-2" : "text-zinc-500 hover:text-zinc-300"}`}
+                      style={{ borderBottomColor: avatarMode === "scriptorium" ? (archetypeDetails?.color || "#f43f5e") : "transparent" }}
+                    >
+                      🖼️ Image Scriptorium
+                    </button>
                   </div>
+
+                  {avatarMode === "emoji" ? (
+                    <div>
+                      <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">Choose Persona Emoji Node</label>
+                      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-1">
+                        {AVATAR_OPTIONS.map((opt) => (
+                          <div 
+                            key={opt.key} 
+                            onClick={() => setAvatar(opt.key)} 
+                            className={`p-2.5 rounded-xl border text-center cursor-pointer transition-all ${avatar === opt.key ? "bg-opacity-10 border-opacity-100" : "bg-zinc-950 border-zinc-850"}`}
+                            style={{ 
+                              borderColor: avatar === opt.key ? (archetypeDetails?.color || "#f43f5e") : undefined,
+                              backgroundColor: avatar === opt.key ? `${archetypeDetails?.color || "#f43f5e"}15` : undefined
+                            }}
+                          >
+                            <span className="text-xl block mb-0.5">{opt.emoji}</span>
+                            <span className="text-[9px] block text-zinc-400 font-semibold">{opt.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid sm:grid-cols-2 gap-6 bg-zinc-950/50 border border-zinc-850 p-4 rounded-xl text-left">
+                      {/* Left: Upload and Sliders */}
+                      <div className="flex flex-col gap-3">
+                        <div>
+                          <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1">Local Image File</label>
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                  if (typeof reader.result === "string") {
+                                    setUploadedBase64(reader.result);
+                                  }
+                                };
+                                reader.readAsDataURL(file);
+                              }
+                            }}
+                            className="text-xs text-zinc-400 block w-full file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-[10px] file:font-mono file:font-black file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer" 
+                          />
+                        </div>
+
+                        <div className="space-y-2 font-mono text-[10px] text-zinc-400 mt-2">
+                          <div>
+                            <div className="flex justify-between mb-0.5">
+                              <span>SCALE: {avatarScale.toFixed(1)}x</span>
+                              <span className="text-zinc-600">0.5x - 3.0x</span>
+                            </div>
+                            <input 
+                              type="range" 
+                              min="0.5" 
+                              max="3.0" 
+                              step="0.1" 
+                              value={avatarScale} 
+                              onChange={(e) => setAvatarScale(parseFloat(e.target.value))} 
+                              className="w-full accent-emerald-500 bg-zinc-800 h-1 rounded" 
+                            />
+                          </div>
+
+                          <div>
+                            <div className="flex justify-between mb-0.5">
+                              <span>ROTATION: {avatarRotate}°</span>
+                              <span className="text-zinc-600">0° - 360°</span>
+                            </div>
+                            <input 
+                              type="range" 
+                              min="0" 
+                              max="360" 
+                              value={avatarRotate} 
+                              onChange={(e) => setAvatarRotate(parseInt(e.target.value))} 
+                              className="w-full accent-emerald-500 bg-zinc-800 h-1 rounded" 
+                            />
+                          </div>
+
+                          <div>
+                            <div className="flex justify-between mb-0.5">
+                              <span>X OFFSET: {avatarX}px</span>
+                              <span className="text-zinc-600">-100px - 100px</span>
+                            </div>
+                            <input 
+                              type="range" 
+                              min="-100" 
+                              max="100" 
+                              value={avatarX} 
+                              onChange={(e) => setAvatarX(parseInt(e.target.value))} 
+                              className="w-full accent-emerald-500 bg-zinc-800 h-1 rounded" 
+                            />
+                          </div>
+
+                          <div>
+                            <div className="flex justify-between mb-0.5">
+                              <span>Y OFFSET: {avatarY}px</span>
+                              <span className="text-zinc-600">-100px - 100px</span>
+                            </div>
+                            <input 
+                              type="range" 
+                              min="-100" 
+                              max="100" 
+                              value={avatarY} 
+                              onChange={(e) => setAvatarY(parseInt(e.target.value))} 
+                              className="w-full bg-zinc-800 h-1" 
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right: Scriptorium Preview */}
+                      <div className="flex flex-col items-center justify-center p-3 border border-dashed border-zinc-800 rounded-xl bg-zinc-950/80">
+                        <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest mb-2 font-bold">Live Token Crop Target</span>
+                        <div 
+                          className="relative w-32 h-32 rounded-full border-2 overflow-hidden flex items-center justify-center bg-zinc-900"
+                          style={{ borderColor: archetypeDetails?.color || "#f43f5e" }}
+                        >
+                          {uploadedBase64 ? (
+                            <img 
+                              src={uploadedBase64} 
+                              alt="Scriptorium Source Avatar" 
+                              referrerPolicy="no-referrer"
+                              className="w-full h-full object-cover pointer-events-none select-none max-w-full max-h-full"
+                              style={{ transform: `scale(${avatarScale}) translate(${avatarX}px, ${avatarY}px) rotate(${avatarRotate}deg)` }}
+                            />
+                          ) : (
+                            <div className="text-center p-2 flex flex-col items-center gap-1">
+                              <span className="text-3xl">🥷</span>
+                              <span className="text-[8px] font-mono text-zinc-600">Pending Upload...</span>
+                            </div>
+                          )}
+                        </div>
+                        {uploadedBase64 && (
+                          <button 
+                            type="button" 
+                            onClick={() => {
+                              setAvatarScale(1.0);
+                              setAvatarRotate(0);
+                              setAvatarX(0);
+                              setAvatarY(0);
+                            }}
+                            className="mt-2 text-[9px] font-mono text-zinc-500 hover:text-white underline cursor-pointer"
+                          >
+                            Reset Transform Controls
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

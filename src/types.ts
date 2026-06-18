@@ -25,8 +25,21 @@ export interface CharacterSheet {
   perks: Perk[];
   customDetails: string;
   avatar: string; // Avatar emoji key
+  avatarImage?: string; // Base64 data URL for uploaded image
+  avatarConfig?: { scale: number; x: number; y: number; rotate: number }; // Transform coordinates
   faction: string; // e.g. "Rulebreakers", "Boardgame Night Crew"
   accentColor: string; // Hex value for class tinting
+}
+
+export interface DiceRollLog {
+  id: string;
+  diceType: "d4" | "d6" | "d8" | "d10" | "d12" | "d20";
+  natural: number;
+  modifier: number;
+  total: number;
+  timestamp: string;
+  note: string;
+  associatedStat?: string;
 }
 
 export interface ChatMessage {

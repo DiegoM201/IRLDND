@@ -84,6 +84,18 @@ export default function App() {
   } | null>(null);
   const [isRolling, setIsRolling] = useState<boolean>(false);
 
+  // 🎲 Polyhedral Dice Bag States
+  const [activeDieType, setActiveDieType] = useState<"d4" | "d6" | "d8" | "d10" | "d12" | "d20">("d20");
+  const [rollNote, setRollNote] = useState<string>("");
+  const [rollHistory, setRollHistory] = useState<any[]>(() => {
+    const saved = localStorage.getItem("irl_roll_history");
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) { return []; }
+    }
+    return [];
+  });
+  const [rollingVal, setRollingVal] = useState<number>(20);
+
   const [chatInput, setChatInput] = useState<string>("");
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     {
@@ -159,7 +171,7 @@ export default function App() {
 ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`).join("\n")}`;
   };
 
-  const handleRollDice = (statName: keyof StatBlock) => {
+  const handleRollDice = (statName?: keyof StatBlock) => {
     if (isRolling || !character) return;
     setIsRolling(true);
     setRollResult(null);
@@ -171,19 +183,72 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
     const updatedSheet = { ...character, xp: updatedXP % 100, level: nextL };
     handleSaveCharacter(updatedSheet);
 
+    const sides = parseInt(activeDieType.substring(1)) || 20;
+
+    // Rapid spinning visual counter
+    let spinCount = 0;
+    const spinner = setInterval(() => {
+      setRollingVal(Math.floor(Math.random() * sides) + 1);
+      spinCount++;
+      if (spinCount >= 10) {
+        clearInterval(spinner);
+      }
+    }, 50);
+
     setTimeout(() => {
-      const d20 = Math.floor(Math.random() * 20) + 1;
-      const val = character.stats[statName];
-      const mod = Math.floor((val - 10) / 2);
-      const total = d20 + mod;
+      const natural = Math.floor(Math.random() * sides) + 1;
+      setRollingVal(natural);
+
+      let mod = 0;
+      let statLabel = "Pure Check";
+      if (statName) {
+        const val = character.stats[statName];
+        mod = Math.floor((val - 10) / 2);
+        statLabel = STAT_DESCRIPTIONS[statName].label;
+      }
+
+      const total = natural + mod;
       
       let bracket = "success";
-      let msg = `Successfully checked ${statName}! (+15 XP)`;
-      if (d20 === 20) { bracket = "crit-success"; msg = `NATURAL 20! Absolute legendary execution! (+15 XP)`; }
-      else if (d20 === 1) { bracket = "crit-fail"; msg = `CRITICAL FAILURE! Clumsiness strikes. (+15 XP)`; }
-      else if (total < 12) { bracket = "fail"; msg = `Check failed. You learn through failure. (+15 XP)`; }
+      let msg = statName ? `Successfully checked ${statLabel}! (+15 XP)` : `Rolled ${activeDieType}! (+15 XP)`;
+      
+      if (natural === sides) { 
+        bracket = "crit-success"; 
+        msg = `NATURAL CRITICAL! Amazing performance on your ${activeDieType}! (+15 XP)`; 
+      } else if (natural === 1) { 
+        bracket = "crit-fail"; 
+        msg = `CRITICAL FAILURE on ${activeDieType}! Clumsiness got the best of you. (+15 XP)`; 
+      } else {
+        const threshold = Math.ceil(sides * 0.55);
+        if (total < threshold) {
+          bracket = "fail"; 
+          msg = `Check was sub-optimal, but you learn through struggle. (+15 XP)`; 
+        }
+      }
 
-      setRollResult({ statName: STAT_DESCRIPTIONS[statName].label, natural: d20, modifier: mod, total, bracket, message: msg });
+      const outcome = { statName: statLabel, natural, modifier: mod, total, bracket, message: msg };
+      setRollResult(outcome);
+
+      // Append Roll History
+      const newHistoryLog = {
+        id: "roll-" + Math.random().toString(36).substring(2, 9),
+        diceType: activeDieType,
+        natural,
+        modifier: mod,
+        total,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+        note: rollNote.trim() || (statName ? `Checked ${statLabel}` : `Standard Check`),
+        associatedStat: statName ? STAT_DESCRIPTIONS[statName].label : undefined
+      };
+
+      setRollHistory(prev => {
+        const next = [newHistoryLog, ...prev].slice(0, 40);
+        localStorage.setItem("irl_roll_history", JSON.stringify(next));
+        return next;
+      });
+
+      // Clear the roll note for next turn
+      setRollNote("");
       setIsRolling(false);
     }, 600);
   };
@@ -443,14 +508,26 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                     setActiveCharacterIndex(index);
                     localStorage.setItem("irl_active_char_idx", index.toString());
                   }}
-                  className="text-xs px-3 py-1 rounded-md font-bold border transition-all cursor-pointer"
+                  className="text-xs px-3 py-1.5 rounded-md font-bold border transition-all cursor-pointer flex items-center gap-1.5"
                   style={{
                     backgroundColor: isActive ? charClassColor : "rgba(24, 24, 27, 0.6)",
                     borderColor: isActive ? charClassColor : "#27272a",
                     color: isActive ? "#09090b" : "#a1a1aa"
                   }}
                 >
-                  {getAvatarEmoji(c.avatar)} {c.name} (Lvl {c.level})
+                  {c.avatar === "custom_uploaded" && c.avatarImage ? (
+                    <span className="w-5 h-5 rounded-full overflow-hidden inline-block border border-zinc-700/50 bg-zinc-950">
+                      <img 
+                        src={c.avatarImage} 
+                        alt="" 
+                        className="w-full h-full object-cover" 
+                        style={{ transform: `scale(${(c.avatarConfig?.scale || 1.2) * 1.3}) translate(${c.avatarConfig?.x || 0}px, ${c.avatarConfig?.y || 0}px) rotate(${c.avatarConfig?.rotate || 0}deg)` }} 
+                      />
+                    </span>
+                  ) : (
+                    <span>{getAvatarEmoji(c.avatar)}</span>
+                  )}
+                  <span>{c.name} (Lvl {c.level})</span>
                 </button>
               );
             })}
@@ -467,10 +544,22 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-zinc-900/60 p-5 rounded-2xl border border-zinc-850">
             <div className="flex items-center gap-4">
               <div 
-                className="text-4xl p-3 rounded-xl border relative"
-                style={{ backgroundColor: `${classColor}15`, borderColor: `${classColor}35` }}
+                className="p-1 rounded-xl border relative w-16 h-16 flex items-center justify-center bg-zinc-950"
+                style={{ borderColor: `${classColor}35` }}
               >
-                {getAvatarEmoji(character.avatar)}
+                {character.avatar === "custom_uploaded" && character.avatarImage ? (
+                  <div className="w-full h-full rounded-lg overflow-hidden flex items-center justify-center bg-zinc-900">
+                    <img 
+                      src={character.avatarImage} 
+                      alt="" 
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover pointer-events-none select-none max-w-full max-h-full"
+                      style={{ transform: `scale(${character.avatarConfig?.scale || 1.2}) translate(${character.avatarConfig?.x || 0}px, ${character.avatarConfig?.y || 0}px) rotate(${character.avatarConfig?.rotate || 0}deg)` }}
+                    />
+                  </div>
+                ) : (
+                  <span className="text-4xl">{getAvatarEmoji(character.avatar)}</span>
+                )}
                 <span 
                   className="absolute -bottom-1.5 -right-1 text-black text-[10px] font-mono px-1.5 rounded-full font-bold"
                   style={{ backgroundColor: classColor }}
@@ -576,14 +665,31 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                       </div>
 
                       {devTab === "sheet-override" && (
-                        <div className="grid sm:grid-cols-2 gap-3 text-xs">
+                        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs text-left">
                           <div>
                             <label className="block text-zinc-400 mb-1 font-mono font-medium">Rename Sheet</label>
-                            <input type="text" value={character.name} onChange={(e) => handleUpdateDirectSheet({ ...character, name: e.target.value })} className="w-full bg-zinc-950 border border-zinc-850 p-2 rounded text-white text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none" />
+                            <input type="text" value={character.name} onChange={(e) => handleUpdateDirectSheet({ ...character, name: e.target.value })} className="w-full bg-zinc-950 border border-zinc-850 p-2 rounded text-white text-xs focus:ring-1 focus:ring-zinc-700 focus:outline-none font-mono" />
                           </div>
                           <div>
                             <label className="block text-zinc-400 mb-1 font-mono font-medium">Modify Faction</label>
-                            <input type="text" value={character.faction} onChange={(e) => handleUpdateDirectSheet({ ...character, faction: e.target.value })} className="w-full bg-zinc-950 border border-zinc-850 p-2 rounded text-white text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none" />
+                            <input type="text" value={character.faction} onChange={(e) => handleUpdateDirectSheet({ ...character, faction: e.target.value })} className="w-full bg-zinc-950 border border-zinc-850 p-2 rounded text-white text-xs focus:ring-1 focus:ring-zinc-700 focus:outline-none font-mono" />
+                          </div>
+                          <div>
+                            <label className="block text-zinc-400 mb-1 font-mono font-medium">Cosmetic Class Color Override</label>
+                            <div className="flex gap-2 items-center">
+                              <input 
+                                type="color" 
+                                value={character.accentColor || classColor} 
+                                onChange={(e) => handleUpdateDirectSheet({ ...character, accentColor: e.target.value })} 
+                                className="w-10 h-8 bg-zinc-950 border border-zinc-850 rounded cursor-pointer shrink-0" 
+                              />
+                              <input 
+                                type="text" 
+                                value={character.accentColor || classColor} 
+                                onChange={(e) => handleUpdateDirectSheet({ ...character, accentColor: e.target.value })} 
+                                className="w-full bg-zinc-950 border border-zinc-850 p-2 rounded text-white text-xs font-mono focus:ring-1 focus:ring-zinc-700 focus:outline-none" 
+                              />
+                            </div>
                           </div>
                         </div>
                       )}
@@ -1005,19 +1111,187 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
               )}
             </div>
 
-            {/* Dice Tray Container Display */}
-            <div className="lg:col-span-4 bg-zinc-900/60 border border-zinc-850 p-4 rounded-2xl h-fit">
-              <h4 className="font-display font-bold text-sm text-white mb-3">IRL Dice Tray</h4>
-              {rollResult ? (
-                <div className="text-center p-3 bg-zinc-950 rounded-xl border border-zinc-850">
-                  <span className="text-[10px] uppercase font-mono text-zinc-500">Result: {rollResult.statName}</span>
-                  <div className="text-3xl font-mono font-black text-amber-400 my-1">{rollResult.total}</div>
-                  <div className="text-[10px] text-zinc-400 font-mono mb-2">({rollResult.natural} on d20) + ({rollResult.modifier} Mod)</div>
-                  <p className="text-[11px] text-zinc-300 leading-relaxed italic">"{rollResult.message}"</p>
+            {/* Advanced Polyhedral Dice Bag Tray & Campaign history */}
+            <div className="lg:col-span-4 flex flex-col gap-5 text-left">
+              
+              {/* Dice Scriptorium Bag */}
+              <div className="bg-zinc-900/60 border border-zinc-850 p-5 rounded-2xl">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-display font-black text-sm text-white flex items-center gap-1.5 uppercase tracking-wide">
+                    <Dice5 className="w-4 h-4" style={{ color: classColor }} />
+                    Polyhedral Dice Bag
+                  </h4>
+                  <span className="text-[10px] font-mono bg-zinc-950 border border-zinc-800 text-zinc-400 px-2 py-0.5 rounded uppercase font-bold">
+                    BAG OPEN
+                  </span>
                 </div>
-              ) : (
-                <p className="text-xs text-zinc-500 italic text-center p-4">Initiate checks by tapping any stat box module!</p>
-              )}
+
+                <p className="text-[11px] text-zinc-400 mb-3 leading-normal">
+                  Select a polyhedral shape below, scribe your check details, then tap the die or any stat card to challenge fate:
+                </p>
+
+                {/* Clickable Shape Selectors */}
+                <div className="grid grid-cols-6 gap-1.5 mb-4 font-mono font-black text-xs">
+                  {(["d4", "d6", "d8", "d10", "d12", "d20"] as const).map(d => {
+                    const isSelected = activeDieType === d;
+                    return (
+                      <button
+                        key={d}
+                        onClick={() => {
+                          setActiveDieType(d);
+                          setRollResult(null);
+                        }}
+                        className="py-1.5 rounded-lg border text-center cursor-pointer transition-all uppercase"
+                        style={{
+                          backgroundColor: isSelected ? classColor : "rgba(24, 24, 27, 0.5)",
+                          borderColor: isSelected ? classColor : "#27272a",
+                          color: isSelected ? "#09090b" : "#a1a1aa"
+                        }}
+                      >
+                        {d}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Roll Objective Note Input */}
+                <div className="mb-4">
+                  <label className="block text-[10px] font-mono text-zinc-500 uppercase font-bold mb-1">
+                    ROLL OBJECTIVE NOTE
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Bluffing bar bouncer for free VIP access..."
+                    value={rollNote}
+                    onChange={(e) => setRollNote(e.target.value)}
+                    className="w-full bg-zinc-950/85 text-xs text-white border border-zinc-850 p-2.5 rounded-xl focus:outline-none focus:border-zinc-700 placeholder-zinc-650"
+                  />
+                </div>
+
+                {/* Big Interactive Rolling Die */}
+                <div className="flex flex-col items-center justify-center py-6 bg-zinc-950/40 rounded-xl border border-zinc-850 relative overflow-hidden group">
+                  <div className="absolute top-1.5 left-2 font-mono text-[8px] text-zinc-600 font-bold uppercase">
+                    Shape: {activeDieType}
+                  </div>
+                  
+                  <button
+                    disabled={isRolling}
+                    onClick={() => handleRollDice()}
+                    className={`w-20 h-20 rounded-2xl flex items-center justify-center font-mono font-black select-none border-2 shadow-2xl relative transition-all duration-300 transform cursor-pointer active:scale-95 ${
+                      isRolling ? "animate-pulse" : "hover:scale-105"
+                    }`}
+                    style={{
+                      borderColor: classColor,
+                      boxShadow: `0 0 15px ${classColor}15`,
+                      backgroundColor: "rgba(9, 9, 11, 0.8)",
+                      color: classColor
+                    }}
+                  >
+                    {isRolling ? (
+                      <span className="text-2xl animate-spin inline-block">🎲</span>
+                    ) : (
+                      <span className="text-3xl tracking-tighter">{rollingVal}</span>
+                    )}
+                  </button>
+
+                  <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-3 select-none font-bold">
+                    {isRolling ? "TUNING PROBABILITIES..." : "TAP DIE TO ROLL PURE CHECK"}
+                  </span>
+                </div>
+
+                {/* Scriptorium result card overlay */}
+                {rollResult && (
+                  <div 
+                    className="mt-4 p-4 rounded-xl border text-center transition-all"
+                    style={{
+                      backgroundColor: `${rollResult.bracket === "crit-success" ? "#06b6d4" : rollResult.bracket === "crit-fail" ? "#ef4444" : rollResult.bracket === "success" ? classColor : "#27272a"}10`,
+                      borderColor: `${rollResult.bracket === "crit-success" ? "#06b6d4" : rollResult.bracket === "crit-fail" ? "#ef4444" : rollResult.bracket === "success" ? classColor : "#27272a"}40`
+                    }}
+                  >
+                    <span className="text-[10px] uppercase font-mono tracking-wider font-extrabold" style={{ color: classColor }}>
+                      Result: {rollResult.statName}
+                    </span>
+                    <div 
+                      className="text-4xl font-mono font-black my-1.5"
+                      style={{ color: rollResult.bracket === "crit-success" ? "#06b6d4" : rollResult.bracket === "crit-fail" ? "#ef4444" : classColor }}
+                    >
+                      {rollResult.total}
+                    </div>
+                    <div className="text-[10px] text-zinc-400 font-mono mb-2">
+                      ({rollResult.natural} on {activeDieType}) {rollResult.modifier >= 0 ? `+ ${rollResult.modifier} Mod` : `- ${Math.abs(rollResult.modifier)} Mod`}
+                    </div>
+                    <p className="text-xs text-zinc-300 italic leading-relaxed font-mono">
+                      "{rollResult.message}"
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Campaign Roll History Ledger */}
+              <div className="bg-zinc-900/60 border border-zinc-850 p-5 rounded-2xl flex flex-col">
+                <div className="flex items-center justify-between mb-3 border-b border-zinc-850 pb-2.5">
+                  <h4 className="font-display font-bold text-xs text-white uppercase tracking-wider">
+                    📜 Real-World Roll History Ledger
+                  </h4>
+                  <span className="text-[10px] font-mono font-bold text-zinc-500">
+                    {rollHistory.length} logs
+                  </span>
+                </div>
+
+                {rollHistory.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-xs text-zinc-500 italic">Roll history ledger is currently empty.</p>
+                    <p className="text-[10.5px] text-zinc-600 font-mono mt-1">Make characters or checks to record deeds.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                    {rollHistory.map((h, i) => {
+                      const isCrit = h.natural === parseInt(h.diceType.substring(1));
+                      const isFail = h.natural === 1;
+                      return (
+                        <div 
+                          key={h.id || i}
+                          className="p-3 bg-zinc-950/80 border border-zinc-850 rounded-xl flex items-center justify-between gap-3 text-xs"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-1.5 mb-1 text-[10px] font-mono">
+                              <span 
+                                className="font-extrabold px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wide"
+                                style={{
+                                  backgroundColor: isCrit ? "rgba(6,182,212,0.15)" : isFail ? "rgba(239,68,68,0.15)" : `${classColor}12`,
+                                  color: isCrit ? "#06b6d4" : isFail ? "#ef4444" : classColor,
+                                  border: `1px solid ${isCrit ? "rgba(6,182,212,0.3)" : isFail ? "rgba(239,68,68,0.3)" : `${classColor}25`}`
+                                }}
+                              >
+                                {h.diceType.toUpperCase()}
+                              </span>
+                              <span className="text-zinc-400 font-black">
+                                {h.associatedStat ? h.associatedStat : "RAW"}
+                              </span>
+                              <span className="text-zinc-600 font-medium">at {h.timestamp}</span>
+                            </div>
+                            <p className="text-[10.5px] text-zinc-400 font-mono truncate italic leading-relaxed">
+                              "{h.note}"
+                            </p>
+                          </div>
+                          
+                          <div className="text-right shrink-0">
+                            <div 
+                              className="text-base font-mono font-black"
+                              style={{ color: isCrit ? "#06b6d4" : isFail ? "#ef4444" : "#ffffff" }}
+                            >
+                              {h.total}
+                            </div>
+                            <div className="text-[9px] text-zinc-500 font-mono">
+                              ({h.natural} nat)
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
