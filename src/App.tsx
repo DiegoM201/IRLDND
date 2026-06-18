@@ -31,16 +31,16 @@ export default function App() {
   const [isAddingNewCharacter, setIsAddingNewCharacter] = useState<boolean>(false);
 
   // 🌟 State 2: Dynamic editable classes & races beyond character sheet parameters
-  const [customArchetypes, setCustomArchetypes] = useState<any[]>(() => {
-    const saved = localStorage.getItem("irl_custom_classes");
+  const [archetypes, setArchetypes] = useState<any[]>(() => {
+    const saved = localStorage.getItem("irl_archetypes_list");
     if (saved) {
       try { return JSON.parse(saved); } catch (e) { return DEFAULT_ARCHETYPES; }
     }
     return DEFAULT_ARCHETYPES;
   });
 
-  const [customRaces, setCustomRaces] = useState<any[]>(() => {
-    const saved = localStorage.getItem("irl_custom_races");
+  const [races, setRaces] = useState<any[]>(() => {
+    const saved = localStorage.getItem("irl_races_list");
     if (saved) {
       try { return JSON.parse(saved); } catch (e) { return DEFAULT_RACES; }
     }
@@ -67,11 +67,16 @@ export default function App() {
   const [forgeRaceBonusStat, setForgeRaceBonusStat] = useState<keyof StatBlock>("charisma");
   const [forgeRaceBonusAmount, setForgeRaceBonusAmount] = useState(2);
 
+  // Editing state trackers for Forge
+  const [editingArchetypeId, setEditingArchetypeId] = useState<string | null>(null);
+  const [editingRaceId, setEditingRaceId] = useState<string | null>(null);
+
   // Manual perk additions
-  const [newPerkTitle, setNewPerkTitle] = useState("");
-  const [newPerkEffect, setNewPerkEffect] = useState("");
-  const [newPerkDescription, setNewPerkDescription] = useState("");
-  const [newPerkTrigger, setNewPerkTrigger] = useState("");
+  const [perkTitle, setPerkTitle] = useState("");
+  const [perkEffect, setPerkEffect] = useState("");
+  const [perkDescription, setPerkDescription] = useState("");
+  const [perkTrigger, setPerkTrigger] = useState("Passive");
+  const [activeEditingPerkIndex, setActiveEditingPerkIndex] = useState<number | null>(null);
 
   const [rollResult, setRollResult] = useState<{
     statName: string; natural: number; modifier: number; total: number; bracket: string; message: string;
@@ -195,39 +200,201 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
     }
   };
 
-  // Add Dynamic Class Core function
-  const handleCreateCustomClass = () => {
-    if (!forgeClassName) return;
-    const item = {
-      id: "custom-" + Date.now(),
-      name: forgeClassName,
-      tagline: forgeClassTagline || "A completely unique role layout.",
-      description: forgeClassDesc || "No dynamic overview provided.",
-      highest: forgeClassHigh,
-      lowest: forgeClassLow,
-      icon: "Sparkles"
-    };
-    const next = [...customArchetypes, item];
-    setCustomArchetypes(next);
-    localStorage.setItem("irl_custom_classes", JSON.stringify(next));
-    setForgeClassName(""); setForgeClassTagline(""); setForgeClassDesc("");
+  // 🌟 Unified Archetype (Class) CRUD Handlers
+  const handleSaveArchetype = () => {
+    if (!forgeClassName.trim()) return;
+    
+    let nextList;
+    if (editingArchetypeId) {
+      // Update
+      nextList = archetypes.map(a => {
+        if (a.id === editingArchetypeId) {
+          return {
+            ...a,
+            name: forgeClassName.trim(),
+            tagline: forgeClassTagline.trim() || "A completely unique role layout.",
+            description: forgeClassDesc.trim() || "No dynamic overview provided.",
+            highest: forgeClassHigh,
+            lowest: forgeClassLow
+          };
+        }
+        return a;
+      });
+      setEditingArchetypeId(null);
+    } else {
+      // Create
+      const newItem = {
+        id: "class-" + Date.now(),
+        name: forgeClassName.trim(),
+        tagline: forgeClassTagline.trim() || "A completely unique role layout.",
+        description: forgeClassDesc.trim() || "No dynamic overview provided.",
+        highest: forgeClassHigh,
+        lowest: forgeClassLow,
+        icon: "Sparkles"
+      };
+      nextList = [...archetypes, newItem];
+    }
+    
+    setArchetypes(nextList);
+    localStorage.setItem("irl_archetypes_list", JSON.stringify(nextList));
+    
+    // Clear form
+    setForgeClassName("");
+    setForgeClassTagline("");
+    setForgeClassDesc("");
+    setForgeClassHigh("intelligence");
+    setForgeClassLow("charisma");
   };
 
-  // Add Dynamic Race function
-  const handleCreateCustomRace = () => {
-    if (!forgeRaceName) return;
-    const item = {
-      id: "custom-race-" + Date.now(),
-      name: forgeRaceName,
-      tagline: forgeRaceTagline || "A new identity lineage.",
-      description: forgeRaceDesc || "Custom attributes apply.",
-      icon: forgeRaceIcon || "✨",
-      bonuses: { [forgeRaceBonusStat]: forgeRaceBonusAmount }
+  const handleDeleteArchetype = (id: string) => {
+    const next = archetypes.filter(a => a.id !== id);
+    setArchetypes(next);
+    localStorage.setItem("irl_archetypes_list", JSON.stringify(next));
+    if (editingArchetypeId === id) {
+      setEditingArchetypeId(null);
+      setForgeClassName("");
+      setForgeClassTagline("");
+      setForgeClassDesc("");
+    }
+  };
+
+  const handleEditArchetype = (a: any) => {
+    setEditingArchetypeId(a.id);
+    setForgeClassName(a.name);
+    setForgeClassTagline(a.tagline || "");
+    setForgeClassDesc(a.description || "");
+    setForgeClassHigh(a.highest || "intelligence");
+    setForgeClassLow(a.lowest || "charisma");
+  };
+
+  // 🌟 Unified Race CRUD Handlers
+  const handleSaveRace = () => {
+    if (!forgeRaceName.trim()) return;
+
+    let nextList;
+    if (editingRaceId) {
+      // Update
+      nextList = races.map(r => {
+        if (r.id === editingRaceId) {
+          return {
+            ...r,
+            name: forgeRaceName.trim(),
+            tagline: forgeRaceTagline.trim() || "A new identity lineage.",
+            description: forgeRaceDesc.trim() || "Custom attributes apply.",
+            icon: forgeRaceIcon || "✨",
+            bonuses: { [forgeRaceBonusStat]: Number(forgeRaceBonusAmount) }
+          };
+        }
+        return r;
+      });
+      setEditingRaceId(null);
+    } else {
+      // Create
+      const newItem = {
+        id: "race-" + Date.now(),
+        name: forgeRaceName.trim(),
+        tagline: forgeRaceTagline.trim() || "A new identity lineage.",
+        description: forgeRaceDesc.trim() || "Custom attributes apply.",
+        icon: forgeRaceIcon || "✨",
+        bonuses: { [forgeRaceBonusStat]: Number(forgeRaceBonusAmount) }
+      };
+      nextList = [...races, newItem];
+    }
+
+    setRaces(nextList);
+    localStorage.setItem("irl_races_list", JSON.stringify(nextList));
+
+    // Clear form
+    setForgeRaceName("");
+    setForgeRaceTagline("");
+    setForgeRaceDesc("");
+    setForgeRaceIcon("✨");
+    setForgeRaceBonusStat("charisma");
+    setForgeRaceBonusAmount(2);
+  };
+
+  const handleDeleteRace = (id: string) => {
+    const next = races.filter(r => r.id !== id);
+    setRaces(next);
+    localStorage.setItem("irl_races_list", JSON.stringify(next));
+    if (editingRaceId === id) {
+      setEditingRaceId(null);
+      setForgeRaceName("");
+      setForgeRaceTagline("");
+      setForgeRaceDesc("");
+      setForgeRaceIcon("✨");
+    }
+  };
+
+  const handleEditRace = (r: any) => {
+    setEditingRaceId(r.id);
+    setForgeRaceName(r.name);
+    setForgeRaceTagline(r.tagline || "");
+    setForgeRaceDesc(r.description || "");
+    setForgeRaceIcon(r.icon || "✨");
+    
+    const bonusEntries = Object.entries(r.bonuses || {});
+    if (bonusEntries.length > 0) {
+      const [bStat, bAmt] = bonusEntries[0];
+      setForgeRaceBonusStat(bStat as keyof StatBlock);
+      setForgeRaceBonusAmount(bAmt as number);
+    } else {
+      setForgeRaceBonusStat("charisma");
+      setForgeRaceBonusAmount(2);
+    }
+  };
+
+  // 🌟 Active Character Perk CRUD Handlers
+  const handleSavePerk = () => {
+    if (!character || !perkTitle.trim() || !perkEffect.trim()) return;
+
+    const newPerk: Perk = {
+      title: perkTitle.trim(),
+      trigger: perkTrigger.trim() || "Passive",
+      effect: perkEffect.trim(),
+      description: perkDescription.trim() || "A humorously peculiar character trait."
     };
-    const next = [...customRaces, item];
-    setCustomRaces(next);
-    localStorage.setItem("irl_custom_races", JSON.stringify(next));
-    setForgeRaceName(""); setForgeRaceTagline(""); setForgeRaceDesc("");
+
+    let updatedPerks = [...character.perks];
+    if (activeEditingPerkIndex !== null) {
+      updatedPerks[activeEditingPerkIndex] = newPerk;
+      setActiveEditingPerkIndex(null);
+    } else {
+      updatedPerks.push(newPerk);
+    }
+
+    const updatedSheet = { ...character, perks: updatedPerks };
+    handleUpdateDirectSheet(updatedSheet);
+
+    // Reset forms
+    setPerkTitle("");
+    setPerkTrigger("Passive");
+    setPerkEffect("");
+    setPerkDescription("");
+  };
+
+  const handleEditPerkClick = (idx: number) => {
+    if (!character) return;
+    const p = character.perks[idx];
+    setActiveEditingPerkIndex(idx);
+    setPerkTitle(p.title);
+    setPerkTrigger(p.trigger);
+    setPerkEffect(p.effect);
+    setPerkDescription(p.description);
+  };
+
+  const handleDeletePerkClick = (idx: number) => {
+    if (!character) return;
+    const updatedPerks = character.perks.filter((_, i) => i !== idx);
+    const updatedSheet = { ...character, perks: updatedPerks };
+    handleUpdateDirectSheet(updatedSheet);
+    if (activeEditingPerkIndex === idx) {
+      setActiveEditingPerkIndex(null);
+      setPerkTitle("");
+      setPerkTrigger("Passive");
+      setPerkEffect("");
+      setPerkDescription("");
+    }
   };
 
   const getAvatarEmoji = (k: string) => {
@@ -242,8 +409,8 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
       {(characters.length === 0 || isAddingNewCharacter) ? (
         <Wizard 
           onComplete={handleSaveCharacter} 
-          availableArchetypes={customArchetypes}
-          availableRaces={customRaces}
+          availableArchetypes={archetypes}
+          availableRaces={races}
           showCancelButton={characters.length > 0}
           onCancel={() => setIsAddingNewCharacter(false)}
         />
@@ -340,76 +507,174 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                   
                   {/* 🛠️ Expanded Dev Mode Overrides Panel */}
                   {devMode && (
-                    <div className="bg-amber-950/15 border border-dashed border-amber-500/40 p-5 rounded-2xl flex flex-col gap-4">
-                      <div className="flex border-b border-zinc-800 gap-3 pb-2">
-                        <button onClick={() => setDevTab("sheet-override")} className={`text-xs font-mono pb-1 ${devTab === "sheet-override" ? "text-amber-400 font-bold border-b border-amber-400" : "text-zinc-500"}`}>Active Override</button>
-                        <button onClick={() => setDevTab("class-forge")} className={`text-xs font-mono pb-1 ${devTab === "class-forge" ? "text-amber-400 font-bold border-b border-amber-400" : "text-zinc-500"}`}>Class Creator</button>
-                        <button onClick={() => setDevTab("race-forge")} className={`text-xs font-mono pb-1 ${devTab === "race-forge" ? "text-amber-400 font-bold border-b border-amber-400" : "text-zinc-500"}`}>Race Creator</button>
+                    <div className="bg-amber-950/15 border border-dashed border-amber-500/40 p-5 rounded-2xl flex flex-col gap-4 text-left">
+                      <div className="flex border-b border-zinc-850 gap-3 pb-2">
+                        <button onClick={() => setDevTab("sheet-override")} className={`text-xs font-mono pb-1 cursor-pointer ${devTab === "sheet-override" ? "text-amber-400 font-bold border-b border-amber-400" : "text-zinc-500 hover:text-zinc-300"}`}>Active Override</button>
+                        <button onClick={() => setDevTab("class-forge")} className={`text-xs font-mono pb-1 cursor-pointer ${devTab === "class-forge" ? "text-amber-400 font-bold border-b border-amber-400" : "text-zinc-500 hover:text-zinc-300"}`}>Class Creator</button>
+                        <button onClick={() => setDevTab("race-forge")} className={`text-xs font-mono pb-1 cursor-pointer ${devTab === "race-forge" ? "text-amber-400 font-bold border-b border-amber-400" : "text-zinc-500 hover:text-zinc-300"}`}>Race Creator</button>
                       </div>
 
                       {devTab === "sheet-override" && (
                         <div className="grid sm:grid-cols-2 gap-3 text-xs">
                           <div>
-                            <label className="block text-zinc-400 mb-1">Rename Sheet</label>
-                            <input type="text" value={character.name} onChange={(e) => handleUpdateDirectSheet({ ...character, name: e.target.value })} className="w-full bg-zinc-950 border border-zinc-850 p-2 rounded text-white" />
+                            <label className="block text-zinc-400 mb-1 font-mono font-medium">Rename Sheet</label>
+                            <input type="text" value={character.name} onChange={(e) => handleUpdateDirectSheet({ ...character, name: e.target.value })} className="w-full bg-zinc-950 border border-zinc-850 p-2 rounded text-white text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none" />
                           </div>
                           <div>
-                            <label className="block text-zinc-400 mb-1">Modify Faction</label>
-                            <input type="text" value={character.faction} onChange={(e) => handleUpdateDirectSheet({ ...character, faction: e.target.value })} className="w-full bg-zinc-950 border border-zinc-850 p-2 rounded text-white" />
+                            <label className="block text-zinc-400 mb-1 font-mono font-medium">Modify Faction</label>
+                            <input type="text" value={character.faction} onChange={(e) => handleUpdateDirectSheet({ ...character, faction: e.target.value })} className="w-full bg-zinc-950 border border-zinc-850 p-2 rounded text-white text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none" />
                           </div>
                         </div>
                       )}
 
-                      {/* 🌟 Dynamic Class Management Module */}
+                      {/* 🌟 Dynamic Class Management Module with full CRUD */}
                       {devTab === "class-forge" && (
                         <div className="flex flex-col gap-3">
-                          <div className="grid sm:grid-cols-3 gap-2">
-                            <input type="text" placeholder="Archetype Title" value={forgeClassName} onChange={(e) => setForgeClassName(e.target.value)} className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded" />
-                            <input type="text" placeholder="Catchy Tagline" value={forgeClassTagline} onChange={(e) => setForgeClassTagline(e.target.value)} className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded" />
-                            <button onClick={handleCreateCustomClass} className="bg-amber-500 text-zinc-950 text-xs font-bold font-mono p-2 rounded cursor-pointer">+ Inject New Role</button>
+                          <h4 className="text-[10px] uppercase font-mono font-bold tracking-wider text-amber-500">
+                            {editingArchetypeId ? "🔧 EDITING EXISTING ROLE BLUEPRINT" : "✨ CREATE A NEW ROLE BLUEPRINT"}
+                          </h4>
+                          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-2">
+                            <input 
+                              type="text" 
+                              placeholder="Class Name" 
+                              value={forgeClassName} 
+                              onChange={(e) => setForgeClassName(e.target.value)} 
+                              className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded focus:outline-none focus:border-amber-500" 
+                            />
+                            <input 
+                              type="text" 
+                              placeholder="Catchy Tagline" 
+                              value={forgeClassTagline} 
+                              onChange={(e) => setForgeClassTagline(e.target.value)} 
+                              className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded focus:outline-none focus:border-amber-500" 
+                            />
+                            
+                            <select 
+                              value={forgeClassHigh} 
+                              onChange={(e) => setForgeClassHigh(e.target.value as any)} 
+                              className="bg-zinc-950 text-xs text-zinc-300 border border-zinc-850 p-2 rounded cursor-pointer"
+                            >
+                              {Object.keys(STAT_DESCRIPTIONS).map(s => <option key={s} value={s}>Highest: {STAT_DESCRIPTIONS[s as keyof StatBlock].label}</option>)}
+                            </select>
+                            
+                            <select 
+                              value={forgeClassLow} 
+                              onChange={(e) => setForgeClassLow(e.target.value as any)} 
+                              className="bg-zinc-950 text-xs text-zinc-300 border border-zinc-850 p-2 rounded cursor-pointer"
+                            >
+                              {Object.keys(STAT_DESCRIPTIONS).map(s => <option key={s} value={s}>Lowest/Flaw: {STAT_DESCRIPTIONS[s as keyof StatBlock].label}</option>)}
+                            </select>
+
+                            <div className="flex gap-1">
+                              <button onClick={handleSaveArchetype} className="flex-1 bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs font-extrabold font-mono p-2 rounded cursor-pointer">
+                                {editingArchetypeId ? "Save Change" : "+ Forge"}
+                              </button>
+                              {editingArchetypeId && (
+                                <button onClick={() => { setEditingArchetypeId(null); setForgeClassName(""); setForgeClassTagline(""); setForgeClassDesc(""); }} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold p-2 px-3 rounded cursor-pointer" title="Cancel Edit">✕</button>
+                              )}
+                            </div>
                           </div>
+
+                          <input 
+                            type="text" 
+                            placeholder="Brief Role Description / Overview" 
+                            value={forgeClassDesc} 
+                            onChange={(e) => setForgeClassDesc(e.target.value)} 
+                            className="w-full bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded focus:outline-none focus:border-amber-500" 
+                          />
+
                           <div className="flex flex-wrap gap-1.5 mt-2">
-                            {customArchetypes.map(a => (
-                              <span key={a.id} className="text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-400 px-2 py-1 rounded flex items-center gap-1">
-                                {a.name}
-                                {a.id.startsWith("custom") && (
-                                  <Trash2 onClick={() => {
-                                    const next = customArchetypes.filter(item => item.id !== a.id);
-                                    setCustomArchetypes(next);
-                                    localStorage.setItem("irl_custom_classes", JSON.stringify(next));
-                                  }} className="w-3 h-3 text-red-400 cursor-pointer hover:text-red-300" />
-                                )}
-                              </span>
+                            {archetypes.map(a => (
+                              <div key={a.id} className="text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-300 px-2.5 py-1.5 rounded-lg flex items-center gap-2">
+                                <span className="font-semibold">{a.name}</span>
+                                <span className="text-zinc-500">({a.highest.substring(0,3).toUpperCase()} / {a.lowest.substring(0,3).toUpperCase()})</span>
+                                <button onClick={() => handleEditArchetype(a)} className="text-amber-400 hover:text-amber-300 text-[10px] font-bold cursor-pointer ml-1">Edit</button>
+                                <button onClick={() => handleDeleteArchetype(a.id)} className="text-red-400 hover:text-red-300 cursor-pointer" title="Delete role class">✕</button>
+                              </div>
                             ))}
                           </div>
                         </div>
                       )}
 
-                      {/* 🌟 Dynamic Queer Race Management Module */}
+                      {/* 🌟 Dynamic Race Management Module with full CRUD */}
                       {devTab === "race-forge" && (
                         <div className="flex flex-col gap-3">
-                          <div className="grid sm:grid-cols-4 gap-2">
-                            <input type="text" placeholder="Race Label" value={forgeRaceName} onChange={(e) => setForgeRaceName(e.target.value)} className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded" />
-                            <input type="text" placeholder="Emoji Icon" value={forgeRaceIcon} onChange={(e) => setForgeRaceIcon(e.target.value)} className="w-16 bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded text-center" />
-                            <select value={forgeRaceBonusStat} onChange={(e) => setForgeRaceBonusStat(e.target.value as any)} className="bg-zinc-950 text-xs text-zinc-300 border border-zinc-850 p-2 rounded cursor-pointer">
-                              {Object.keys(STAT_DESCRIPTIONS).map(s => <option key={s} value={s}>{s}</option>)}
+                          <h4 className="text-[10px] uppercase font-mono font-bold tracking-wider text-amber-500">
+                            {editingRaceId ? "🔧 EDITING EXISTING COMMUNITY BLUEPRINT" : "✨ CREATE A NEW COMMUNITY BLUEPRINT"}
+                          </h4>
+                          <div className="grid sm:grid-cols-2 lg:grid-cols-6 gap-2">
+                            <input 
+                              type="text" 
+                              placeholder="Race Label" 
+                              value={forgeRaceName} 
+                              onChange={(e) => setForgeRaceName(e.target.value)} 
+                              className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded focus:outline-none focus:border-amber-500" 
+                            />
+                            <input 
+                              type="text" 
+                              placeholder="Catchy Tagline" 
+                              value={forgeRaceTagline} 
+                              onChange={(e) => setForgeRaceTagline(e.target.value)} 
+                              className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded focus:outline-none focus:border-amber-500" 
+                            />
+                            <input 
+                              type="text" 
+                              placeholder="Emoji Icon (e.g. 🦄)" 
+                              value={forgeRaceIcon} 
+                              onChange={(e) => setForgeRaceIcon(e.target.value)} 
+                              className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded text-center focus:outline-none focus:border-amber-500" 
+                            />
+                            
+                            <select 
+                              value={forgeRaceBonusStat} 
+                              onChange={(e) => setForgeRaceBonusStat(e.target.value as any)} 
+                              className="bg-zinc-950 text-xs text-zinc-300 border border-zinc-850 p-2 rounded cursor-pointer"
+                            >
+                              {Object.keys(STAT_DESCRIPTIONS).map(s => <option key={s} value={s}>Bonus: {STAT_DESCRIPTIONS[s as keyof StatBlock].label}</option>)}
                             </select>
-                            <button onClick={handleCreateCustomRace} className="bg-amber-500 text-zinc-950 text-xs font-bold font-mono p-2 rounded cursor-pointer">+ Inject Race</button>
+
+                            <input 
+                              type="number" 
+                              min="1" 
+                              max="5" 
+                              value={forgeRaceBonusAmount} 
+                              onChange={(e) => setForgeRaceBonusAmount(Number(e.target.value))} 
+                              className="bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded text-center focus:outline-none focus:border-amber-500" 
+                              title="Ability score bonus amount"
+                            />
+
+                            <div className="flex gap-1 justify-between items-center">
+                              <button onClick={handleSaveRace} className="flex-1 bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs font-extrabold font-mono p-2 rounded cursor-pointer">
+                                {editingRaceId ? "Save Change" : "+ Forge"}
+                              </button>
+                              {editingRaceId && (
+                                <button onClick={() => { setEditingRaceId(null); setForgeRaceName(""); setForgeRaceTagline(""); setForgeRaceDesc(""); setForgeRaceIcon("✨"); }} className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold p-2 px-3 rounded cursor-pointer" title="Cancel Edit">✕</button>
+                              )}
+                            </div>
                           </div>
-                          <input type="text" placeholder="Racial Description" value={forgeRaceDesc} onChange={(e) => setForgeRaceDesc(e.target.value)} className="w-full bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded" />
+
+                          <input 
+                            type="text" 
+                            placeholder="Racial Traits Overview" 
+                            value={forgeRaceDesc} 
+                            onChange={(e) => setForgeRaceDesc(e.target.value)} 
+                            className="w-full bg-zinc-950 text-xs text-white border border-zinc-850 p-2 rounded focus:outline-none focus:border-amber-500" 
+                          />
+
                           <div className="flex flex-wrap gap-1.5 mt-2">
-                            {customRaces.map(r => (
-                              <span key={r.id} className="text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-400 px-2 py-1 rounded flex items-center gap-1">
-                                {r.icon} {r.name}
-                                {r.id.startsWith("custom") && (
-                                  <Trash2 onClick={() => {
-                                    const next = customRaces.filter(item => item.id !== r.id);
-                                    setCustomRaces(next);
-                                    localStorage.setItem("irl_custom_races", JSON.stringify(next));
-                                  }} className="w-3 h-3 text-red-400 cursor-pointer hover:text-red-300" />
-                                )}
-                              </span>
-                            ))}
+                            {races.map(r => {
+                              const bonusEntries = Object.entries(r.bonuses || {});
+                              const bonusStr = bonusEntries.map(([s, v]) => `+${v} ${s.substring(0,3).toUpperCase()}`).join(", ");
+                              return (
+                                <div key={r.id} className="text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-300 px-2.5 py-1.5 rounded-lg flex items-center gap-2">
+                                  <span>{r.icon}</span>
+                                  <span className="font-semibold">{r.name}</span>
+                                  <span className="text-green-400 font-mono">({bonusStr})</span>
+                                  <button onClick={() => handleEditRace(r)} className="text-amber-400 hover:text-amber-300 text-[10px] font-bold cursor-pointer ml-1">Edit</button>
+                                  <button onClick={() => handleDeleteRace(r.id)} className="text-red-400 hover:text-red-300 cursor-pointer" title="Delete community blueprint">✕</button>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       )}
@@ -419,9 +684,44 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
 
                   <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {Object.entries(STAT_DESCRIPTIONS).map(([key, desc]) => {
-                      const k = key as keyof StatBlock; const value = character.stats[k]; const mod = Math.floor((value - 10) / 2);
+                      const k = key as keyof StatBlock; 
+                      const value = character.stats[k]; 
+                      const mod = Math.floor((value - 10) / 2);
+                      
+                      // Calculate base score by looking up the selected race's bonuses from our unified state
+                      const characterRace = races.find(r => r.name === character.race) || races.find(r => r.name.toLowerCase() === character.race.toLowerCase());
+                      const raceBonus = characterRace?.bonuses?.[k] || 0;
+                      const baseValue = value - raceBonus;
+
                       return (
                         <div key={k} onClick={() => { if (!devMode) handleRollDice(k); }} className={`p-4 bg-zinc-900/40 rounded-xl border text-left select-none relative group ${devMode ? "border-amber-500/20" : "border-zinc-850 hover:border-amber-500 transition-all cursor-pointer"}`}>
+                          
+                          {/* 🔮 Dynamic Hover Tooltip Breakdown Card */}
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-zinc-950 border border-zinc-800 p-3 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none text-[10px] font-mono flex flex-col gap-1 text-zinc-300">
+                            <div className="flex justify-between border-b border-zinc-800 pb-1 mb-1 font-display">
+                              <span className="font-bold text-amber-400 text-xs">{desc.label}</span>
+                              <span className="text-zinc-500 text-[9px]">CALCULATION</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-zinc-500">Base Value:</span>
+                              <span className="text-white font-bold">{baseValue}</span>
+                            </div>
+                            {raceBonus > 0 && (
+                              <div className="flex justify-between text-green-400">
+                                <span className="text-zinc-500">Racial Bonus ({character.race}):</span>
+                                <span className="font-bold">+{raceBonus}</span>
+                              </div>
+                            )}
+                            <div className="flex justify-between border-t border-zinc-900 pt-1 mt-1 font-bold">
+                              <span className="text-zinc-400">Total Score:</span>
+                              <span className="text-white">{value}</span>
+                            </div>
+                            <div className="flex justify-between text-green-400 border-t border-zinc-900 pt-1 mt-1 font-bold">
+                              <span>Modifier:</span>
+                              <span>{mod >= 0 ? `+${mod}` : mod}</span>
+                            </div>
+                          </div>
+
                           <div className="flex justify-between items-center mb-2">
                             <span className="text-[10px] font-mono text-zinc-400 uppercase font-bold">{k.substring(0,3)}</span>
                             <span className="font-mono text-xs font-bold text-green-400">{mod >= 0 ? `+${mod}` : mod}</span>
@@ -441,6 +741,133 @@ ${character.perks.map(p => `- **${p.title}**: ${p.effect} ("${p.description}")`)
                         </div>
                       );
                     })}
+                  </div>
+
+                  {/* 📜 Active Character Scribed Perks Management Section */}
+                  <div className="mt-8 text-left border-t border-zinc-850 pt-6">
+                    <div className="flex flex-wrap items-center justify-between mb-4 gap-2">
+                      <h3 className="font-display font-bold text-lg text-white flex items-center gap-2">
+                        <Award className="w-5 h-5 text-amber-500" /> Scribed Character Perks
+                      </h3>
+                      <span className="text-[10px] font-mono text-zinc-400 bg-zinc-950 border border-zinc-850 px-2 py-0.5 rounded font-bold">
+                        {character.perks.length} Passive Perks Active
+                      </span>
+                    </div>
+
+                    {character.perks.length === 0 ? (
+                      <p className="text-xs text-zinc-500 italic mb-5">No corporate or social perks scribed. Formulate a perk below or use the AI DM Advice builder!</p>
+                    ) : (
+                      <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                        {character.perks.map((p, idx) => (
+                          <div 
+                            key={idx} 
+                            className={`p-4 bg-zinc-900/40 border rounded-xl flex justify-between items-start relative overflow-hidden transition-all group/perk ${
+                              activeEditingPerkIndex === idx 
+                                ? "border-amber-500 shadow-lg shadow-amber-500/5 bg-amber-950/10" 
+                                : "border-zinc-850 hover:border-zinc-700"
+                            }`}
+                          >
+                            <div className="flex-1 pr-6 text-left">
+                              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                                <h4 className="font-display font-extrabold text-amber-400 text-sm">{p.title}</h4>
+                                <span className="text-[9px] font-mono text-zinc-400 bg-zinc-950 border border-zinc-850 px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">
+                                  Trigger: {p.trigger}
+                                </span>
+                              </div>
+                              <p className="text-zinc-200 text-xs font-mono font-semibold mb-1 flex items-center gap-1.5">
+                                <span className="text-amber-500 font-bold">★</span> {p.effect}
+                              </p>
+                              <p className="text-zinc-400 text-xs italic leading-relaxed">"{p.description}"</p>
+                            </div>
+                            
+                            <div className="flex items-center gap-1 shrink-0 ml-2">
+                              <button 
+                                onClick={() => handleEditPerkClick(idx)}
+                                className="text-amber-400 hover:text-amber-300 p-1 bg-zinc-950 border border-zinc-850 rounded hover:scale-105 transition-all text-[10px] font-mono font-bold px-2 cursor-pointer"
+                              >
+                                Edit
+                              </button>
+                              <button 
+                                onClick={() => handleDeletePerkClick(idx)}
+                                className="text-red-400 hover:text-red-300 p-1.5 bg-zinc-950 border border-zinc-850 rounded hover:scale-105 transition-all cursor-pointer"
+                                title="Banish perk"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Perk Writer / Writer Dashboard Form */}
+                    <div className="bg-zinc-950/70 border border-zinc-850 rounded-2xl p-5 mt-4">
+                      <h4 className="text-xs font-mono text-amber-400 font-black uppercase mb-3 flex items-center justify-between">
+                        <span>{activeEditingPerkIndex !== null ? "📝 Edit Scribed Perk" : "✨ Scribe Custom Perk"}</span>
+                        {activeEditingPerkIndex !== null && (
+                          <button 
+                            onClick={() => { setActiveEditingPerkIndex(null); setPerkTitle(""); setPerkTrigger("Passive"); setPerkEffect(""); setPerkDescription(""); }} 
+                            className="text-zinc-500 hover:text-white font-bold text-xs uppercase cursor-pointer"
+                          >
+                            ✕ Cancel Edit
+                          </button>
+                        )}
+                      </h4>
+
+                      <div className="grid sm:grid-cols-2 gap-3 mb-3">
+                        <div>
+                          <label className="block text-[10px] font-mono text-zinc-500 uppercase mb-1 font-bold">Perk Title</label>
+                          <input 
+                            type="text" 
+                            placeholder="e.g., Tactical Procrastinator" 
+                            value={perkTitle}
+                            onChange={(e) => setPerkTitle(e.target.value)}
+                            className="w-full bg-zinc-900 border border-zinc-800 p-2.5 rounded-xl text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-mono text-zinc-500 uppercase mb-1 font-bold">Trigger Condition</label>
+                          <input 
+                            type="text" 
+                            placeholder="e.g., Passive, or Ordering takeout" 
+                            value={perkTrigger}
+                            onChange={(e) => setPerkTrigger(e.target.value)}
+                            className="w-full bg-zinc-900 border border-zinc-800 p-2.5 rounded-xl text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid sm:grid-cols-2 gap-3 mb-3">
+                        <div>
+                          <label className="block text-[10px] font-mono text-zinc-500 uppercase mb-1 font-bold">Modifier Effect</label>
+                          <input 
+                            type="text" 
+                            placeholder="e.g., Advantage on Wisdom checks under pressure" 
+                            value={perkEffect}
+                            onChange={(e) => setPerkEffect(e.target.value)}
+                            className="w-full bg-zinc-900 border border-zinc-800 p-2.5 rounded-xl text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-mono text-zinc-500 uppercase mb-1 font-bold">Flavor Description / Joke</label>
+                          <input 
+                            type="text" 
+                            placeholder="e.g., Under maximum panic, your reflexes and room reading are unmatched." 
+                            value={perkDescription}
+                            onChange={(e) => setPerkDescription(e.target.value)}
+                            className="w-full bg-zinc-900 border border-zinc-800 p-2.5 rounded-xl text-xs text-zinc-200 focus:outline-none focus:border-amber-500"
+                          />
+                        </div>
+                      </div>
+
+                      <button 
+                        onClick={handleSavePerk}
+                        disabled={!perkTitle.trim() || !perkEffect.trim()}
+                        className="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 py-2.5 rounded-xl text-xs font-black transition-all uppercase cursor-pointer disabled:opacity-40 disabled:hover:bg-amber-500"
+                      >
+                        {activeEditingPerkIndex !== null ? "✓ Save and Scribe Perk Changes" : "+ Scribe Perk to Character Sheet"}
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
