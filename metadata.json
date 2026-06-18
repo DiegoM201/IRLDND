@@ -1,0 +1,6 @@
+{
+  "name": "IRL Character Sheet",
+  "description": "An interactive tool to map real-world personality, daily habits, and quirks into a D&D-style tabletop character sheet.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

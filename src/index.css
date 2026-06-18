@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --color-brand-beige: #f4eae1;
+  --color-brand-dark: #121214;
+  --color-brand-card: #1c1c1f;
+  --color-gold: #d4af37;
+  --color-crimson: #a30000;
+}
+
+/* Custom animation classes */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes spin-roll {
+  0% { transform: rotate(0deg) scale(0.8); }
+  50% { transform: rotate(360deg) scale(1.2); }
+  100% { transform: rotate(720deg) scale(1); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite ease-in-out;
+}
+
+.animate-spin-roll {
+  animation: spin-roll 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body {
+  background-color: #0c0c0e;
+  color: #f3f4f6;
+  font-family: var(--font-sans);
+}
+
+/* Custom gorgeous scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #121214;
+}
+::-webkit-scrollbar-thumb {
+  background: #2e2e33;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3e3e44;
+}
